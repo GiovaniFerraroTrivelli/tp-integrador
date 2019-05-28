@@ -35,5 +35,6 @@ public abstract class Arbol<E extends Comparable<E>> {
 
 	public abstract boolean esLleno();
 
-	
+	protected abstract int cuentaNodosDeNivelAux(int nivel, int i);
+
 }
