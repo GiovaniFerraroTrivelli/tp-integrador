@@ -56,7 +56,6 @@ public class ArbolVacio<E extends Comparable<E>> extends Arbol<E> {
 
 	@Override
 	public void agregar(E a) {
-		// TODO Auto-generated method stub
 		
 	}
         @Override
@@ -79,6 +78,9 @@ public class ArbolVacio<E extends Comparable<E>> extends Arbol<E> {
 		return false;
 	}
 
-
+	public int cuentaNodosDeNivelAux(int nivel, int nivelActual)
+	{
+		return 0;
+	}
 
 }
