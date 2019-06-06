@@ -9,6 +9,11 @@ public class UnidadDeMedida {
 		this.unidad = null;
 	}
 	
+	public UnidadDeMedida(Double valor) {
+		this.valor = valor;
+		this.unidad = null;
+	}
+	
 	public Double getValor() {
 		return valor;
 	}
