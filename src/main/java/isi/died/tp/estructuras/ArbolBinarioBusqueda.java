@@ -159,5 +159,25 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		
 		return false;
 	}
-
+	
+	/*public List<E> rango(int inicio, int fin)
+	{
+		List<E> lista = new ArrayList<E>();
+		List<E> inorden = new ArrayList<E>();
+		
+		inorden = this.inOrden();
+		
+		for(Integer i = inicio; i <= fin; i++)
+		{
+			for(E e: inorden)
+			{
+				if(e.compareTo(i) == 0)
+				{
+					lista.add(e);
+				}
+			}
+		}
+		
+		return lista;
+	}*/
 }
