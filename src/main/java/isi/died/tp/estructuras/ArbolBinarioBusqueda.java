@@ -134,22 +134,22 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	@Override
 	public boolean esCompleto() {
 
-		Integer profDer = this.derecho.profundidad();
-		Integer profIzq = this.izquierdo.profundidad();
+        Integer profDer = this.derecho.profundidad();
+        Integer profIzq = this.izquierdo.profundidad();
 
-		if(this.derecho.esVacio() && this.izquierdo.esVacio())
-			return true;
-		
-		else if(profDer == profIzq)
-		{
-			return (this.izquierdo.esLleno());
-		}
-		else if(profDer == profIzq - 1)
-		{
-			return (this.derecho.esLleno());
-		}
-		else return false;	
-	}
+        if(this.derecho.esVacio() && this.izquierdo.esVacio())
+            return true;
+        
+        else if(profDer == profIzq)
+        {
+            return (this.izquierdo.esLleno() && this.derecho.esCompleto());
+        }
+        else if(profDer == profIzq - 1)
+        {
+            return (this.derecho.esLleno() && this.izquierdo.esCompleto());
+        }
+        else return false;    
+    }
 
 	@Override
 	public boolean esLleno() {
@@ -160,24 +160,21 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		return false;
 	}
 	
-	/*public List<E> rango(int inicio, int fin)
+	public List<E> rango(E inicio, E fin)
 	{
 		List<E> lista = new ArrayList<E>();
 		List<E> inorden = new ArrayList<E>();
 		
 		inorden = this.inOrden();
 		
-		for(Integer i = inicio; i <= fin; i++)
+		for(E e: inorden)
 		{
-			for(E e: inorden)
+			if(e.compareTo(inicio) >= 0 && e.compareTo(fin) <= 0)
 			{
-				if(e.compareTo(i) == 0)
-				{
-					lista.add(e);
-				}
+				lista.add(e);
 			}
 		}
 		
 		return lista;
-	}*/
+	}
 }
