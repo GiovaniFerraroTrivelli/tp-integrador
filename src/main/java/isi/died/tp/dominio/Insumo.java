@@ -17,6 +17,22 @@ public class Insumo implements Comparable<Insumo>
 		this.stock = stock;
 		this.peso = peso;
 	}
+
+	public Float getCosto() {
+		return costo;
+	}
+
+	public void setCosto(Float costo) {
+		this.costo = costo;
+	}
+
+	public Integer getStock() {
+		return stock;
+	}
+
+	public void setStock(Integer stock) {
+		this.stock = stock;
+	}
 	
 	@Override
 	public int compareTo(Insumo otro)
