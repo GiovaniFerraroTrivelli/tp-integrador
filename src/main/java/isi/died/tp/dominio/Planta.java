@@ -27,11 +27,13 @@ public class Planta {
 	
 	public Boolean necesitaInsumo(Insumo i)
 	{
-		Predicate<Stock> filtro = ((e)-> (e.getCantidad().equals(i)));
+		Predicate<Stock> filtro = ((e)-> (e.getCantidad() < e.getPuntoPedido()));
 
-			//TODO ESTO
-		return listaStock.stream().flatMap((e) -> (e.getListaInsumos().stream())).filter(filtro).count();
-	}
+		List<Stock> stock = listaStock.stream().filter(filtro).collect(Collectors.toList()); 
+
+		return (stock.size() == 0) ? false : true;
+    	}
+
 
 	public ArrayList<Stock> getListaStock() {
 		return listaStock;
