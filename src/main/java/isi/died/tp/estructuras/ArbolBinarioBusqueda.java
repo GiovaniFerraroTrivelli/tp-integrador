@@ -154,7 +154,7 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	@Override
 	public boolean esLleno() {
 	
-		if(this.cuentaNodosDeNivel(this.profundidad()) == Math.pow(2, this.profundidad()))
+		if(this.cuentaNodosDeNivel(this.profundidad()) == Math.pow(2, this.profundidad()) - 1)
 			return true;
 		
 		return false;
