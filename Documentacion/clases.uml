@@ -1,0 +1,63 @@
+@startuml
+
+hide enum methods
+
+class Grafo{
+
+}
+
+class Insumo{
+    -id: Integer
+    -descripcion: String
+    -costo: Float
+    -peso: Float
+    -esRefrigerado: Boolean
+}
+
+enum UnidadMedida{
+    +KILO
+    +PIEZA
+    +GRAMO
+    +METRO
+    +LITRO
+    +M3
+    +M2
+    +CM2
+    +CM
+}
+
+class Stock{
+    -id: Integer
+    -cantidad: Integer
+    -puntoPedido: Integer
+}
+
+class Planta{
+    -id: Integer
+}
+note left: nodos del grafo
+
+class Ruta{
+    -distancia: Float
+    -duracionViaje: Integer
+    -pesoMax: Float
+}
+note left: aristas del grafo
+
+class Camion{
+    -marca: String
+    -modelo: String
+    -dominio: String
+    -anio: Integer
+    -costoKm: Float
+    -capacidad: Integer
+    -aptoTransportarLiquido: Boolean
+}
+
+Insumo --> UnidadMedida
+Stock "0..n" <-- "1" Insumo
+Planta "1" <-- "0..n" Stock
+Grafo "1" *-- "0..n" Planta
+Grafo "1" *-- "0..n" Ruta
+
+@enduml
