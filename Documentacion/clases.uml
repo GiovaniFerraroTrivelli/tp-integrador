@@ -1,0 +1,62 @@
+@startuml
+
+hide enum methods
+
+class MaterialCapacitacion{
+    -titulo: String
+    -tema: String
+    -precio: Float
+    -calificacion: Integer
+    -fechaPublicacion: Date
+    -relevancia: Relevancia
+    --
+    +getters()
+    +setters()
+    ..
+    +crear(String[]): Void
+    +modificar(String[]): Void
+    +borrar(): Void
+}
+
+enum Relevancia{
+    +ALTA
+    +MEDIA
+    +BAJA
+}
+
+class Arbol{
+    +getters()
+    +setters()
+    ..
+}
+
+enum TipoNodo{
+    +TITULO
+    +METADATO
+    +AUTOR
+    +SECION
+    +PARRAFO
+    +CAPTIULO
+    +EDITORIAL
+    +RESUMEN
+    +PALABRA_CLAVE
+
+}
+
+class Nodo{
+    valor: String
+    tipoNodo: TipoNodo
+    --
+    +getters()
+    +setters()
+    ..
+}
+
+MaterialCapacitacion --> Relevancia
+Nodo --> TipoNodo
+
+MaterialCapacitacion --> Arbol
+Nodo <-- Arbol
+Nodo "-hijos"--> Arbol
+
+@enduml
