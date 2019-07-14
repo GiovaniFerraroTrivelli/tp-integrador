@@ -36,14 +36,14 @@ public class Menu {
 		frame.setMinimumSize(new Dimension(600, 400));	
 		
 		ImageIcon insumoIcon = new ImageIcon(new ImageIcon("images/Insumo.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
-		ImageIcon sotckIcon = new ImageIcon(new ImageIcon("images/Stock.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
+		ImageIcon stockIcon = new ImageIcon(new ImageIcon("images/Stock.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		ImageIcon camionIcon = new ImageIcon(new ImageIcon("images/Camion.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		ImageIcon caminoIcon = new ImageIcon(new ImageIcon("images/Camino.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		ImageIcon plantaIcon = new ImageIcon(new ImageIcon("images/Planta.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		ImageIcon infoIcon = new ImageIcon(new ImageIcon("images/Info.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		
 		ButtonEdit insumob = new ButtonEdit(insumoIcon);
-		ButtonEdit stockb = new ButtonEdit(sotckIcon);
+		ButtonEdit stockb = new ButtonEdit(stockIcon);
 		ButtonEdit camionb = new ButtonEdit(camionIcon);
 		ButtonEdit caminob = new ButtonEdit(caminoIcon);
 		ButtonEdit plantab = new ButtonEdit(plantaIcon);
@@ -61,17 +61,19 @@ public class Menu {
 		stockb.setText("Stock");	
 		camionb.setText("Camiones");
 		caminob.setText("Caminos");	
-		plantab.setText("Planta");	
+		plantab.setText("Plantas");	
 		infob.setText("Informacion");	
 		
-		for(ButtonEdit b : botones)
+		
+		for(int i = 0; i<6; i++)
 		{
+			ButtonEdit b = botones.get(i);
 			b.setBackground(Color.WHITE);
 			b.setVerticalTextPosition(SwingConstants.BOTTOM);
 			b.setHorizontalTextPosition(SwingConstants.CENTER);
 			b.setFocusPainted(false);
 			panel.add(b);
-			b.addActionListener(panel);
+			b.addActionListener(panel,i);
 		}
 		
 		frame.setVisible(true);
