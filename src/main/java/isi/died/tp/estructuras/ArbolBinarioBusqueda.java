@@ -7,25 +7,25 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 
 	protected Arbol<E> izquierdo;
 	protected Arbol<E> derecho;
-	
-	public ArbolBinarioBusqueda(){
-		this.valor=null;
-		this.izquierdo=new ArbolVacio<E>();
-		this.derecho=new ArbolVacio<E>();
+
+	public ArbolBinarioBusqueda() {
+		this.valor = null;
+		this.izquierdo = new ArbolVacio<E>();
+		this.derecho = new ArbolVacio<E>();
 	}
-	
-	public ArbolBinarioBusqueda(E e){
-		this.valor=e;
-		this.izquierdo=new ArbolVacio<E>();
-		this.derecho=new ArbolVacio<E>();
+
+	public ArbolBinarioBusqueda(E e) {
+		this.valor = e;
+		this.izquierdo = new ArbolVacio<E>();
+		this.derecho = new ArbolVacio<E>();
 	}
-	
-	public ArbolBinarioBusqueda(E e,Arbol<E> i,Arbol<E> d){
-		this.valor=e;
-		this.izquierdo=i;
-		this.derecho=d;
+
+	public ArbolBinarioBusqueda(E e, Arbol<E> i, Arbol<E> d) {
+		this.valor = e;
+		this.izquierdo = i;
+		this.derecho = d;
 	}
-	
+
 	@Override
 	public List<E> preOrden() {
 		List<E> lista = new ArrayList<E>();
@@ -34,6 +34,7 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		lista.addAll(this.derecho.preOrden());
 		return lista;
 	}
+
 	@Override
 	public List<E> inOrden() {
 		List<E> lista = new ArrayList<E>();
@@ -42,6 +43,7 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		lista.addAll(this.derecho.preOrden());
 		return lista;
 	}
+
 	@Override
 	public List<E> posOrden() {
 		List<E> lista = new ArrayList<E>();
@@ -51,56 +53,56 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		return lista;
 
 	}
+
 	@Override
 	public boolean esVacio() {
 		return false;
 	}
-        
+
 	@Override
 	public E valor() {
 		return this.valor;
 	}
-	
+
 	@Override
 	public Arbol<E> izquierdo() {
 		return this.izquierdo;
 	}
-	
+
 	@Override
 	public Arbol<E> derecho() {
 		return this.derecho;
 	}
 
-
 	@Override
 	public void agregar(E a) {
-		if(this.valor.compareTo(a)<1) {
-			if (this.derecho.esVacio()) this.derecho = new ArbolBinarioBusqueda<E>(a);
-			else this.derecho.agregar(a);
-		}else {
-			if (this.izquierdo.esVacio()) this.izquierdo= new ArbolBinarioBusqueda<E>(a);
-			else this.izquierdo.agregar(a);
+		if (this.valor.compareTo(a) < 1) {
+			if (this.derecho.esVacio())
+				this.derecho = new ArbolBinarioBusqueda<E>(a);
+			else
+				this.derecho.agregar(a);
+		} else {
+			if (this.izquierdo.esVacio())
+				this.izquierdo = new ArbolBinarioBusqueda<E>(a);
+			else
+				this.izquierdo.agregar(a);
 		}
 	}
-	
+
 	@Override
 	public boolean equals(Arbol<E> unArbol) {
-		return this.valor.equals(unArbol.valor()) && this.izquierdo.equals(unArbol.izquierdo()) && this.derecho.equals(unArbol.derecho());
+		return this.valor.equals(unArbol.valor()) && this.izquierdo.equals(unArbol.izquierdo())
+				&& this.derecho.equals(unArbol.derecho());
 	}
 
 	@Override
 	public boolean contiene(E unValor) {
-		if(this.valor().compareTo(unValor) == 0)
-		{
+		if (this.valor().compareTo(unValor) == 0) {
 			return true;
 
-		}
-		else if(this.valor().compareTo(unValor) > 0)
-		{
+		} else if (this.valor().compareTo(unValor) > 0) {
 			return this.derecho.contiene(unValor);
-		}
-		else
-		{
+		} else {
 			return this.izquierdo.contiene(unValor);
 		}
 	}
@@ -115,66 +117,56 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		return this.cuentaNodosDeNivelAux(nivel, 0);
 	}
 
-	public int cuentaNodosDeNivelAux(int nivel, int nivelActual)
-	{
-		if(nivel == nivelActual)
-		{
+	@Override
+	public int cuentaNodosDeNivelAux(int nivel, int nivelActual) {
+		if (nivel == nivelActual) {
 			return 1;
-		}
-		else if(nivelActual == nivel - 1)
-		{
-			return this.izquierdo.cuentaNodosDeNivelAux(nivel, nivelActual + 1) + this.derecho.cuentaNodosDeNivelAux(nivel, nivelActual + 1);
-		}
-		else
-		{
+		} else if (nivelActual == nivel - 1) {
+			return this.izquierdo.cuentaNodosDeNivelAux(nivel, nivelActual + 1)
+					+ this.derecho.cuentaNodosDeNivelAux(nivel, nivelActual + 1);
+		} else {
 			return this.cuentaNodosDeNivelAux(nivel, nivelActual++);
 		}
 	}
-	
+
 	@Override
 	public boolean esCompleto() {
 
-        Integer profDer = this.derecho.profundidad();
-        Integer profIzq = this.izquierdo.profundidad();
+		Integer profDer = this.derecho.profundidad();
+		Integer profIzq = this.izquierdo.profundidad();
 
-        if(this.derecho.esVacio() && this.izquierdo.esVacio())
-            return true;
-        
-        else if(profDer == profIzq)
-        {
-            return (this.izquierdo.esLleno() && this.derecho.esCompleto());
-        }
-        else if(profDer == profIzq - 1)
-        {
-            return (this.derecho.esLleno() && this.izquierdo.esCompleto());
-        }
-        else return false;    
-    }
+		if (this.derecho.esVacio() && this.izquierdo.esVacio())
+			return true;
+
+		else if (profDer == profIzq) {
+			return (this.izquierdo.esLleno() && this.derecho.esCompleto());
+		} else if (profDer == profIzq - 1) {
+			return (this.derecho.esLleno() && this.izquierdo.esCompleto());
+		} else
+			return false;
+	}
 
 	@Override
 	public boolean esLleno() {
-	
-		if(this.cuentaNodosDeNivel(this.profundidad()) == Math.pow(2, this.profundidad()))
+
+		if (this.cuentaNodosDeNivel(this.profundidad()) == Math.pow(2, this.profundidad()))
 			return true;
-		
+
 		return false;
 	}
-	
-	public List<E> rango(E inicio, E fin)
-	{
+
+	public List<E> rango(E inicio, E fin) {
 		List<E> lista = new ArrayList<E>();
 		List<E> inorden = new ArrayList<E>();
-		
+
 		inorden = this.inOrden();
-		
-		for(E e: inorden)
-		{
-			if(e.compareTo(inicio) >= 0 && e.compareTo(fin) <= 0)
-			{
+
+		for (E e : inorden) {
+			if (e.compareTo(inicio) >= 0 && e.compareTo(fin) <= 0) {
 				lista.add(e);
 			}
 		}
-		
+
 		return lista;
 	}
 }
