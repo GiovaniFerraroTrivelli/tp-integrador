@@ -4,12 +4,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-public class boton_edit extends JButton{
+public class Button_edit extends JButton{
 	
-	boton_edit(){
+	Button_edit(){
 		super();
 	}
-	public boton_edit(ImageIcon insumoIcon) {
+	public Button_edit(ImageIcon insumoIcon) {
 		super(insumoIcon);
 	}
 	void addActionListener(JPanel panel){	
