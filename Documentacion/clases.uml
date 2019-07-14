@@ -12,6 +12,7 @@ class Insumo{
     -costo: Float
     -peso: Float
     -esRefrigerado: Boolean
+    +compareTo(Insumo): int //<<Override>>//
 }
 
 enum UnidadMedida{
@@ -54,10 +55,17 @@ class Camion{
     -aptoTransportarLiquido: Boolean
 }
 
+interface "Comparable<T>"{
+    +compareTo(T): int
+}
+
+Insumo ..|> "Comparable<T>": "<<implements>>"
 Insumo --> UnidadMedida
 Stock "0..n" <-- "1" Insumo
 Planta "1" <-- "0..n" Stock
 Grafo "1" *-- "0..n" Planta
 Grafo "1" *-- "0..n" Ruta
+Camion --> Insumo: ˗transoporta
+Camion -[hidden]> Insumo
 
 @enduml
