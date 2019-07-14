@@ -42,14 +42,14 @@ public class Menu {
 		ImageIcon plantaIcon = new ImageIcon(new ImageIcon("images/Planta.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		ImageIcon infoIcon = new ImageIcon(new ImageIcon("images/Info.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		
-		Button_edit insumob = new Button_edit(insumoIcon);
-		Button_edit stockb = new Button_edit(sotckIcon);
-		Button_edit camionb = new Button_edit(camionIcon);
-		Button_edit caminob = new Button_edit(caminoIcon);
-		Button_edit plantab = new Button_edit(plantaIcon);
-		Button_edit infob = new Button_edit(infoIcon);
+		ButtonEdit insumob = new ButtonEdit(insumoIcon);
+		ButtonEdit stockb = new ButtonEdit(sotckIcon);
+		ButtonEdit camionb = new ButtonEdit(camionIcon);
+		ButtonEdit caminob = new ButtonEdit(caminoIcon);
+		ButtonEdit plantab = new ButtonEdit(plantaIcon);
+		ButtonEdit infob = new ButtonEdit(infoIcon);
 		
-		ArrayList<Button_edit> botones = new ArrayList<Button_edit>();
+		ArrayList<ButtonEdit> botones = new ArrayList<ButtonEdit>();
 		botones.add(insumob);
 		botones.add(stockb);
 		botones.add(camionb);
@@ -64,7 +64,7 @@ public class Menu {
 		plantab.setText("Planta");	
 		infob.setText("Informacion");	
 		
-		for(Button_edit b : botones)
+		for(ButtonEdit b : botones)
 		{
 			b.setBackground(Color.WHITE);
 			b.setVerticalTextPosition(SwingConstants.BOTTOM);
