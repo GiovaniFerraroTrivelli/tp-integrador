@@ -66,6 +66,7 @@ public class Menu {
 			b.setBackground(Color.white);
 			b.setVerticalTextPosition(SwingConstants.BOTTOM);
 			b.setHorizontalTextPosition(SwingConstants.CENTER);
+			b.setFocusPainted(false);
 			panel.add(b);
 		}
 			
