@@ -1,4 +1,4 @@
-package isi.died.tp.estructuras;
+package estructuras;
 
 import java.util.List;
 

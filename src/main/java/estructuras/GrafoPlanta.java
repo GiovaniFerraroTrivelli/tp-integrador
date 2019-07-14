@@ -1,9 +1,9 @@
-package isi.died.tp.estructuras;
+package estructuras;
 
 import java.util.List;
 
-import isi.died.tp.dominio.Insumo;
-import isi.died.tp.dominio.Planta;
+import dominio.Insumo;
+import dominio.Planta;
 
 public class GrafoPlanta extends Grafo<Planta> {
 	public void imprimirDistanciaAdyacentes(Planta inicial) {
@@ -16,7 +16,6 @@ public class GrafoPlanta extends Grafo<Planta> {
 		}
 	}
 
-	// a
 	public Planta buscarPlanta(Planta inicial, Insumo i, Integer saltos) {
 
 		if (saltos < 0) {
@@ -33,12 +32,4 @@ public class GrafoPlanta extends Grafo<Planta> {
 		return null;
 	}
 
-	// b
-	// public Planta buscarPlanta(Planta inicial, Insumo i) {
-
-	// }
-	// c
-	// public Planta buscarPlanta (Insumo i)
-	// {
-	// }
 }

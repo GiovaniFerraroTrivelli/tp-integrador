@@ -1,4 +1,4 @@
-package isi.died.tp.dominio;
+package dominio;
 
 public class Insumo implements Comparable<Insumo> {
 	protected Integer id;

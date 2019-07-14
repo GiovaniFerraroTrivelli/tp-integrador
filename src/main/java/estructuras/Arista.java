@@ -1,4 +1,4 @@
-package isi.died.tp.estructuras;
+package estructuras;
 
 public class Arista<T> {
 	private Vertice<T> inicio;
