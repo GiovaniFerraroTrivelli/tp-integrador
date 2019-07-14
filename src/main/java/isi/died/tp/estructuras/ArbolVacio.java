@@ -5,10 +5,10 @@ import java.util.List;
 
 public class ArbolVacio<E extends Comparable<E>> extends Arbol<E> {
 
-	public ArbolVacio(){
-		this.valor=null;
+	public ArbolVacio() {
+		this.valor = null;
 	}
-	
+
 	@Override
 	public List<E> preOrden() {
 		return new ArrayList<E>();
@@ -56,9 +56,10 @@ public class ArbolVacio<E extends Comparable<E>> extends Arbol<E> {
 
 	@Override
 	public void agregar(E a) {
-		
+
 	}
-        @Override
+
+	@Override
 	public int profundidad() {
 		return 0;
 	}
@@ -78,8 +79,8 @@ public class ArbolVacio<E extends Comparable<E>> extends Arbol<E> {
 		return false;
 	}
 
-	public int cuentaNodosDeNivelAux(int nivel, int nivelActual)
-	{
+	@Override
+	public int cuentaNodosDeNivelAux(int nivel, int nivelActual) {
 		return 0;
 	}
 

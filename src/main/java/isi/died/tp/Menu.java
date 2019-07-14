@@ -121,52 +121,56 @@ public class Menu {
 	public static void InsumoPanel(JFrame frame)
 	{
 		JButton button; 
-		JPanel pane = new JPanel();
+		JPanel panel = new JPanel();
 		
-		pane.setLayout(new GridBagLayout());  
+		panel.setLayout(new GridBagLayout());  
 		GridBagConstraints c = new GridBagConstraints();  
 
-		button = new JButton("Button 1");  
+		c.fill = GridBagConstraints.HORIZONTAL; 
+		c.weightx = 0.1;  
+		
+		button = new JButton("Nuevo");  
 
 		c.fill = GridBagConstraints.HORIZONTAL;  
 		c.gridx = 0;  
 		c.gridy = 0;  
-		pane.add(button, c);  
+		panel.add(button, c);  
 		  
-		button = new JButton("Button 2");  
+		button = new JButton("Editar");  
 		c.fill = GridBagConstraints.HORIZONTAL;  
-		c.weightx = 0.5;  
 		c.gridx = 1;  
 		c.gridy = 0;  
-		pane.add(button, c);  
+		panel.add(button, c);  
 		  
-		button = new JButton("Button 3");  
+		button = new JButton("Borrar");  
 		c.fill = GridBagConstraints.HORIZONTAL;  
-		c.weightx = 0.5;  
 		c.gridx = 2;  
 		c.gridy = 0;  
-		pane.add(button, c);  
+		panel.add(button, c);  
 		  
 		button = new JButton("Long-Named Button 4");  
 		c.fill = GridBagConstraints.HORIZONTAL;  
-		c.ipady = 40;      //make this component tall  
+		c.ipady = 360;      //make this component tall  
 		c.weightx = 0.0;  
-		c.gridwidth = 3;  
+		c.gridwidth = 6;
 		c.gridx = 0;  
 		c.gridy = 1;  
-		pane.add(button, c);  
+		panel.add(button, c);  
 		  
 		button = new JButton("5");  
 		c.fill = GridBagConstraints.HORIZONTAL;  
 		c.ipady = 0;       //reset to default  
-		c.weighty = 1.0;   //request any extra vertical space  
-		c.anchor = GridBagConstraints.PAGE_END; //bottom of space  
-		c.gridx = 1;       //aligned with button 2  
-		c.gridwidth = 2;   //2 columns wide  
-		c.gridy = 2;       //third row  
-		pane.add(button, c);  
+		c.weighty = 2.0;   //request any extra vertical space  
+		c.gridx = 0;       //aligned with button 2  
+		c.gridwidth = 8;   //2 columns wide  
+		c.gridy = 3;       //third row  
+		panel.add(button, c);  
 		
-		panels.add(pane);
+		panel.setBounds(0, 0, SIZE_X, SIZE_Y);
+		panel.setVisible(false);
+		
+		frame.add(panel);
+		panels.add(panel);
 	}
 
 	public static void StockPanel(JFrame frame)

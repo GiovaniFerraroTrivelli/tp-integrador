@@ -3,21 +3,22 @@ package isi.died.tp.estructuras;
 public class Vertice<T> {
 
 	private T valor;
-	
-	public Vertice(){	}
-	 
-	public Vertice(T v){
+
+	public Vertice() {
+	}
+
+	public Vertice(T v) {
 		this.valor = v;
 	}
-	
-	public void setValor(T v){
+
+	public void setValor(T v) {
 		this.valor = v;
 	}
-	
-	public T getValor(){
+
+	public T getValor() {
 		return this.valor;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -47,6 +48,5 @@ public class Vertice<T> {
 	public String toString() {
 		return valor.toString();
 	}
-	
-	
+
 }
