@@ -17,6 +17,7 @@ public class Menu {
 
 	public static void main(String[] args)
 	{
+		// comentario de ejemplo
 		createAndShowGUI();
 	}
 	
@@ -53,7 +54,7 @@ public class Menu {
 		botones.add(plantab);
 		botones.add(infob);
 		
-		insumob.setText("Insumos");	
+		insumob.setText("Insumos");
 		stockb.setText("Stock");	
 		camionb.setText("Camiones");
 		caminob.setText("Caminos");	
