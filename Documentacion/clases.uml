@@ -2,70 +2,138 @@
 
 hide enum methods
 
-class Grafo{
+package dominio{
+    class Grafo{
 
+    }
+
+    class Insumo{
+        -id: Integer
+        -descripcion: String
+        -costo: Float
+        -peso: Float
+        -esRefrigerado: Boolean
+        +compareTo(Insumo): int //<<Override>>//
+    }
+
+    enum UnidadMedida{
+        +KILO
+        +PIEZA
+        +GRAMO
+        +METRO
+        +LITRO
+        +M3
+        +M2
+        +CM2
+        +CM
+    }
+
+    class Stock{
+        -id: Integer
+        -cantidad: Integer
+        -puntoPedido: Integer
+    }
+
+    class Planta{
+        -id: Integer
+    }
+    note left: nodos del grafo
+
+    class Ruta{
+        -distancia: Float
+        -duracionViaje: Integer
+        -pesoMax: Float
+    }
+    note left: aristas del grafo
+
+    class Camion{
+        -marca: String
+        -modelo: String
+        -dominio: String
+        -anio: Integer
+        -costoKm: Float
+        -capacidad: Integer
+        -aptoTransportarLiquido: Boolean
+    }
+
+    interface "Comparable<T>"{
+            +compareTo(T): int
+    }
+
+    Insumo ..|> "Comparable<T>": "<<implements>>"
+    Insumo --> UnidadMedida
+    Stock "0..n" <-- "1" Insumo
+    Planta "1" <-- "0..n" Stock: " ˗ listaStock"
+    Grafo "1" *-- "0..n" Planta
+    Grafo "1" *-- "0..n" Ruta
+    Camion --> Insumo: ˗ transoporta
+    Planta -[hidden]|> Ruta
+    Insumo -[hidden]|> Camion
 }
 
-class Insumo{
-    -id: Integer
-    -descripcion: String
-    -costo: Float
-    -peso: Float
-    -esRefrigerado: Boolean
-    +compareTo(Insumo): int //<<Override>>//
+package gestores{
+    class GestorInsumo <<(S, #FF7700) Singleton>> {
+        -{static} singleton: GestorInsumo
+        -GestorInsumo()
+        +{static} getInstance(): GestorInsumo
+        +buscar(String[]): Insumo //<<Override>>//
+        +modificar(Insumo, String[]): Void //<<Override>>//
+        +crear(String[]): Insumo //<<Override>>//
+    }
+
+    class GestorPlanta <<(S, #FF7700) Singleton>> {
+        -{static} singleton: GestorPlanta
+        -GestorPlanta()
+        +{static} getInstance(): GestorPlanta
+        +buscar(String[]): Planta //<<Override>>//
+        +modificar(Planta, String[]): Void //<<Override>>//
+        +crear(String[]): Planta //<<Override>>//
+    }
+
+    class GestorStock <<(S, #FF7700) Singleton>> {
+        -{static} singleton: GestorStock
+        -GestorStock()
+        +{static} getInstance(): GestorStock
+        +buscar(String[]): Stock //<<Override>>// 
+        +modificar(Stock, String[]): Void //<<Override>>//
+        +crear(String[]): Stock //<<Override>>//
+    }
+
+    class GestorRuta <<(S, #FF7700) Singleton>> {
+        -{static} singleton: GestorRuta
+        -GestorRuta()
+        +{static} getInstance(): GestorRuta
+        +buscar(String[]): Ruta //<<Override>>// 
+        +modificar(Ruta, String[]): Void //<<Override>>//
+        +crear(String[]): Ruta //<<Override>>//
+    }
+
+    class GestorCamion <<(S, #FF7700) Singleton>> {
+        -{static} singleton: GestorCamion
+        -GestorCamion()
+        +{static} getInstance(): GestorCamion
+        +buscar(String[]): Camion //<<Override>>//
+        +modificar(Camion, String[]): Void //<<Override>>//
+        +crear(String[]): Camion //<<Override>>//
+    }
+
+    interface "Gestor<T>"{
+        +buscar(String[]): T 
+        +modificar(T, String[]): Void
+        +crear(String[]): T
+    }
+
+    GestorRuta ..|> "Gestor<T>": "<<implements>>"
+    GestorCamion ..|> "Gestor<T>": "<<implements>>"
+    GestorPlanta ..|> "Gestor<T>": "<<implements>>"
+    GestorInsumo ..|> "Gestor<T>": "<<implements>>"
+    GestorStock ..|> "Gestor<T>": "<<implements>>"
 }
 
-enum UnidadMedida{
-    +KILO
-    +PIEZA
-    +GRAMO
-    +METRO
-    +LITRO
-    +M3
-    +M2
-    +CM2
-    +CM
-}
-
-class Stock{
-    -id: Integer
-    -cantidad: Integer
-    -puntoPedido: Integer
-}
-
-class Planta{
-    -id: Integer
-}
-note left: nodos del grafo
-
-class Ruta{
-    -distancia: Float
-    -duracionViaje: Integer
-    -pesoMax: Float
-}
-note left: aristas del grafo
-
-class Camion{
-    -marca: String
-    -modelo: String
-    -dominio: String
-    -anio: Integer
-    -costoKm: Float
-    -capacidad: Integer
-    -aptoTransportarLiquido: Boolean
-}
-
-interface "Comparable<T>"{
-    +compareTo(T): int
-}
-
-Insumo ..|> "Comparable<T>": "<<implements>>"
-Insumo --> UnidadMedida
-Stock "0..n" <-- "1" Insumo
-Planta "1" <-- "0..n" Stock
-Grafo "1" *-- "0..n" Planta
-Grafo "1" *-- "0..n" Ruta
-Camion --> Insumo: ˗transoporta
-Camion -[hidden]> Insumo
+GestorRuta "1" -- "0.. n" Ruta
+GestorCamion "1" -- "0.. n" Camion
+GestorPlanta "1" -- "0.. n" Planta
+GestorInsumo "1" -- "0.. n" Insumo
+GestorStock "1" -- "0.. n" Stock
 
 @enduml
