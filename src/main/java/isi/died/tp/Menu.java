@@ -20,20 +20,24 @@ public class Menu {
 
 	public static void main(String[] args)
 	{
-		// comentario de ejemplo
-		menuPrincipal();
+		JFrame frame = new JFrame("Trabajo Práctico Integrador - DIED 2019");
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(600, 400);
+		frame.setMinimumSize(new Dimension(600, 400));
+		
+		menuPrincipal(frame).setVisible(true);
+		InsumoPanel(frame).setVisible(false);
+		
+		frame.setVisible(true);
 	}
 	
-	public static void menuPrincipal()
+	public static JPanel menuPrincipal(JFrame frame)
 	{
-		JFrame frame = new JFrame("Trabajo Práctico Integrador - DIED 2019");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
-		GridLayout test = new GridLayout(3,2);
 		frame.add(panel);
-		panel.setLayout(test);
-		frame.setSize(600, 400);
-		frame.setMinimumSize(new Dimension(600, 400));	
+		GridLayout grid = new GridLayout(3,2);
+		panel.setLayout(grid);
 		
 		ImageIcon insumoIcon = new ImageIcon(new ImageIcon("images/Insumo.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		ImageIcon stockIcon = new ImageIcon(new ImageIcon("images/Stock.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
@@ -64,8 +68,8 @@ public class Menu {
 		plantab.setText("Plantas");	
 		infob.setText("Informacion");	
 		
-		
-		for(int i = 0; i<6; i++)
+		int arraySize = botones.size();
+		for(int i = 0; i < arraySize; i++)
 		{
 			ButtonEdit b = botones.get(i);
 			b.setBackground(Color.WHITE);
@@ -73,14 +77,32 @@ public class Menu {
 			b.setHorizontalTextPosition(SwingConstants.CENTER);
 			b.setFocusPainted(false);
 			panel.add(b);
-			b.addActionListener(panel,i);
+			b.addActionListener(panel, i);
 		}
 		
-		frame.setVisible(true);
-		
-		
+		return panel;
 	}
 	
-	
+	public static JPanel InsumoPanel(JFrame frame)
+	{
+		JPanel panel = new JPanel();
+		GridLayout grid = new GridLayout(3,3);
+		panel.setLayout(grid);
+		frame.add(panel);
+		
+		JButton newButton = new JButton("Nuevo");
+		JButton editButton = new JButton("Editar");
+		JButton deleteButton = new JButton("Borrar");
+
+		panel.add(newButton);
+		panel.add(editButton);
+		panel.add(deleteButton);
+		
+		//b.setBackground(Color.WHITE);
+		//b.setVerticalTextPosition(SwingConstants.BOTTOM);
+		//b.setHorizontalTextPosition(SwingConstants.CENTER);
+		
+		return panel;
+	}
 	
 }
