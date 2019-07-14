@@ -18,24 +18,49 @@ import javax.swing.SwingConstants;
 
 public class Menu {
 
+	static ArrayList<JPanel> panels = new ArrayList<JPanel>();
+	
 	public static void main(String[] args)
 	{
 		JFrame frame = new JFrame("Trabajo Práctico Integrador - DIED 2019");
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(600, 400);
-		frame.setMinimumSize(new Dimension(600, 400));
+		frame.setSize(1280, 720);
+		frame.setMinimumSize(new Dimension(1280, 720));
+		frame.setResizable(false);
 		
-		menuPrincipal(frame).setVisible(true);
-		InsumoPanel(frame).setVisible(false);
+		menuPrincipal(frame);
+		InsumoPanel(frame);
+		StockPanel(frame);
+		CamionPanel(frame);
+		CaminoPanel(frame);
+		PlantaPanel(frame);
+		InfoPanel(frame);
 		
 		frame.setVisible(true);
 	}
 	
+	public static void showPanel(Integer id)
+	{
+		if(id > 0)
+		{
+			panels.get(id).setVisible(true);
+			panels.get(0).setVisible(false);
+		}
+		else
+		{
+			panels.get(0).setVisible(true);
+			
+			int size = panels.size();
+
+			for(int i = 1; i <= size; i++)
+				panels.get(i).setVisible(false);
+		}
+	}
+	
 	public static JPanel menuPrincipal(JFrame frame)
 	{
-		JPanel panel = new JPanel();
-		frame.add(panel);
+		JPanel panel = new JPanel(null);
 		GridLayout grid = new GridLayout(3,2);
 		panel.setLayout(grid);
 		
@@ -77,15 +102,20 @@ public class Menu {
 			b.setHorizontalTextPosition(SwingConstants.CENTER);
 			b.setFocusPainted(false);
 			panel.add(b);
-			b.addActionListener(panel, i);
+			b.addActionListener(panel, i + 1);
 		}
 		
+		panel.setBounds(0, 0, 1280, 720);
+		frame.add(panel);
+		panel.setVisible(true);
+		
+		panels.add(panel);		
 		return panel;
 	}
 	
 	public static JPanel InsumoPanel(JFrame frame)
 	{
-		JPanel panel = new JPanel();
+		JPanel panel = new JPanel(null);
 		GridLayout grid = new GridLayout(3,3);
 		panel.setLayout(grid);
 		frame.add(panel);
@@ -102,7 +132,128 @@ public class Menu {
 		//b.setVerticalTextPosition(SwingConstants.BOTTOM);
 		//b.setHorizontalTextPosition(SwingConstants.CENTER);
 		
+		panel.setBounds(0, 0, 1280, 720);
+		panels.add(panel);
+		return panel;
+	}
+
+	public static JPanel StockPanel(JFrame frame)
+	{
+		JPanel panel = new JPanel(null);
+		GridLayout grid = new GridLayout(3,3);
+		panel.setLayout(grid);
+		frame.add(panel);
+		
+		JButton newButton = new JButton("Nuevo");
+		JButton editButton = new JButton("Editar");
+		JButton deleteButton = new JButton("Borrar");
+
+		panel.add(newButton);
+		panel.add(editButton);
+		panel.add(deleteButton);
+		
+		//b.setBackground(Color.WHITE);
+		//b.setVerticalTextPosition(SwingConstants.BOTTOM);
+		//b.setHorizontalTextPosition(SwingConstants.CENTER);
+		
+		panel.setBounds(0, 0, 1280, 720);
+		panels.add(panel);
+		return panel;
+	}
+
+	public static JPanel CamionPanel(JFrame frame)
+	{
+		JPanel panel = new JPanel(null);
+		GridLayout grid = new GridLayout(3,3);
+		panel.setLayout(grid);
+		frame.add(panel);
+		
+		JButton newButton = new JButton("Nuevo");
+		JButton editButton = new JButton("Editar");
+		JButton deleteButton = new JButton("Borrar");
+
+		panel.add(newButton);
+		panel.add(editButton);
+		panel.add(deleteButton);
+		
+		//b.setBackground(Color.WHITE);
+		//b.setVerticalTextPosition(SwingConstants.BOTTOM);
+		//b.setHorizontalTextPosition(SwingConstants.CENTER);
+		
+		panel.setBounds(0, 0, 1280, 720);
+		panels.add(panel);
+		return panel;
+	}
+
+	public static JPanel CaminoPanel(JFrame frame)
+	{
+		JPanel panel = new JPanel(null);
+		GridLayout grid = new GridLayout(3,3);
+		panel.setLayout(grid);
+		frame.add(panel);
+		
+		JButton newButton = new JButton("Nuevo");
+		JButton editButton = new JButton("Editar");
+		JButton deleteButton = new JButton("Borrar");
+
+		panel.add(newButton);
+		panel.add(editButton);
+		panel.add(deleteButton);
+		
+		//b.setBackground(Color.WHITE);
+		//b.setVerticalTextPosition(SwingConstants.BOTTOM);
+		//b.setHorizontalTextPosition(SwingConstants.CENTER);
+		
+		panel.setBounds(0, 0, 1280, 720);
+		panels.add(panel);
 		return panel;
 	}
 	
+	public static JPanel PlantaPanel(JFrame frame)
+	{
+		JPanel panel = new JPanel(null);
+		GridLayout grid = new GridLayout(3,3);
+		panel.setLayout(grid);
+		frame.add(panel);
+		
+		JButton newButton = new JButton("Nuevo");
+		JButton editButton = new JButton("Editar");
+		JButton deleteButton = new JButton("Borrar");
+
+		panel.add(newButton);
+		panel.add(editButton);
+		panel.add(deleteButton);
+		
+		//b.setBackground(Color.WHITE);
+		//b.setVerticalTextPosition(SwingConstants.BOTTOM);
+		//b.setHorizontalTextPosition(SwingConstants.CENTER);
+		
+		panel.setBounds(0, 0, 1280, 720);
+		panels.add(panel);
+		return panel;
+	}
+
+	public static JPanel InfoPanel(JFrame frame)
+	{
+		JPanel panel = new JPanel(null);
+		GridLayout grid = new GridLayout(3,3);
+		panel.setLayout(grid);
+		frame.add(panel);
+		
+		JButton newButton = new JButton("Nuevo");
+		JButton editButton = new JButton("Editar");
+		JButton deleteButton = new JButton("Borrar");
+
+		panel.add(newButton);
+		panel.add(editButton);
+		panel.add(deleteButton);
+		
+		//b.setBackground(Color.WHITE);
+		//b.setVerticalTextPosition(SwingConstants.BOTTOM);
+		//b.setHorizontalTextPosition(SwingConstants.CENTER);
+		
+		panel.setBounds(0, 0, 1280, 720);
+		panels.add(panel);
+		return panel;
+	}
 }
