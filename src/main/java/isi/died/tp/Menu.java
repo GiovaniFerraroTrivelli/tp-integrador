@@ -2,6 +2,8 @@ package isi.died.tp;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -15,18 +17,20 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-
 public class Menu {
 
 	static ArrayList<JPanel> panels = new ArrayList<JPanel>();
+	
+	private final static Integer SIZE_X = 1280;
+	private final static Integer SIZE_Y = 720;
 	
 	public static void main(String[] args)
 	{
 		JFrame frame = new JFrame("Trabajo Práctico Integrador - DIED 2019");
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1280, 720);
-		frame.setMinimumSize(new Dimension(1280, 720));
+		frame.setSize(SIZE_X, SIZE_Y);
+		frame.setMinimumSize(new Dimension(SIZE_X, SIZE_Y));
 		frame.setResizable(false);
 		
 		menuPrincipal(frame);
@@ -42,6 +46,8 @@ public class Menu {
 	
 	public static void showPanel(Integer id)
 	{
+		System.out.println("Llamando ID: " + id);
+		
 		if(id > 0)
 		{
 			panels.get(id).setVisible(true);
@@ -105,39 +111,65 @@ public class Menu {
 			b.addActionListener(panel, i + 1);
 		}
 		
-		panel.setBounds(0, 0, 1280, 720);
+		panel.setBounds(0, 0, SIZE_X, SIZE_Y);
 		frame.add(panel);
-		panel.setVisible(true);
 		
 		panels.add(panel);		
 		return panel;
 	}
 	
-	public static JPanel InsumoPanel(JFrame frame)
+	public static void InsumoPanel(JFrame frame)
 	{
-		JPanel panel = new JPanel(null);
-		GridLayout grid = new GridLayout(3,3);
-		panel.setLayout(grid);
-		frame.add(panel);
+		JButton button; 
+		JPanel pane = new JPanel();
 		
-		JButton newButton = new JButton("Nuevo");
-		JButton editButton = new JButton("Editar");
-		JButton deleteButton = new JButton("Borrar");
+		pane.setLayout(new GridBagLayout());  
+		GridBagConstraints c = new GridBagConstraints();  
 
-		panel.add(newButton);
-		panel.add(editButton);
-		panel.add(deleteButton);
+		button = new JButton("Button 1");  
+
+		c.fill = GridBagConstraints.HORIZONTAL;  
+		c.gridx = 0;  
+		c.gridy = 0;  
+		pane.add(button, c);  
+		  
+		button = new JButton("Button 2");  
+		c.fill = GridBagConstraints.HORIZONTAL;  
+		c.weightx = 0.5;  
+		c.gridx = 1;  
+		c.gridy = 0;  
+		pane.add(button, c);  
+		  
+		button = new JButton("Button 3");  
+		c.fill = GridBagConstraints.HORIZONTAL;  
+		c.weightx = 0.5;  
+		c.gridx = 2;  
+		c.gridy = 0;  
+		pane.add(button, c);  
+		  
+		button = new JButton("Long-Named Button 4");  
+		c.fill = GridBagConstraints.HORIZONTAL;  
+		c.ipady = 40;      //make this component tall  
+		c.weightx = 0.0;  
+		c.gridwidth = 3;  
+		c.gridx = 0;  
+		c.gridy = 1;  
+		pane.add(button, c);  
+		  
+		button = new JButton("5");  
+		c.fill = GridBagConstraints.HORIZONTAL;  
+		c.ipady = 0;       //reset to default  
+		c.weighty = 1.0;   //request any extra vertical space  
+		c.anchor = GridBagConstraints.PAGE_END; //bottom of space  
+		c.gridx = 1;       //aligned with button 2  
+		c.gridwidth = 2;   //2 columns wide  
+		c.gridy = 2;       //third row  
+		pane.add(button, c);  
 		
-		//b.setBackground(Color.WHITE);
-		//b.setVerticalTextPosition(SwingConstants.BOTTOM);
-		//b.setHorizontalTextPosition(SwingConstants.CENTER);
-		
-		panel.setBounds(0, 0, 1280, 720);
-		panels.add(panel);
-		return panel;
+		panels.add(pane);
 	}
 
-	public static JPanel StockPanel(JFrame frame)
+	public static void StockPanel(JFrame frame)
 	{
 		JPanel panel = new JPanel(null);
 		GridLayout grid = new GridLayout(3,3);
@@ -156,12 +188,13 @@ public class Menu {
 		//b.setVerticalTextPosition(SwingConstants.BOTTOM);
 		//b.setHorizontalTextPosition(SwingConstants.CENTER);
 		
-		panel.setBounds(0, 0, 1280, 720);
+		panel.setBounds(0, 0, SIZE_X, SIZE_Y);
+		panel.setVisible(false);
+		
 		panels.add(panel);
-		return panel;
 	}
 
-	public static JPanel CamionPanel(JFrame frame)
+	public static void CamionPanel(JFrame frame)
 	{
 		JPanel panel = new JPanel(null);
 		GridLayout grid = new GridLayout(3,3);
@@ -180,12 +213,13 @@ public class Menu {
 		//b.setVerticalTextPosition(SwingConstants.BOTTOM);
 		//b.setHorizontalTextPosition(SwingConstants.CENTER);
 		
-		panel.setBounds(0, 0, 1280, 720);
+		panel.setBounds(0, 0, SIZE_X, SIZE_Y);
+		panel.setVisible(false);
+		
 		panels.add(panel);
-		return panel;
 	}
 
-	public static JPanel CaminoPanel(JFrame frame)
+	public static void CaminoPanel(JFrame frame)
 	{
 		JPanel panel = new JPanel(null);
 		GridLayout grid = new GridLayout(3,3);
@@ -204,12 +238,13 @@ public class Menu {
 		//b.setVerticalTextPosition(SwingConstants.BOTTOM);
 		//b.setHorizontalTextPosition(SwingConstants.CENTER);
 		
-		panel.setBounds(0, 0, 1280, 720);
+		panel.setBounds(0, 0, SIZE_X, SIZE_Y);
+		panel.setVisible(false);
+		
 		panels.add(panel);
-		return panel;
 	}
 	
-	public static JPanel PlantaPanel(JFrame frame)
+	public static void PlantaPanel(JFrame frame)
 	{
 		JPanel panel = new JPanel(null);
 		GridLayout grid = new GridLayout(3,3);
@@ -228,12 +263,13 @@ public class Menu {
 		//b.setVerticalTextPosition(SwingConstants.BOTTOM);
 		//b.setHorizontalTextPosition(SwingConstants.CENTER);
 		
-		panel.setBounds(0, 0, 1280, 720);
+		panel.setBounds(0, 0, SIZE_X, SIZE_Y);
+		panel.setVisible(false);
+		
 		panels.add(panel);
-		return panel;
 	}
 
-	public static JPanel InfoPanel(JFrame frame)
+	public static void InfoPanel(JFrame frame)
 	{
 		JPanel panel = new JPanel(null);
 		GridLayout grid = new GridLayout(3,3);
@@ -252,8 +288,9 @@ public class Menu {
 		//b.setVerticalTextPosition(SwingConstants.BOTTOM);
 		//b.setHorizontalTextPosition(SwingConstants.CENTER);
 		
-		panel.setBounds(0, 0, 1280, 720);
+		panel.setBounds(0, 0, SIZE_X, SIZE_Y);
+		panel.setVisible(false);
+		
 		panels.add(panel);
-		return panel;
 	}
 }
