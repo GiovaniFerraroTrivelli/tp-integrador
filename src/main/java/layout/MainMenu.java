@@ -46,12 +46,12 @@ public class MainMenu {
 	private CardLayout cl;
 	private JTextField textField_1;
 	private static JTable tablePlantas;
-	
+	GestorPlanta gestorPlanta = GestorPlanta.getInstance();
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		GestorPlanta gestorPlanta = GestorPlanta.getInstance();
+		
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -468,8 +468,12 @@ public class MainMenu {
 					
 					btnEliminar.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
-							GestorPlanta.getInstance().borrar((Integer)tablePlantas.getValueAt(tablePlantas.getSelectedRow(), 0));
-							refreshPlantaTable();
+							try {
+							gestorPlanta.borrar((Integer)tablePlantas.getValueAt(tablePlantas.getSelectedRow(), 0));
+							refreshPlantaTable();}
+							catch(Exception e) {
+								System.out.println("No hay plantas seleccionadas");
+							}
 						}
 					});
 					
