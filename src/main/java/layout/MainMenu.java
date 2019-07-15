@@ -23,6 +23,11 @@ import java.awt.GridBagConstraints;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+
+import dominio.Insumo;
+import dominio.InsumoLiquido;
+import dominio.UnidadDeMedida;
+
 import java.awt.Insets;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -239,6 +244,13 @@ public class MainMenu {
 					gbc_btnNuevoInsumo.insets = new Insets(0, 0, 5, 5);
 					gbc_btnNuevoInsumo.gridx = 1;
 					gbc_btnNuevoInsumo.gridy = 3;
+					
+					btnNuevoInsumo.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							CreateInsumoDialog cid = new CreateInsumoDialog();
+						}
+					});
+
 					panel.add(btnNuevoInsumo, gbc_btnNuevoInsumo);
 				}
 				{
