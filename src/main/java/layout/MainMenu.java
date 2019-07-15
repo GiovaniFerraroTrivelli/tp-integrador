@@ -22,12 +22,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import dominio.Insumo;
 import dominio.InsumoLiquido;
 import dominio.Planta;
+import dominio.Stock;
 import dominio.UnidadDeMedida;
 import gestores.GestorPlanta;
 
@@ -46,7 +49,9 @@ public class MainMenu {
 	private CardLayout cl;
 	private JTextField textField_1;
 	private static JTable tablePlantas;
-	GestorPlanta gestorPlanta = GestorPlanta.getInstance();
+	private static JTable tableStock;
+	static GestorPlanta gestorPlanta = GestorPlanta.getInstance();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -168,7 +173,6 @@ public class MainMenu {
 	 */
 	private void loadInsumosMenu()
 	{
-		System.out.println("asdada");
 		JPanel pnlInsumos = new JPanel();
 		frmTrabajoPrctico.getContentPane().add(pnlInsumos, "card__Insumos");
 		pnlInsumos.setLayout(new BorderLayout(0, 0));
@@ -363,7 +367,6 @@ public class MainMenu {
 
 	private void loadPlantasMenu()
 	{
-		System.out.println("asdada");
 		JPanel pnlPlantas = new JPanel();
 		frmTrabajoPrctico.getContentPane().add(pnlPlantas, "card__Planta");
 		pnlPlantas.setLayout(new BorderLayout(0, 0));
@@ -468,12 +471,19 @@ public class MainMenu {
 					
 					btnEliminar.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
-							try {
-							gestorPlanta.borrar((Integer)tablePlantas.getValueAt(tablePlantas.getSelectedRow(), 0));
-							refreshPlantaTable();}
-							catch(Exception e) {
-								System.out.println("No hay plantas seleccionadas");
-							}
+							Integer rowId = tablePlantas.getSelectedRow();
+
+                            if(rowId < 0)
+                            {
+                                JOptionPane.showMessageDialog(frmTrabajoPrctico,
+                                        "No hay ninguna planta seleccionada",
+                                        "Información",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                                return;
+                            }
+
+                            gestorPlanta.borrar((Integer)tablePlantas.getValueAt(rowId, 0));
+                            refreshPlantaTable();
 						}
 					});
 					
@@ -528,6 +538,14 @@ public class MainMenu {
 				tablePlantas.setDefaultEditor(Object.class, null);
 				JTableHeader header = tablePlantas.getTableHeader();
 				JScrollPane panel_scrlpn = new JScrollPane(tablePlantas);
+				
+				tablePlantas.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+			        public void valueChanged(ListSelectionEvent event) {
+			        	if (!event.getValueIsAdjusting() && tablePlantas.getSelectedRow() != -1)
+			        		refreshStockTable((Integer)tablePlantas.getValueAt(tablePlantas.getSelectedRow(), 0));
+			        }
+			    });
+				
 				panel.add(panel_scrlpn, gbc_panel_1);
 			}
 			{
@@ -538,21 +556,12 @@ public class MainMenu {
 				gbc_panel_1.gridx = 6;
 				gbc_panel_1.gridy = 4;
 				
-				String data[][] = {
-			              {"Manzana","5"},
-		                  {"PaVos","84"},
-		                  {"Premiums Nostalgia Gamers","82"},
-		          };
-				
-				String col[] = {"Stock","Cantidad"};
-				
-				DefaultTableModel model = new DefaultTableModel(data,col);
-				JTable table = new JTable(model);
-				table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-				table.setAutoCreateRowSorter(true);
-				table.setDefaultEditor(Object.class, null);
-				JTableHeader header = table.getTableHeader();
-				JScrollPane panel_scrlpn = new JScrollPane(table);
+				tableStock = new JTable();
+				tableStock.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				tableStock.setAutoCreateRowSorter(true);
+				tableStock.setDefaultEditor(Object.class, null);
+				JTableHeader header = tablePlantas.getTableHeader();
+				JScrollPane panel_scrlpn = new JScrollPane(tableStock);
 				panel.add(panel_scrlpn, gbc_panel_1);
 			}
 			{
@@ -571,7 +580,7 @@ public class MainMenu {
 	{
 		String col[] = {"ID","Nombre"};
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-		ArrayList<Planta> tempListaPlantas = GestorPlanta.getInstance().getListaPlantas();
+		ArrayList<Planta> tempListaPlantas = gestorPlanta.getListaPlantas();
 		
 		for (int i = 0; i < tempListaPlantas.size(); i++)
 		{
@@ -579,6 +588,26 @@ public class MainMenu {
 		   String nombre = tempListaPlantas.get(i).getNombre();
 			   
 		   Object[] data = {id, nombre};
+		   tableModel.addRow(data);
+		}
+		
+		tablePlantas.setModel(tableModel);
+	}
+	
+	public static void refreshStockTable(Integer plantaId)
+	{
+		String col[] = {"ID", "Insumo", "Cantidad", "Punto pedido"};
+		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+		ArrayList<Stock> tempListaStock = gestorPlanta.getStockByPlantaId(plantaId);
+		
+		for (int i = 0; i < tempListaStock.size(); i++)
+		{
+		   Integer id = tempListaStock.get(i).getId();
+		   String descripcion = tempListaStock.get(i).getInsumo().getDescripcion();
+		   Integer cantidad = tempListaStock.get(i).getCantidad();
+		   Integer puntopedido = tempListaStock.get(i).getPuntoPedido();
+		   
+		   Object[] data = {id, descripcion, cantidad, puntopedido};
 		   tableModel.addRow(data);
 		}
 		

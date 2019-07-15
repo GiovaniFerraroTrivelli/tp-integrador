@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 
 public class CreateInsumoDialog extends JFrame {
 
@@ -47,9 +48,9 @@ public class CreateInsumoDialog extends JFrame {
 		contentPane.add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{119, 58, 86, 32, 0};
-		gbl_panel.rowHeights = new int[]{55, 20, 0, 0, 0, 0};
+		gbl_panel.rowHeights = new int[]{55, 0, 20, 0, 0, 0, 0};
 		gbl_panel.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
 		JPanel panel_2 = new JPanel();
@@ -60,12 +61,28 @@ public class CreateInsumoDialog extends JFrame {
 		gbc_panel_2.gridy = 0;
 		panel.add(panel_2, gbc_panel_2);
 		
+		JLabel lblPlanta = new JLabel("Planta:");
+		GridBagConstraints gbc_lblPlanta = new GridBagConstraints();
+		gbc_lblPlanta.anchor = GridBagConstraints.EAST;
+		gbc_lblPlanta.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPlanta.gridx = 1;
+		gbc_lblPlanta.gridy = 1;
+		panel.add(lblPlanta, gbc_lblPlanta);
+		
+		JComboBox comboBox = new JComboBox();
+		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBox.gridx = 2;
+		gbc_comboBox.gridy = 1;
+		panel.add(comboBox, gbc_comboBox);
+		
 		JLabel lblDescripcin = new JLabel("Descripción:");
 		GridBagConstraints gbc_lblDescripcin = new GridBagConstraints();
 		gbc_lblDescripcin.anchor = GridBagConstraints.EAST;
 		gbc_lblDescripcin.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDescripcin.gridx = 1;
-		gbc_lblDescripcin.gridy = 1;
+		gbc_lblDescripcin.gridy = 2;
 		panel.add(lblDescripcin, gbc_lblDescripcin);
 		
 		txtDescripcion = new JTextField();
@@ -74,7 +91,7 @@ public class CreateInsumoDialog extends JFrame {
 		gbc_txtDescripcion.anchor = GridBagConstraints.NORTH;
 		gbc_txtDescripcion.insets = new Insets(0, 0, 5, 5);
 		gbc_txtDescripcion.gridx = 2;
-		gbc_txtDescripcion.gridy = 1;
+		gbc_txtDescripcion.gridy = 2;
 		panel.add(txtDescripcion, gbc_txtDescripcion);
 		txtDescripcion.setColumns(10);
 		
@@ -83,7 +100,7 @@ public class CreateInsumoDialog extends JFrame {
 		gbc_lblCosto.insets = new Insets(0, 0, 5, 5);
 		gbc_lblCosto.anchor = GridBagConstraints.EAST;
 		gbc_lblCosto.gridx = 1;
-		gbc_lblCosto.gridy = 2;
+		gbc_lblCosto.gridy = 3;
 		panel.add(lblCosto, gbc_lblCosto);
 		
 		txtCosto = new JTextField();
@@ -91,7 +108,7 @@ public class CreateInsumoDialog extends JFrame {
 		gbc_txtCosto.insets = new Insets(0, 0, 5, 5);
 		gbc_txtCosto.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtCosto.gridx = 2;
-		gbc_txtCosto.gridy = 2;
+		gbc_txtCosto.gridy = 3;
 		panel.add(txtCosto, gbc_txtCosto);
 		txtCosto.setColumns(10);
 		
@@ -100,7 +117,7 @@ public class CreateInsumoDialog extends JFrame {
 		gbc_lblPeso.anchor = GridBagConstraints.EAST;
 		gbc_lblPeso.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPeso.gridx = 1;
-		gbc_lblPeso.gridy = 3;
+		gbc_lblPeso.gridy = 4;
 		panel.add(lblPeso, gbc_lblPeso);
 		
 		textField = new JTextField();
@@ -108,7 +125,7 @@ public class CreateInsumoDialog extends JFrame {
 		gbc_textField.insets = new Insets(0, 0, 5, 5);
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField.gridx = 2;
-		gbc_textField.gridy = 3;
+		gbc_textField.gridy = 4;
 		panel.add(textField, gbc_textField);
 		textField.setColumns(10);
 		
@@ -117,7 +134,7 @@ public class CreateInsumoDialog extends JFrame {
 		gbc_chckbxS.anchor = GridBagConstraints.WEST;
 		gbc_chckbxS.insets = new Insets(0, 0, 0, 5);
 		gbc_chckbxS.gridx = 2;
-		gbc_chckbxS.gridy = 4;
+		gbc_chckbxS.gridy = 5;
 		panel.add(chckbxS, gbc_chckbxS);
 		
 		JPanel panel_1 = new JPanel();

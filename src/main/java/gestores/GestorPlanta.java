@@ -2,6 +2,7 @@ package gestores;
 
 import java.util.ArrayList;
 import dominio.Planta;
+import dominio.Stock;
 
 public class GestorPlanta implements Gestor<Object> {
     private static final GestorPlanta INSTANCE = new GestorPlanta();
@@ -46,5 +47,17 @@ public class GestorPlanta implements Gestor<Object> {
 		return null;
 	}
     
+	public ArrayList<Stock> getStockByPlantaId(Integer id)
+	{
+		for(int i = 0; i < listaPlantas.size(); i++)
+		{
+			if(listaPlantas.get(i).getId() == id)
+			{
+				return listaPlantas.get(i).getListaStock();
+			}
+		}
+		
+		return null;
+	}
     
 }

@@ -16,6 +16,14 @@ public class Insumo implements Comparable<Insumo> {
 		this.peso = peso;
 	}
 
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
 	public Float getCosto() {
 		return costo;
 	}
