@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import dominio.Insumo;
 import dominio.InsumoLiquido;
 import dominio.UnidadDeMedida;
+import gestores.GestorPlanta;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -19,6 +20,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JCheckBox;
 
@@ -74,20 +77,15 @@ public class CreatePlantaDialog extends JFrame {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Insumo insumo;
+				GestorPlanta.crearPlanta(txtDescripcion.getText());
+				System.out.println(GestorPlanta.getListaPlantas().toString());
 				
-				if(chckbxS.isSelected())
-				{
-					insumo = new InsumoLiquido(323232, UnidadDeMedida.M2, 5, 30.0f);
-				}
-				else
-				{
-					//insumo = new Insumo();
-				}
-
+				MainMenu.refreshPlantaTable();
+				
 				dispose();
 			}
 		});
+
 		panel_1.add(btnGuardar);
 		
 		JButton btnCancelar = new JButton("Cancelar");

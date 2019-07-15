@@ -27,7 +27,9 @@ import javax.swing.table.JTableHeader;
 
 import dominio.Insumo;
 import dominio.InsumoLiquido;
+import dominio.Planta;
 import dominio.UnidadDeMedida;
+import gestores.GestorPlanta;
 
 import java.awt.Insets;
 import javax.swing.JTextField;
@@ -43,11 +45,14 @@ public class MainMenu {
 	private JFrame frmTrabajoPrctico;
 	private CardLayout cl;
 	private JTextField textField_1;
-
+	private static JTable tablePlantas;
+	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		GestorPlanta gestorPlanta = new GestorPlanta();
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -460,6 +465,14 @@ public class MainMenu {
 					gbc_btnEliminar.insets = new Insets(0, 0, 5, 5);
 					gbc_btnEliminar.gridx = 3;
 					gbc_btnEliminar.gridy = 3;
+					
+					btnEliminar.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							GestorPlanta.borrarPlanta((Integer)tablePlantas.getValueAt(tablePlantas.getSelectedRow(), 0));
+							refreshPlantaTable();
+						}
+					});
+					
 					panel.add(btnEliminar, gbc_btnEliminar);
 				}
 			}
@@ -504,24 +517,13 @@ public class MainMenu {
 				gbc_panel_1.fill = GridBagConstraints.BOTH;
 				gbc_panel_1.gridx = 1;
 				gbc_panel_1.gridy = 4;
-				
-				String data[][] = {
-			              {"1","Man Utd","Luis Van gaal","86"},
-		                  {"2","Chelsea","Jose Mourinho","84"},
-		                  {"3","Man City","Manuele Pelegrini","82"},
-		                  {"4","Arsenal","Arsene Wenger","80"},
-		                  {"5","Liverpool","Brendan Rodgers","78"},
-		          };
-				
-				String col[] = {"ID","Nombre"};
-				
-				DefaultTableModel model = new DefaultTableModel(data,col);
-				JTable table = new JTable(model);
-				table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-				table.setAutoCreateRowSorter(true);
-				table.setDefaultEditor(Object.class, null);
-				JTableHeader header = table.getTableHeader();
-				JScrollPane panel_scrlpn = new JScrollPane(table);
+
+				tablePlantas = new JTable();
+				tablePlantas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				tablePlantas.setAutoCreateRowSorter(true);
+				tablePlantas.setDefaultEditor(Object.class, null);
+				JTableHeader header = tablePlantas.getTableHeader();
+				JScrollPane panel_scrlpn = new JScrollPane(tablePlantas);
 				panel.add(panel_scrlpn, gbc_panel_1);
 			}
 			{
@@ -559,5 +561,23 @@ public class MainMenu {
 			}
 		}
 	
+	}
+
+	public static void refreshPlantaTable()
+	{
+		String col[] = {"ID","Nombre"};
+		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+		ArrayList<Planta> tempListaPlantas = GestorPlanta.getListaPlantas();
+		
+		for (int i = 0; i < tempListaPlantas.size(); i++)
+		{
+		   int id = tempListaPlantas.get(i).getId();
+		   String nombre = tempListaPlantas.get(i).getNombre();
+			   
+		   Object[] data = {id, nombre};
+		   tableModel.addRow(data);
+		}
+		
+		tablePlantas.setModel(tableModel);
 	}
 }

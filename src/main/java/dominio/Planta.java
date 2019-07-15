@@ -6,11 +6,19 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Planta {
+	private static Integer lastId = 0;
+	
 	private Integer id;
 	private String nombre;
 
 	private ArrayList<Stock> listaStock;
 
+	public Planta(String nombre)
+	{
+		this.id = ++lastId;
+		this.nombre = nombre;
+	}
+	
 	public Double costoTotal() {
 		return listaStock.stream().mapToDouble((i) -> (i.getInsumo().getStock() * i.getInsumo().getCosto())).sum();
 	}
@@ -37,6 +45,11 @@ public class Planta {
 	public void setListaStock(ArrayList<Stock> listaStock) {
 		this.listaStock = listaStock;
 	}
+	
+	public Integer getId()
+	{
+		return id;
+	}
 
 	public String getNombre() {
 		return nombre;
@@ -46,4 +59,8 @@ public class Planta {
 		this.nombre = nombre;
 	}
 
+	@Override
+	public String toString() {
+		return "Planta [id=" + id + ", nombre=" + nombre + ", listaStock=" + listaStock + "]";
+	}
 }
