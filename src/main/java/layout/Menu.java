@@ -208,6 +208,7 @@ public class Menu {
 		list.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(list, BorderLayout.CENTER);
 
+		panel_1.setBounds(0, 0, SIZE_X, SIZE_Y);
 		panel.setBounds(0, 0, SIZE_X, SIZE_Y);
 		panel.setVisible(false);
 
