@@ -87,6 +87,9 @@ public class MainMenu {
 		
 		// Loading content of second panel (Insumos)
 		loadInsumosMenu();
+		
+		// Loading content of third panel (Stock)
+		loadStockMenu();
 	}
 	
 	private void loadMainMenu()
@@ -112,18 +115,26 @@ public class MainMenu {
 		ImageIcon infoIcon = new ImageIcon(
 				new ImageIcon(resourcesPath + "Info.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 
-		JButton insumob = new JButton(insumoIcon);
-		JButton stockb = new JButton(stockIcon);
+		
+		
 		JButton camionb = new JButton(camionIcon);
 		JButton caminob = new JButton(caminoIcon);
 		JButton plantab = new JButton(plantaIcon);
 		JButton infob = new JButton(infoIcon);
 
+		JButton insumob = new JButton(insumoIcon);
 		insumob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Insumos");
 			}
 		});		
+		
+		JButton stockb = new JButton(stockIcon);
+		stockb.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				cl.show(frmTrabajoPrctico.getContentPane(), "card__Stock");
+			}
+		});
 		
 		ArrayList<JButton> botones = new ArrayList<JButton>();
 		botones.add(insumob);
@@ -279,9 +290,140 @@ public class MainMenu {
 				panel.add(panel_1, gbc_panel_1);
 			}
 		}
-		
-		
+	
+	}
 
-		
+	private void loadStockMenu()
+	{
+		System.out.println("asdada");
+		JPanel pnlStock = new JPanel();
+		frmTrabajoPrctico.getContentPane().add(pnlStock, "card__Stock");
+		pnlStock.setLayout(new BorderLayout(0, 0));
+		{
+			JPanel panel = new JPanel();
+			pnlStock.add(panel, BorderLayout.SOUTH);
+			{
+				JButton btnVolver = new JButton("Volver");
+				btnVolver.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						cl.show(frmTrabajoPrctico.getContentPane(), "card__MainMenu");
+					}
+				});		
+				panel.add(btnVolver);
+			}
+			{
+				JButton btnGuardarCambios = new JButton("Guardar cambios");
+				panel.add(btnGuardarCambios);
+			}
+		}
+		{
+			JPanel panel = new JPanel();
+			pnlStock.add(panel, BorderLayout.NORTH);
+			{
+				JLabel lblInsumos = new JLabel("Panel de administración de Stock");
+				lblInsumos.setFont(new Font("Arial", Font.PLAIN, 18));
+				lblInsumos.setHorizontalAlignment(SwingConstants.LEFT);
+				panel.add(lblInsumos);
+			}
+		}
+		{
+			JPanel panel = new JPanel();
+			pnlStock.add(panel, BorderLayout.CENTER);
+			GridBagLayout gbl_panel = new GridBagLayout();
+			gbl_panel.columnWidths = new int[] {0, 0, 30, 30, 0, 30, 30, 0};
+			gbl_panel.rowHeights = new int[]{0, 0, 0, 0};
+			gbl_panel.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0};
+			gbl_panel.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
+			panel.setLayout(gbl_panel);
+			{
+				JButton btnNuevo = new JButton("Nuevo");
+				btnNuevo.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				GridBagConstraints gbc_btnNuevo = new GridBagConstraints();
+				gbc_btnNuevo.fill = GridBagConstraints.HORIZONTAL;
+				gbc_btnNuevo.insets = new Insets(0, 0, 5, 5);
+				gbc_btnNuevo.gridx = 1;
+				gbc_btnNuevo.gridy = 0;
+				panel.add(btnNuevo, gbc_btnNuevo);
+			}
+			{
+				JButton btnEditar = new JButton("Editar");
+				GridBagConstraints gbc_btnEditar = new GridBagConstraints();
+				gbc_btnEditar.gridwidth = 3;
+				gbc_btnEditar.fill = GridBagConstraints.HORIZONTAL;
+				gbc_btnEditar.insets = new Insets(0, 0, 5, 5);
+				gbc_btnEditar.gridx = 3;
+				gbc_btnEditar.gridy = 0;
+				panel.add(btnEditar, gbc_btnEditar);
+			}
+			{
+				JButton btnBorrar = new JButton("Borrar");
+				GridBagConstraints gbc_btnBorrar = new GridBagConstraints();
+				gbc_btnBorrar.fill = GridBagConstraints.HORIZONTAL;
+				gbc_btnBorrar.insets = new Insets(0, 0, 5, 5);
+				gbc_btnBorrar.gridx = 7;
+				gbc_btnBorrar.gridy = 0;
+				panel.add(btnBorrar, gbc_btnBorrar);
+			}
+			{
+				textField_1 = new JTextField();
+				textField_1.setToolTipText("Escriba aquí lo que desea buscar...");
+				GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+				gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+				gbc_textField_1.fill = GridBagConstraints.BOTH;
+				gbc_textField_1.gridx = 1;
+				gbc_textField_1.gridy = 1;
+				panel.add(textField_1, gbc_textField_1);
+				textField_1.setColumns(10);
+			}
+			{
+				JButton btnBuscar = new JButton("Buscar");
+				GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
+				gbc_btnBuscar.gridwidth = 3;
+				gbc_btnBuscar.fill = GridBagConstraints.BOTH;
+				gbc_btnBuscar.insets = new Insets(0, 0, 5, 5);
+				gbc_btnBuscar.gridx = 3;
+				gbc_btnBuscar.gridy = 1;
+				panel.add(btnBuscar, gbc_btnBuscar);
+			}
+			{
+				JButton btnAgregarStock = new JButton("Agregar stock");
+				GridBagConstraints gbc_btnAgregarStock = new GridBagConstraints();
+				gbc_btnAgregarStock.fill = GridBagConstraints.HORIZONTAL;
+				gbc_btnAgregarStock.insets = new Insets(0, 0, 5, 5);
+				gbc_btnAgregarStock.gridx = 7;
+				gbc_btnAgregarStock.gridy = 1;
+				panel.add(btnAgregarStock, gbc_btnAgregarStock);
+			}
+			{
+				JPanel panel_1 = new JPanel();
+				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+				gbc_panel_1.insets = new Insets(0, 0, 0, 5);
+				gbc_panel_1.fill = GridBagConstraints.BOTH;
+				gbc_panel_1.gridx = 0;
+				gbc_panel_1.gridy = 2;
+				panel.add(panel_1, gbc_panel_1);
+			}
+			{
+				JList list = new JList();
+				GridBagConstraints gbc_list = new GridBagConstraints();
+				gbc_list.insets = new Insets(0, 0, 0, 5);
+				gbc_list.gridwidth = 7;
+				gbc_list.fill = GridBagConstraints.BOTH;
+				gbc_list.gridx = 1;
+				gbc_list.gridy = 2;
+				panel.add(list, gbc_list);
+			}
+			{
+				JPanel panel_1 = new JPanel();
+				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+				gbc_panel_1.fill = GridBagConstraints.BOTH;
+				gbc_panel_1.gridx = 8;
+				gbc_panel_1.gridy = 2;
+				panel.add(panel_1, gbc_panel_1);
+			}
+		}
 	}
 }
