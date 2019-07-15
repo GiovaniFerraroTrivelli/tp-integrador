@@ -27,6 +27,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.JPasswordField;
 import java.awt.Insets;
 import javax.swing.JTextField;
@@ -35,6 +37,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JToolBar;
 import javax.swing.JLabel;
 import java.awt.Font;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.JMenu;
+import javax.swing.JSplitPane;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 public class MainMenu {
 
@@ -42,6 +51,7 @@ public class MainMenu {
 	private CardLayout cl;
 	private JTextField textField;
 	private JTextField textField_1;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -89,7 +99,7 @@ public class MainMenu {
 		loadInsumosMenu();
 		
 		// Loading content of third panel (Stock)
-		loadStockMenu();
+		loadPlantasMenu();
 	}
 	
 	private void loadMainMenu()
@@ -97,14 +107,12 @@ public class MainMenu {
 		JPanel pnlMainMenu = new JPanel();
 		frmTrabajoPrctico.getContentPane().add(pnlMainMenu, "card__MainMenu");
 		
-		GridLayout grid = new GridLayout(3, 2);
+		GridLayout grid = new GridLayout(1, 5);
 		pnlMainMenu.setLayout(grid);
 		
 		String resourcesPath = "src/main/resources/";
 
 		ImageIcon insumoIcon = new ImageIcon(new ImageIcon(resourcesPath + "Insumo.png").getImage()
-				.getScaledInstance(80, 80, Image.SCALE_DEFAULT));
-		ImageIcon stockIcon = new ImageIcon(new ImageIcon(resourcesPath + "Stock.png").getImage()
 				.getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		ImageIcon camionIcon = new ImageIcon(new ImageIcon(resourcesPath + "Camion.png").getImage()
 				.getScaledInstance(80, 80, Image.SCALE_DEFAULT));
@@ -114,12 +122,9 @@ public class MainMenu {
 				.getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		ImageIcon infoIcon = new ImageIcon(
 				new ImageIcon(resourcesPath + "Info.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
-
-		
-		
+	
 		JButton camionb = new JButton(camionIcon);
 		JButton caminob = new JButton(caminoIcon);
-		JButton plantab = new JButton(plantaIcon);
 		JButton infob = new JButton(infoIcon);
 
 		JButton insumob = new JButton(insumoIcon);
@@ -128,24 +133,22 @@ public class MainMenu {
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Insumos");
 			}
 		});		
-		
-		JButton stockb = new JButton(stockIcon);
-		stockb.addActionListener(new ActionListener() {
+
+		JButton plantab = new JButton(plantaIcon);
+		plantab.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				cl.show(frmTrabajoPrctico.getContentPane(), "card__Stock");
+				cl.show(frmTrabajoPrctico.getContentPane(), "card__Planta");
 			}
 		});
 		
 		ArrayList<JButton> botones = new ArrayList<JButton>();
 		botones.add(insumob);
-		botones.add(stockb);
 		botones.add(camionb);
 		botones.add(caminob);
 		botones.add(plantab);
 		botones.add(infob);
 
 		insumob.setText("Insumos");
-		stockb.setText("Stock");
 		camionb.setText("Camiones");
 		caminob.setText("Caminos");
 		plantab.setText("Plantas");
@@ -182,7 +185,7 @@ public class MainMenu {
 					public void actionPerformed(ActionEvent arg0) {
 						cl.show(frmTrabajoPrctico.getContentPane(), "card__MainMenu");
 					}
-				});		
+				});
 				panel.add(btnVolver);
 			}
 			{
@@ -192,112 +195,164 @@ public class MainMenu {
 		}
 		{
 			JPanel panel = new JPanel();
-			pnlInsumos.add(panel, BorderLayout.NORTH);
-			{
-				JLabel lblInsumos = new JLabel("Panel de administración de Insumos");
-				lblInsumos.setFont(new Font("Arial", Font.PLAIN, 18));
-				lblInsumos.setHorizontalAlignment(SwingConstants.LEFT);
-				panel.add(lblInsumos);
-			}
-		}
-		{
-			JPanel panel = new JPanel();
 			pnlInsumos.add(panel, BorderLayout.CENTER);
 			GridBagLayout gbl_panel = new GridBagLayout();
-			gbl_panel.columnWidths = new int[] {0, 0, 30, 30, 0, 30, 30, 0};
-			gbl_panel.rowHeights = new int[]{0, 0, 0, 0};
-			gbl_panel.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0};
-			gbl_panel.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
+			gbl_panel.columnWidths = new int[] {0, 165, 0, 99, 155, 193, 0, 179, 84};
+			gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
+			gbl_panel.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0};
+			gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 			panel.setLayout(gbl_panel);
 			{
-				JButton btnNuevo = new JButton("Nuevo");
-				btnNuevo.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-					}
-				});
-				GridBagConstraints gbc_btnNuevo = new GridBagConstraints();
-				gbc_btnNuevo.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btnNuevo.insets = new Insets(0, 0, 5, 5);
-				gbc_btnNuevo.gridx = 1;
-				gbc_btnNuevo.gridy = 0;
-				panel.add(btnNuevo, gbc_btnNuevo);
+				{
+					JPanel panel_1 = new JPanel();
+					GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+					gbc_panel_1.insets = new Insets(0, 0, 5, 5);
+					gbc_panel_1.fill = GridBagConstraints.BOTH;
+					gbc_panel_1.gridx = 4;
+					gbc_panel_1.gridy = 0;
+					panel.add(panel_1, gbc_panel_1);
+				}
+				{
+					JLabel lblPanelDeAdministracin = new JLabel("Panel de administración de insumos");
+					lblPanelDeAdministracin.setFont(new Font("Segoe UI", Font.PLAIN, 24));
+					GridBagConstraints gbc_lblPanelDeAdministracin = new GridBagConstraints();
+					gbc_lblPanelDeAdministracin.gridwidth = 8;
+					gbc_lblPanelDeAdministracin.insets = new Insets(0, 0, 5, 5);
+					gbc_lblPanelDeAdministracin.gridx = 1;
+					gbc_lblPanelDeAdministracin.gridy = 1;
+					panel.add(lblPanelDeAdministracin, gbc_lblPanelDeAdministracin);
+				}
 			}
 			{
-				JButton btnEditar = new JButton("Editar");
-				GridBagConstraints gbc_btnEditar = new GridBagConstraints();
-				gbc_btnEditar.gridwidth = 3;
-				gbc_btnEditar.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btnEditar.insets = new Insets(0, 0, 5, 5);
-				gbc_btnEditar.gridx = 3;
-				gbc_btnEditar.gridy = 0;
-				panel.add(btnEditar, gbc_btnEditar);
+				{
+					JPanel panel_1 = new JPanel();
+					GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+					gbc_panel_1.insets = new Insets(0, 0, 5, 5);
+					gbc_panel_1.fill = GridBagConstraints.BOTH;
+					gbc_panel_1.gridx = 4;
+					gbc_panel_1.gridy = 2;
+					panel.add(panel_1, gbc_panel_1);
+				}
 			}
 			{
-				JButton btnBorrar = new JButton("Borrar");
-				GridBagConstraints gbc_btnBorrar = new GridBagConstraints();
-				gbc_btnBorrar.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btnBorrar.insets = new Insets(0, 0, 5, 5);
-				gbc_btnBorrar.gridx = 7;
-				gbc_btnBorrar.gridy = 0;
-				panel.add(btnBorrar, gbc_btnBorrar);
+				JComboBox<String> comboBox = new JComboBox<String>();
+				GridBagConstraints gbc_comboBox = new GridBagConstraints();
+				gbc_comboBox.insets = new Insets(0, 0, 5, 5);
+				gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+				gbc_comboBox.gridx = 5;
+				gbc_comboBox.gridy = 3;
+				
+				comboBox.addItem("Nombre");
+				comboBox.addItem("Costo mínimo");
+				comboBox.addItem("Costo máximo");
+				comboBox.addItem("Stock mínimo");
+				comboBox.addItem("Stock máximo");
+				{
+					JButton btnNuevoInsumo = new JButton("Nuevo insumo");
+					GridBagConstraints gbc_btnNuevoInsumo = new GridBagConstraints();
+					gbc_btnNuevoInsumo.anchor = GridBagConstraints.EAST;
+					gbc_btnNuevoInsumo.insets = new Insets(0, 0, 5, 5);
+					gbc_btnNuevoInsumo.gridx = 1;
+					gbc_btnNuevoInsumo.gridy = 3;
+					panel.add(btnNuevoInsumo, gbc_btnNuevoInsumo);
+				}
+				{
+					JButton btnEliminar = new JButton("Eliminar");
+					GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
+					gbc_btnEliminar.anchor = GridBagConstraints.WEST;
+					gbc_btnEliminar.insets = new Insets(0, 0, 5, 5);
+					gbc_btnEliminar.gridx = 2;
+					gbc_btnEliminar.gridy = 3;
+					panel.add(btnEliminar, gbc_btnEliminar);
+				}
+				{
+					JLabel lblOrdenarPor = new JLabel("Ordenar por:");
+					GridBagConstraints gbc_lblOrdenarPor = new GridBagConstraints();
+					gbc_lblOrdenarPor.insets = new Insets(0, 0, 5, 5);
+					gbc_lblOrdenarPor.anchor = GridBagConstraints.EAST;
+					gbc_lblOrdenarPor.gridx = 4;
+					gbc_lblOrdenarPor.gridy = 3;
+					panel.add(lblOrdenarPor, gbc_lblOrdenarPor);
+				}
+				
+				panel.add(comboBox, gbc_comboBox);
 			}
+			JButton btnBuscar = new JButton("Buscar");
+			btnBuscar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				}
+			});
 			{
 				textField_1 = new JTextField();
 				textField_1.setToolTipText("Escriba aquí lo que desea buscar...");
 				GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-				gbc_textField_1.gridwidth = 5;
+				gbc_textField_1.gridwidth = 2;
 				gbc_textField_1.insets = new Insets(0, 0, 5, 5);
 				gbc_textField_1.fill = GridBagConstraints.BOTH;
-				gbc_textField_1.gridx = 1;
-				gbc_textField_1.gridy = 1;
+				gbc_textField_1.gridx = 6;
+				gbc_textField_1.gridy = 3;
 				panel.add(textField_1, gbc_textField_1);
 				textField_1.setColumns(10);
 			}
-			{
-				JButton btnBuscar = new JButton("Buscar");
-				GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
-				gbc_btnBuscar.fill = GridBagConstraints.BOTH;
-				gbc_btnBuscar.insets = new Insets(0, 0, 5, 5);
-				gbc_btnBuscar.gridx = 7;
-				gbc_btnBuscar.gridy = 1;
-				panel.add(btnBuscar, gbc_btnBuscar);
-			}
+			GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
+			gbc_btnBuscar.anchor = GridBagConstraints.WEST;
+			gbc_btnBuscar.gridwidth = 2;
+			gbc_btnBuscar.fill = GridBagConstraints.VERTICAL;
+			gbc_btnBuscar.insets = new Insets(0, 0, 5, 0);
+			gbc_btnBuscar.gridx = 8;
+			gbc_btnBuscar.gridy = 3;
+			panel.add(btnBuscar, gbc_btnBuscar);
 			{
 				JPanel panel_1 = new JPanel();
 				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 				gbc_panel_1.insets = new Insets(0, 0, 0, 5);
 				gbc_panel_1.fill = GridBagConstraints.BOTH;
 				gbc_panel_1.gridx = 0;
-				gbc_panel_1.gridy = 2;
+				gbc_panel_1.gridy = 4;
 				panel.add(panel_1, gbc_panel_1);
 			}
 			{
-				JList list = new JList();
-				GridBagConstraints gbc_list = new GridBagConstraints();
-				gbc_list.insets = new Insets(0, 0, 0, 5);
-				gbc_list.gridwidth = 7;
-				gbc_list.fill = GridBagConstraints.BOTH;
-				gbc_list.gridx = 1;
-				gbc_list.gridy = 2;
-				panel.add(list, gbc_list);
+				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+				gbc_panel_1.gridwidth = 8;
+				gbc_panel_1.insets = new Insets(0, 0, 0, 5);
+				gbc_panel_1.fill = GridBagConstraints.BOTH;
+				gbc_panel_1.gridx = 1;
+				gbc_panel_1.gridy = 4;
+				
+				String data[][] = {
+			              {"1","Man Utd","Luis Van gaal","86"},
+		                  {"2","Chelsea","Jose Mourinho","84"},
+		                  {"3","Man City","Manuele Pelegrini","82"},
+		                  {"4","Arsenal","Arsene Wenger","80"},
+		                  {"5","Liverpool","Brendan Rodgers","78"},
+		          };
+				
+				String col[] = {"ID","Descripción","Costo","Peso", "Refrigerado"};
+				
+				DefaultTableModel model = new DefaultTableModel(data,col);
+				JTable table = new JTable(model);
+				table.setAutoCreateRowSorter(true);
+				JTableHeader header = table.getTableHeader();
+				JScrollPane panel_scrlpn = new JScrollPane(table);
+				panel.add(panel_scrlpn, gbc_panel_1);
 			}
 			{
 				JPanel panel_1 = new JPanel();
 				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 				gbc_panel_1.fill = GridBagConstraints.BOTH;
-				gbc_panel_1.gridx = 8;
-				gbc_panel_1.gridy = 2;
+				gbc_panel_1.gridx = 9;
+				gbc_panel_1.gridy = 4;
 				panel.add(panel_1, gbc_panel_1);
 			}
 		}
 	
 	}
 
-	private void loadStockMenu()
+	private void loadPlantasMenu()
 	{
 		System.out.println("asdada");
 		JPanel pnlStock = new JPanel();
-		frmTrabajoPrctico.getContentPane().add(pnlStock, "card__Stock");
+		frmTrabajoPrctico.getContentPane().add(pnlStock, "card__Planta");
 		pnlStock.setLayout(new BorderLayout(0, 0));
 		{
 			JPanel panel = new JPanel();
@@ -320,7 +375,7 @@ public class MainMenu {
 			JPanel panel = new JPanel();
 			pnlStock.add(panel, BorderLayout.NORTH);
 			{
-				JLabel lblInsumos = new JLabel("Panel de administración de Stock");
+				JLabel lblInsumos = new JLabel("Panel de administración de Plantas");
 				lblInsumos.setFont(new Font("Arial", Font.PLAIN, 18));
 				lblInsumos.setHorizontalAlignment(SwingConstants.LEFT);
 				panel.add(lblInsumos);
