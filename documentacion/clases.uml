@@ -36,6 +36,7 @@ package dominio{
 
     class Planta{
         -id: Integer
+        -nombre: String
     }
     note left: nodos del grafo
 
@@ -66,7 +67,7 @@ package dominio{
     Planta "1" <-- "0..n" Stock: " ˗ listaStock"
     Grafo "1" *-- "0..n" Planta
     Grafo "1" *-- "0..n" Ruta
-    Camion --> Insumo: ˗ transoporta
+    Camion --> Insumo: ˗ transporta
     Planta -[hidden]|> Ruta
     Insumo -[hidden]|> Camion
 }
