@@ -1,18 +1,25 @@
 package layout;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import javax.swing.border.EtchedBorder;
 
 public class Menu {
 
@@ -119,49 +126,87 @@ public class Menu {
 	public static void InsumoPanel(JFrame frame) {
 		JButton button;
 		JPanel panel = new JPanel();
-
-		panel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.1;
-
-		button = new JButton("Nuevo");
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		panel.add(button, c);
-
-		button = new JButton("Editar");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 0;
-		panel.add(button, c);
-
-		button = new JButton("Borrar");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 2;
-		c.gridy = 0;
-		panel.add(button, c);
-
-		button = new JButton("Long-Named Button 4");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.ipady = 360; // make this component tall
-		c.weightx = 0.0;
-		c.gridwidth = 6;
-		c.gridx = 0;
-		c.gridy = 1;
-		panel.add(button, c);
-
-		button = new JButton("5");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.ipady = 0; // reset to default
-		c.weighty = 2.0; // request any extra vertical space
-		c.gridx = 0; // aligned with button 2
-		c.gridwidth = 8; // 2 columns wide
-		c.gridy = 3; // third row
-		panel.add(button, c);
+		JPanel contentPane = new JPanel();
+		
+		contentPane.add(panel, BorderLayout.NORTH);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[]{141, 141, 141, 0};
+		gbl_panel.rowHeights = new int[]{23, 23, 0};
+		gbl_panel.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		panel.setLayout(gbl_panel);
+		
+		JButton btnNewButton = new JButton("Crear");
+		btnNewButton.setBackground(Color.WHITE);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.fill = GridBagConstraints.BOTH;
+		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton.gridx = 0;
+		gbc_btnNewButton.gridy = 0;
+		panel.add(btnNewButton, gbc_btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Editar");
+		btnNewButton_1.setBackground(Color.WHITE);
+		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
+		gbc_btnNewButton_1.fill = GridBagConstraints.BOTH;
+		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton_1.gridx = 1;
+		gbc_btnNewButton_1.gridy = 0;
+		panel.add(btnNewButton_1, gbc_btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("Borrar");
+		btnNewButton_2.setBackground(Color.WHITE);
+		GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
+		gbc_btnNewButton_2.fill = GridBagConstraints.BOTH;
+		gbc_btnNewButton_2.insets = new Insets(0, 0, 5, 0);
+		gbc_btnNewButton_2.gridx = 2;
+		gbc_btnNewButton_2.gridy = 0;
+		panel.add(btnNewButton_2, gbc_btnNewButton_2);
+		
+		JTextPane textPane = new JTextPane();
+		GridBagConstraints gbc_textPane = new GridBagConstraints();
+		gbc_textPane.gridwidth = 2;
+		gbc_textPane.fill = GridBagConstraints.BOTH;
+		gbc_textPane.insets = new Insets(0, 0, 0, 5);
+		gbc_textPane.gridx = 0;
+		gbc_textPane.gridy = 1;
+		panel.add(textPane, gbc_textPane);
+		
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setBackground(Color.WHITE);
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
+		gbc_btnBuscar.fill = GridBagConstraints.BOTH;
+		gbc_btnBuscar.gridx = 2;
+		gbc_btnBuscar.gridy = 1;
+		panel.add(btnBuscar, gbc_btnBuscar);
+		
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1, BorderLayout.SOUTH);
+		
+		JButton btnNewButton_3 = new JButton("Guardar");
+		btnNewButton_3.setBackground(Color.WHITE);
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		panel_1.setLayout(new GridLayout(0, 2, 0, 0));
+		panel_1.add(btnNewButton_3);
+		
+		JButton btnNewButton_4 = new JButton("Volver");
+		btnNewButton_4.setBackground(Color.WHITE);
+		panel_1.add(btnNewButton_4);
+		
+		JList list = new JList();
+		list.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		contentPane.add(list, BorderLayout.CENTER);
 
 		panel.setBounds(0, 0, SIZE_X, SIZE_Y);
 		panel.setVisible(false);
