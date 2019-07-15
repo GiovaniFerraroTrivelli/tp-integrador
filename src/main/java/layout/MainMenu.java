@@ -6,52 +6,37 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
-import java.awt.Window.Type;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.LayoutManager;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
-import javax.swing.JRadioButton;
-import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.JPasswordField;
 import java.awt.Insets;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.BoxLayout;
-import javax.swing.JToolBar;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
-import javax.swing.JMenu;
-import javax.swing.JSplitPane;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+import javax.swing.ListSelectionModel;
 
 public class MainMenu {
 
 	private JFrame frmTrabajoPrctico;
 	private CardLayout cl;
-	private JTextField textField;
 	private JTextField textField_1;
-	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -257,11 +242,19 @@ public class MainMenu {
 					panel.add(btnNuevoInsumo, gbc_btnNuevoInsumo);
 				}
 				{
+					JButton btnEditar_1 = new JButton("Editar");
+					GridBagConstraints gbc_btnEditar_1 = new GridBagConstraints();
+					gbc_btnEditar_1.insets = new Insets(0, 0, 5, 5);
+					gbc_btnEditar_1.gridx = 2;
+					gbc_btnEditar_1.gridy = 3;
+					panel.add(btnEditar_1, gbc_btnEditar_1);
+				}
+				{
 					JButton btnEliminar = new JButton("Eliminar");
 					GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
 					gbc_btnEliminar.anchor = GridBagConstraints.WEST;
 					gbc_btnEliminar.insets = new Insets(0, 0, 5, 5);
-					gbc_btnEliminar.gridx = 2;
+					gbc_btnEliminar.gridx = 3;
 					gbc_btnEliminar.gridy = 3;
 					panel.add(btnEliminar, gbc_btnEliminar);
 				}
@@ -331,7 +324,9 @@ public class MainMenu {
 				
 				DefaultTableModel model = new DefaultTableModel(data,col);
 				JTable table = new JTable(model);
+				table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				table.setAutoCreateRowSorter(true);
+				table.setDefaultEditor(Object.class, null);
 				JTableHeader header = table.getTableHeader();
 				JScrollPane panel_scrlpn = new JScrollPane(table);
 				panel.add(panel_scrlpn, gbc_panel_1);
