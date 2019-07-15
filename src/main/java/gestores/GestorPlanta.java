@@ -3,11 +3,19 @@ package gestores;
 import java.util.ArrayList;
 import dominio.Planta;
 
-public class GestorPlanta extends Gestor {
+public class GestorPlanta implements Gestor<Object> {
+    private static final GestorPlanta INSTANCE = new GestorPlanta();
 
-	private static ArrayList<Planta> listaPlantas = new ArrayList<Planta>();
+    private GestorPlanta() {}
+
+    public static GestorPlanta getInstance() {
+        return INSTANCE;
+    }
+    
+    private ArrayList<Planta> listaPlantas = new ArrayList<Planta>();
 	
-	public static Planta crearPlanta(String nombre)
+	@Override
+	public Planta crear(String nombre)
 	{
 		Planta planta = new Planta(nombre);
 		listaPlantas.add(planta);
@@ -15,12 +23,12 @@ public class GestorPlanta extends Gestor {
 		return planta;
 	}
 	
-	public static ArrayList<Planta> getListaPlantas()
+	public ArrayList<Planta> getListaPlantas()
 	{
 		return listaPlantas;
 	}
-	
-	public static void borrarPlanta(Integer id)
+	@Override
+	public void borrar(Integer id)
 	{
 		for(int i = 0; i < listaPlantas.size(); i++)
 		{
@@ -31,4 +39,12 @@ public class GestorPlanta extends Gestor {
 			}
 		}
 	}
+
+	@Override
+	public Planta buscar(String[] nombre) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+    
+    
 }

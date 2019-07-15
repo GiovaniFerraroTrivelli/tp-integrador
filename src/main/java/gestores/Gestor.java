@@ -1,6 +1,9 @@
 package gestores;
 
-public class Gestor {
-
-	public static void crear(String nombre) {}
+public interface Gestor<T> {
+	
+	public T crear(String nombre);
+	public T buscar(String[] nombre);
+	public void borrar(Integer id);
+	
 }

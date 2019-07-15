@@ -51,7 +51,7 @@ public class MainMenu {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		GestorPlanta gestorPlanta = new GestorPlanta();
+		GestorPlanta gestorPlanta = GestorPlanta.getInstance();
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -468,7 +468,7 @@ public class MainMenu {
 					
 					btnEliminar.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
-							GestorPlanta.borrarPlanta((Integer)tablePlantas.getValueAt(tablePlantas.getSelectedRow(), 0));
+							GestorPlanta.getInstance().borrar((Integer)tablePlantas.getValueAt(tablePlantas.getSelectedRow(), 0));
 							refreshPlantaTable();
 						}
 					});
@@ -567,7 +567,7 @@ public class MainMenu {
 	{
 		String col[] = {"ID","Nombre"};
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-		ArrayList<Planta> tempListaPlantas = GestorPlanta.getListaPlantas();
+		ArrayList<Planta> tempListaPlantas = GestorPlanta.getInstance().getListaPlantas();
 		
 		for (int i = 0; i < tempListaPlantas.size(); i++)
 		{

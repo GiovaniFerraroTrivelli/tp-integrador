@@ -29,7 +29,7 @@ public class CreatePlantaDialog extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtDescripcion;
-
+	GestorPlanta gestorPlanta = GestorPlanta.getInstance();
 	/**
 	 * Create the frame.
 	 */
@@ -77,8 +77,8 @@ public class CreatePlantaDialog extends JFrame {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				GestorPlanta.crearPlanta(txtDescripcion.getText());
-				System.out.println(GestorPlanta.getListaPlantas().toString());
+				gestorPlanta.crear(txtDescripcion.getText());
+				System.out.println(gestorPlanta.getListaPlantas().toString());
 				
 				MainMenu.refreshPlantaTable();
 				
