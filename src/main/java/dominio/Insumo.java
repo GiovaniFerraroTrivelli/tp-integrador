@@ -9,6 +9,12 @@ public class Insumo implements Comparable<Insumo> {
 	protected Float peso; /* peso en kg */
 	protected Boolean esRefrigerado;
 
+	
+	public Insumo(String descripcion) {
+		this.descripcion = descripcion;
+	}
+	
+	
 	public Insumo(Integer id, UnidadDeMedida udm, Integer stock, Float peso) {
 		this.id = id;
 		this.unidadDeMedida = udm;
@@ -43,5 +49,10 @@ public class Insumo implements Comparable<Insumo> {
 	@Override
 	public int compareTo(Insumo otro) {
 		return (this.stock - otro.stock);
+	}
+
+
+	public Integer getId() {
+		return id;
 	}
 }

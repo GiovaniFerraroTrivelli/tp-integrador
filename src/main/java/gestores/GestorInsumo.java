@@ -1,26 +1,42 @@
 package gestores;
-/*
+
+import java.util.ArrayList;
+
+import dominio.Insumo;
+
 public class GestorInsumo implements Gestor<Object>{
     private static final GestorInsumo INSTANCE = new GestorInsumo();
-
-    // El constructor privado no permite que se genere un constructor por defecto.
-    // (con mismo modificador de acceso que la definición de la clase) 
+    private ArrayList<Insumo> listaInsumos = new ArrayList<Insumo>();
     private GestorInsumo() {}
 
     public static GestorInsumo getInstance() {
         return INSTANCE;
     }
     
+    public ArrayList<Insumo> getListaInsumos(){
+    	return listaInsumos;
+    }   
+    
     @Override
-	public Object crear(String[] nombre) {
-		// TODO Auto-generated method stub
-		return null;
+	public Insumo crear(String descripcion) {
+		return (new Insumo(descripcion));
 	}
 
 	@Override
 	public void borrar(Integer id) {
-		// TODO Auto-generated method stub
-		
+		for(int i = 0; i < listaInsumos.size(); i++)
+		{
+			if(listaInsumos.get(i).getId() == id)
+			{
+				listaInsumos.remove(i);
+				break;
+			}
+		}
 	}
-    
-}*/
+
+	@Override
+	public Object buscar(String[] nombre) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}
