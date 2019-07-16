@@ -5,6 +5,7 @@ import java.util.List;
 
 import dominio.Insumo;
 import dominio.InsumoLiquido;
+import estructuras.ArbolBinarioBusqueda;
 
 public class GestorInsumo implements Gestor<Object>{
     private static final GestorInsumo INSTANCE = new GestorInsumo();
@@ -59,7 +60,11 @@ public class GestorInsumo implements Gestor<Object>{
 	
 	@Override
 	public List<String> buscar(String busqueda) {
-		// TODO Auto-generated method stub
-		return null;
+		String primElem = this.getListaInsumos().get(0).getDescripcion();
+		ArbolBinarioBusqueda<String> arbol = new ArbolBinarioBusqueda<String>(primElem);
+		for(int i = 1; i < this.getListaInsumos().size(); i++){
+			arbol.agregar(this.getListaInsumos().get(i).getDescripcion());
+		}
+		return arbol.buscar(busqueda);
 	}
 }
