@@ -55,10 +55,10 @@ public class GestorInsumo implements Gestor<Object>{
 			}
 		}
 	}
-
+	/*
 	@Override
 	public Object buscar(String[] nombre) {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}*/
 }

@@ -1,8 +1,11 @@
 package gestores;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import dominio.Planta;
 import dominio.Stock;
+import estructuras.ArbolBinarioBusqueda;
 
 public class GestorPlanta implements Gestor<Object> {
     private static final GestorPlanta INSTANCE = new GestorPlanta();
@@ -54,9 +57,12 @@ public class GestorPlanta implements Gestor<Object> {
 	}
 
 	@Override
-	public Planta buscar(String[] nombre) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> buscar(String nombre, String busqueda) {
+		ArbolBinarioBusqueda<String> arbol = new ArbolBinarioBusqueda<String>();
+		for(Planta p : this.getListaPlantas()){
+			arbol.agregar(p.getNombre());
+		}
+		return arbol.buscar(busqueda);
 	}
     
 	public ArrayList<Stock> getStockByPlantaId(Integer id)

@@ -1,9 +1,11 @@
 package gestores;
 
-public interface Gestor<T> {
+import java.util.List;
+
+public interface Gestor<E> {
 	
-	public T crear(String nombre);
-	public T buscar(String[] nombre);
+	public E crear(String nombre);
 	public void borrar(Integer id);
+	public List<String> buscar(String nombre, String busqueda);
 	
 }
