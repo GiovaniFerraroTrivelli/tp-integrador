@@ -3,6 +3,7 @@ package gestores;
 import java.util.ArrayList;
 
 import dominio.Insumo;
+import dominio.InsumoLiquido;
 
 public class GestorInsumo implements Gestor<Object>{
     private static final GestorInsumo INSTANCE = new GestorInsumo();
@@ -21,7 +22,10 @@ public class GestorInsumo implements Gestor<Object>{
 	public Insumo crear(String descripcion) {
 		return (new Insumo(descripcion));
 	}
-
+    public InsumoLiquido crearLiquido(String descripcion) {
+    	return (new InsumoLiquido(descripcion));
+    }
+    
 	@Override
 	public void borrar(Integer id) {
 		for(int i = 0; i < listaInsumos.size(); i++)
