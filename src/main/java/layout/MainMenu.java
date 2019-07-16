@@ -528,7 +528,19 @@ public class MainMenu {
 				btnAadirInsumo.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0)
 					{
-						AddInsumoDialog cid = new AddInsumoDialog();
+						Integer selectedRow = tablePlantas.getSelectedRow();
+						
+						if(selectedRow < 0)
+						{
+							JOptionPane.showMessageDialog(frmTrabajoPrctico,
+                                    "No hay ninguna planta seleccionada",
+                                    "Información",
+                                    JOptionPane.INFORMATION_MESSAGE);
+							return;
+						}
+						
+						Integer selectedPlanta = (Integer)tablePlantas.getValueAt(selectedRow, 0);
+						AddInsumoDialog cid = new AddInsumoDialog(selectedPlanta);
 					}
 				});
 				

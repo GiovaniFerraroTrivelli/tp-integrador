@@ -35,7 +35,7 @@ public class AddInsumoDialog extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AddInsumoDialog() {
+	public AddInsumoDialog(Integer plantaId) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);
 		setResizable(false);
@@ -51,15 +51,15 @@ public class AddInsumoDialog extends JFrame {
 		contentPane.add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{86, 58, 205, 32, 0};
-		gbl_panel.rowHeights = new int[]{0, 0};
+		gbl_panel.rowHeights = new int[]{0, 0, 0, 0};
 		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
 		JLabel lblPeso = new JLabel("Insumo:");
 		GridBagConstraints gbc_lblPeso = new GridBagConstraints();
 		gbc_lblPeso.anchor = GridBagConstraints.EAST;
-		gbc_lblPeso.insets = new Insets(0, 0, 0, 5);
+		gbc_lblPeso.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPeso.gridx = 1;
 		gbc_lblPeso.gridy = 0;
 		panel.add(lblPeso, gbc_lblPeso);
@@ -68,11 +68,18 @@ public class AddInsumoDialog extends JFrame {
 		comboBox.setModel(new DefaultComboBoxModel<Insumo>(gestorInsumo.getListaInsumos().toArray(new Insumo[0])));
 		
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
-		gbc_comboBox.insets = new Insets(0, 0, 0, 5);
+		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox.gridx = 2;
 		gbc_comboBox.gridy = 0;
 		panel.add(comboBox, gbc_comboBox);
+		
+		JLabel lblAgregandoAPlanta = new JLabel("Agregando a planta: " + plantaId);
+		GridBagConstraints gbc_lblAgregandoAPlanta = new GridBagConstraints();
+		gbc_lblAgregandoAPlanta.insets = new Insets(0, 0, 0, 5);
+		gbc_lblAgregandoAPlanta.gridx = 2;
+		gbc_lblAgregandoAPlanta.gridy = 2;
+		panel.add(lblAgregandoAPlanta, gbc_lblAgregandoAPlanta);
 		
 		JPanel panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
@@ -81,6 +88,7 @@ public class AddInsumoDialog extends JFrame {
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
+				// plantaId -> Id de la planta
 				// ((Insumo)comboBox.getSelectedItem()) -> Instancia de la clase Insumo
 				// se puede hacer esto por ejemplo -> ((Insumo)comboBox.getSelectedItem()).getId();
 				
