@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -15,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 import dominio.Insumo;
 import dominio.InsumoLiquido;
 import dominio.UnidadDeMedida;
+import gestores.GestorInsumo;
 
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -28,7 +30,7 @@ import javax.swing.JList;
 public class AddInsumoDialog extends JFrame {
 
 	private JPanel contentPane;
-
+	static GestorInsumo gestorInsumo = GestorInsumo.getInstance();
 
 	/**
 	 * Create the frame.
@@ -62,7 +64,9 @@ public class AddInsumoDialog extends JFrame {
 		gbc_lblPeso.gridy = 0;
 		panel.add(lblPeso, gbc_lblPeso);
 		
-		JComboBox comboBox = new JComboBox();
+		JComboBox<Insumo> comboBox = new JComboBox<Insumo>();
+		comboBox.setModel(new DefaultComboBoxModel<Insumo>(gestorInsumo.getListaInsumos().toArray(new Insumo[0])));
+		
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.insets = new Insets(0, 0, 0, 5);
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
@@ -76,6 +80,9 @@ public class AddInsumoDialog extends JFrame {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
+				// ((Insumo)comboBox.getSelectedItem()) -> Instancia de la clase Insumo
+				// se puede hacer esto por ejemplo -> ((Insumo)comboBox.getSelectedItem()).getId();
 				
 				dispose();
 			}

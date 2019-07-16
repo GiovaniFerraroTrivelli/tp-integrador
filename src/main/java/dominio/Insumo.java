@@ -39,10 +39,8 @@ public class Insumo implements Comparable<Insumo> {
 
 	@Override
 	public String toString() {
-		return "Insumo [id=" + id + ", descripcion=" + descripcion + ", unidadDeMedida=" + unidadDeMedida + ", costo="
-				+ costo + ", stock=" + stock + ", peso=" + peso + ", esRefrigerado=" + esRefrigerado + "]";
+		return descripcion + " (ID: " + id + ")";
 	}
-
 
 	public Float getPeso() {
 		return peso;

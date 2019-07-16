@@ -639,6 +639,9 @@ public class MainMenu {
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 		ArrayList<Stock> tempListaStock = gestorPlanta.getStockByPlantaId(plantaId);
 		
+		if(tempListaStock == null)
+			return;
+		
 		for (int i = 0; i < tempListaStock.size(); i++)
 		{
 		   Integer id = tempListaStock.get(i).getId();
