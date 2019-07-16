@@ -1,17 +1,14 @@
 package layout;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import dominio.Insumo;
-import dominio.InsumoLiquido;
 import dominio.UnidadDeMedida;
 import gestores.GestorInsumo;
-import gestores.GestorPlanta;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -23,7 +20,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 
 public class CreateInsumoDialog extends JFrame {
 

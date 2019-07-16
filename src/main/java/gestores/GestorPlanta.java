@@ -52,7 +52,6 @@ public class GestorPlanta implements Gestor<Object> {
 		}
 		return null;
 	}
-	
 
 	@Override
 	public Planta buscar(String[] nombre) {

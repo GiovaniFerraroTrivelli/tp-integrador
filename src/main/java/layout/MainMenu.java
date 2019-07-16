@@ -3,7 +3,6 @@ package layout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -11,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -25,13 +25,11 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 
 import dominio.Insumo;
 import dominio.InsumoLiquido;
 import dominio.Planta;
 import dominio.Stock;
-import dominio.UnidadDeMedida;
 import gestores.GestorInsumo;
 import gestores.GestorPlanta;
 
@@ -260,7 +258,7 @@ public class MainMenu {
 					
 					btnNuevoInsumo.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
-							CreateInsumoDialog cid = new CreateInsumoDialog();
+							new CreateInsumoDialog();
 						}
 					});
 
@@ -372,7 +370,6 @@ public class MainMenu {
 				tableInsumos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				tableInsumos.setAutoCreateRowSorter(true);
 				tableInsumos.setDefaultEditor(Object.class, null);
-				JTableHeader header = tableInsumos.getTableHeader();
 				JScrollPane panel_scrlpn = new JScrollPane(tableInsumos);
 				panel.add(panel_scrlpn, gbc_panel_1);
 			}
@@ -396,36 +393,15 @@ public class MainMenu {
 		{
 			JPanel panel = new JPanel();
 			pnlPlantas.add(panel, BorderLayout.SOUTH);
-			{
-				JButton btnVolver = new JButton("Volver");
-				btnVolver.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						cl.show(frmTrabajoPrctico.getContentPane(), "card__MainMenu");
-					}
-				});
-				panel.add(btnVolver);
-			}
-			{
-				JButton btnGuardarCambios = new JButton("Guardar cambios");
-				btnGuardarCambios.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						JOptionPane.showMessageDialog(frmTrabajoPrctico,
-							    "Todas las modificaciones fueron guardadas exitosamente",
-							    "Información",
-							    JOptionPane.INFORMATION_MESSAGE);
-					}
-				});
-				panel.add(btnGuardarCambios);
-			}
 		}
 		{
 			JPanel panel = new JPanel();
 			pnlPlantas.add(panel, BorderLayout.CENTER);
 			GridBagLayout gbl_panel = new GridBagLayout();
-			gbl_panel.columnWidths = new int[] {0, 165, 0, 0, 99, 111, 155, 193, 0, 179, 84};
-			gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
+			gbl_panel.columnWidths = new int[] {0, 165, 0, 0, 99, 111, 101, 193, 0, 179, 84};
+			gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
 			gbl_panel.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0};
-			gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+			gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 			panel.setLayout(gbl_panel);
 			{
 				{
@@ -434,17 +410,42 @@ public class MainMenu {
 					gbc_panel_1.insets = new Insets(0, 0, 5, 5);
 					gbc_panel_1.fill = GridBagConstraints.BOTH;
 					gbc_panel_1.gridx = 6;
-					gbc_panel_1.gridy = 0;
+					gbc_panel_1.gridy = 1;
 					panel.add(panel_1, gbc_panel_1);
+				}
+				{
+					JButton btnVolver_1 = new JButton("");
+					btnVolver_1.setForeground(Color.WHITE);
+					btnVolver_1.setIcon(new ImageIcon(new ImageIcon("src/main/resources/back.png").getImage()
+							.getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+
+					btnVolver_1.setOpaque(false);
+					btnVolver_1.setContentAreaFilled(false);
+					btnVolver_1.setBorderPainted(false);
+					btnVolver_1.setBorder(null);
+					btnVolver_1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+					btnVolver_1.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							cl.show(frmTrabajoPrctico.getContentPane(), "card__MainMenu");
+						}
+					});
+					
+					GridBagConstraints gbc_btnVolver_1 = new GridBagConstraints();
+					gbc_btnVolver_1.anchor = GridBagConstraints.WEST;
+					gbc_btnVolver_1.insets = new Insets(0, 0, 5, 5);
+					gbc_btnVolver_1.gridx = 1;
+					gbc_btnVolver_1.gridy = 2;
+					panel.add(btnVolver_1, gbc_btnVolver_1);
 				}
 				{
 					JLabel lblPanelDeAdministracin = new JLabel("Panel de administración de plantas");
 					lblPanelDeAdministracin.setFont(new Font("Segoe UI", Font.PLAIN, 24));
 					GridBagConstraints gbc_lblPanelDeAdministracin = new GridBagConstraints();
-					gbc_lblPanelDeAdministracin.gridwidth = 10;
+					gbc_lblPanelDeAdministracin.gridwidth = 8;
 					gbc_lblPanelDeAdministracin.insets = new Insets(0, 0, 5, 5);
-					gbc_lblPanelDeAdministracin.gridx = 1;
-					gbc_lblPanelDeAdministracin.gridy = 1;
+					gbc_lblPanelDeAdministracin.gridx = 2;
+					gbc_lblPanelDeAdministracin.gridy = 2;
 					panel.add(lblPanelDeAdministracin, gbc_lblPanelDeAdministracin);
 				}
 			}
@@ -455,7 +456,7 @@ public class MainMenu {
 					gbc_panel_1.insets = new Insets(0, 0, 5, 5);
 					gbc_panel_1.fill = GridBagConstraints.BOTH;
 					gbc_panel_1.gridx = 6;
-					gbc_panel_1.gridy = 2;
+					gbc_panel_1.gridy = 3;
 					panel.add(panel_1, gbc_panel_1);
 				}
 			}
@@ -466,11 +467,19 @@ public class MainMenu {
 					gbc_btnNuevoInsumo.anchor = GridBagConstraints.EAST;
 					gbc_btnNuevoInsumo.insets = new Insets(0, 0, 5, 5);
 					gbc_btnNuevoInsumo.gridx = 1;
-					gbc_btnNuevoInsumo.gridy = 3;
+					gbc_btnNuevoInsumo.gridy = 4;
 					
 					btnNuevoInsumo.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
-							CreatePlantaDialog cid = new CreatePlantaDialog();
+							String plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico,
+									"Nombre de la planta"
+							);
+
+							if(plantaName != null)
+							{							
+								gestorPlanta.crear(plantaName);
+								MainMenu.refreshPlantaTable();
+							}
 						}
 					});
 
@@ -482,7 +491,34 @@ public class MainMenu {
 						GridBagConstraints gbc_btnEditar_1 = new GridBagConstraints();
 						gbc_btnEditar_1.insets = new Insets(0, 0, 5, 5);
 						gbc_btnEditar_1.gridx = 2;
-						gbc_btnEditar_1.gridy = 3;
+						gbc_btnEditar_1.gridy = 4;
+						
+						btnEditar_1.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent arg0) {
+								Integer rowId = tablePlantas.getSelectedRow();
+								
+								if(rowId < 0)
+			                    {
+			                        JOptionPane.showMessageDialog(frmTrabajoPrctico,
+			                            "No hay ninguna planta seleccionada",
+			                            "Información",
+			                            JOptionPane.INFORMATION_MESSAGE);
+			                        return;
+			                    }
+
+								String plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico,
+										"Nuevo nombre de la planta",
+										(String)tablePlantas.getValueAt(rowId, 1)
+								);
+
+								if(plantaName != null)
+								{							
+									gestorPlanta.obtenerPlanta((Integer)tablePlantas.getValueAt(rowId, 0)).setNombre(plantaName);
+									MainMenu.refreshPlantaTable();
+								}
+							}
+						});
+						
 						panel.add(btnEditar_1, gbc_btnEditar_1);
 					}
 				}
@@ -497,23 +533,24 @@ public class MainMenu {
 			gbc_btnEliminar.anchor = GridBagConstraints.WEST;
 			gbc_btnEliminar.insets = new Insets(0, 0, 5, 5);
 			gbc_btnEliminar.gridx = 3;
-			gbc_btnEliminar.gridy = 3;
+			gbc_btnEliminar.gridy = 4;
 			
 			btnEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					Integer rowId = tablePlantas.getSelectedRow();
 
-                            if(rowId < 0)
-                            {
-                                JOptionPane.showMessageDialog(frmTrabajoPrctico,
-                                        "No hay ninguna planta seleccionada",
-                                        "Información",
-                                        JOptionPane.INFORMATION_MESSAGE);
-                                return;
-                            }
+                    if(rowId < 0)
+                    {
+                        JOptionPane.showMessageDialog(frmTrabajoPrctico,
+                            "No hay ninguna planta seleccionada",
+                            "Información",
+                            JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
 
-                            gestorPlanta.borrar((Integer)tablePlantas.getValueAt(rowId, 0));
-                            refreshPlantaTable();
+                    gestorPlanta.borrar((Integer)tablePlantas.getValueAt(rowId, 0));
+                    refreshPlantaTable();
+                    refreshStockTable(0);
 				}
 			});
 			
@@ -523,7 +560,7 @@ public class MainMenu {
 				GridBagConstraints gbc_btnAadirInsumo = new GridBagConstraints();
 				gbc_btnAadirInsumo.insets = new Insets(0, 0, 5, 5);
 				gbc_btnAadirInsumo.gridx = 4;
-				gbc_btnAadirInsumo.gridy = 3;
+				gbc_btnAadirInsumo.gridy = 4;
 				
 				btnAadirInsumo.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0)
@@ -540,11 +577,20 @@ public class MainMenu {
 						}
 						
 						Integer selectedPlanta = (Integer)tablePlantas.getValueAt(selectedRow, 0);
-						AddInsumoDialog cid = new AddInsumoDialog(selectedPlanta);
+						new AddInsumoDialog(selectedPlanta);
 					}
 				});
 				
 				panel.add(btnAadirInsumo, gbc_btnAadirInsumo);
+			}
+			{
+				JLabel lblBuscarPlantas = new JLabel("Buscar plantas:");
+				GridBagConstraints gbc_lblBuscarPlantas = new GridBagConstraints();
+				gbc_lblBuscarPlantas.insets = new Insets(0, 0, 5, 5);
+				gbc_lblBuscarPlantas.anchor = GridBagConstraints.EAST;
+				gbc_lblBuscarPlantas.gridx = 7;
+				gbc_lblBuscarPlantas.gridy = 4;
+				panel.add(lblBuscarPlantas, gbc_lblBuscarPlantas);
 			}
 			{
 				textField_1 = new JTextField();
@@ -554,7 +600,7 @@ public class MainMenu {
 				gbc_textField_1.insets = new Insets(0, 0, 5, 5);
 				gbc_textField_1.fill = GridBagConstraints.BOTH;
 				gbc_textField_1.gridx = 8;
-				gbc_textField_1.gridy = 3;
+				gbc_textField_1.gridy = 4;
 				panel.add(textField_1, gbc_textField_1);
 				textField_1.setColumns(10);
 			}
@@ -564,7 +610,7 @@ public class MainMenu {
 			gbc_btnBuscar.fill = GridBagConstraints.VERTICAL;
 			gbc_btnBuscar.insets = new Insets(0, 0, 5, 0);
 			gbc_btnBuscar.gridx = 10;
-			gbc_btnBuscar.gridy = 3;
+			gbc_btnBuscar.gridy = 4;
 			panel.add(btnBuscar, gbc_btnBuscar);
 			{
 				JPanel panel_1 = new JPanel();
@@ -572,7 +618,7 @@ public class MainMenu {
 				gbc_panel_1.insets = new Insets(0, 0, 0, 5);
 				gbc_panel_1.fill = GridBagConstraints.BOTH;
 				gbc_panel_1.gridx = 0;
-				gbc_panel_1.gridy = 4;
+				gbc_panel_1.gridy = 5;
 				panel.add(panel_1, gbc_panel_1);
 			}
 			{
@@ -581,13 +627,12 @@ public class MainMenu {
 				gbc_panel_1.insets = new Insets(0, 0, 0, 5);
 				gbc_panel_1.fill = GridBagConstraints.BOTH;
 				gbc_panel_1.gridx = 1;
-				gbc_panel_1.gridy = 4;
+				gbc_panel_1.gridy = 5;
 
 				tablePlantas = new JTable();
 				tablePlantas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				tablePlantas.setAutoCreateRowSorter(true);
 				tablePlantas.setDefaultEditor(Object.class, null);
-				JTableHeader header = tablePlantas.getTableHeader();
 				JScrollPane panel_scrlpn = new JScrollPane(tablePlantas);
 				
 				tablePlantas.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -605,13 +650,12 @@ public class MainMenu {
 				gbc_panel_1.insets = new Insets(0, 0, 0, 5);
 				gbc_panel_1.fill = GridBagConstraints.BOTH;
 				gbc_panel_1.gridx = 7;
-				gbc_panel_1.gridy = 4;
+				gbc_panel_1.gridy = 5;
 				
 				tableStock = new JTable();
 				tableStock.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				tableStock.setAutoCreateRowSorter(true);
 				tableStock.setDefaultEditor(Object.class, null);
-				JTableHeader header = tablePlantas.getTableHeader();
 				JScrollPane panel_scrlpn = new JScrollPane(tableStock);
 				panel.add(panel_scrlpn, gbc_panel_1);
 			}
@@ -620,7 +664,7 @@ public class MainMenu {
 				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 				gbc_panel_1.fill = GridBagConstraints.BOTH;
 				gbc_panel_1.gridx = 11;
-				gbc_panel_1.gridy = 4;
+				gbc_panel_1.gridy = 5;
 				panel.add(panel_1, gbc_panel_1);
 			}
 		}
@@ -650,21 +694,26 @@ public class MainMenu {
 		String col[] = {"Insumo", "Cantidad", "Punto pedido"};
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 		ArrayList<Stock> tempListaStock = gestorPlanta.getStockByPlantaId(plantaId);
-		
-		
-		
-		for (int i = 0; i < tempListaStock.size(); i++)
+
+		if(plantaId > 0)
 		{
-		   
-		   String descripcion = tempListaStock.get(i).getInsumo().getDescripcion();
-		   Integer cantidad = tempListaStock.get(i).getCantidad();
-		   Integer puntopedido = tempListaStock.get(i).getPuntoPedido();
-		   
-		   Object[] data = {descripcion, cantidad, puntopedido};
-		   tableModel.addRow(data);
+			for (int i = 0; i < tempListaStock.size(); i++)
+			{
+			   
+			   String descripcion = tempListaStock.get(i).getInsumo().getDescripcion();
+			   Integer cantidad = tempListaStock.get(i).getCantidad();
+			   Integer puntopedido = tempListaStock.get(i).getPuntoPedido();
+			   
+			   Object[] data = {descripcion, cantidad, puntopedido};
+			   tableModel.addRow(data);
+			}
+			
+			tableStock.setModel(tableModel);
 		}
-		
-		tableStock.setModel(tableModel);
+		else
+		{
+			tableStock.setModel(tableModel);			
+		}
 	}
 	
 	public static void refreshInsumoTable()
