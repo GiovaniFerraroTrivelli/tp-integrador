@@ -11,7 +11,7 @@ public class Planta {
 	private Integer id;
 	private String nombre;
 
-	private ArrayList<Stock> listaStock;
+	private ArrayList<Stock> listaStock = new ArrayList<Stock>();
 
 	public Planta(String nombre)
 	{

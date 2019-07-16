@@ -40,6 +40,19 @@ public class GestorPlanta implements Gestor<Object> {
 			}
 		}
 	}
+	
+	public Planta obtenerPlanta(Integer id)
+	{
+		for(int i = 0; i < listaPlantas.size(); i++)
+		{
+			if(listaPlantas.get(i).getId() == id)
+			{
+				return listaPlantas.get(i);		
+			}
+		}
+		return null;
+	}
+	
 
 	@Override
 	public Planta buscar(String[] nombre) {

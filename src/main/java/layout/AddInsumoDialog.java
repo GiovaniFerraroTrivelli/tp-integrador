@@ -15,8 +15,11 @@ import javax.swing.border.EmptyBorder;
 
 import dominio.Insumo;
 import dominio.InsumoLiquido;
+import dominio.Planta;
+import dominio.Stock;
 import dominio.UnidadDeMedida;
 import gestores.GestorInsumo;
+import gestores.GestorPlanta;
 
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -31,7 +34,8 @@ public class AddInsumoDialog extends JFrame {
 
 	private JPanel contentPane;
 	static GestorInsumo gestorInsumo = GestorInsumo.getInstance();
-
+	static GestorPlanta gestorPlanta = GestorPlanta.getInstance();
+	
 	/**
 	 * Create the frame.
 	 */
@@ -87,7 +91,10 @@ public class AddInsumoDialog extends JFrame {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				Stock stockInsumo = new Stock();
+				stockInsumo.setInsumo(((Insumo)comboBox.getSelectedItem()));
+				System.out.println(gestorPlanta.obtenerPlanta(plantaId).getListaStock().add(stockInsumo));//.getListaStock().add(stockInsumo);//.getListaStock().add(stockInsumo);
+				//System.out.println(gestorPlanta.obtenerPlanta(plantaId).getListaStock().add(stockInsumo));
 				// plantaId -> Id de la planta
 				// ((Insumo)comboBox.getSelectedItem()) -> Instancia de la clase Insumo
 				// se puede hacer esto por ejemplo -> ((Insumo)comboBox.getSelectedItem()).getId();
