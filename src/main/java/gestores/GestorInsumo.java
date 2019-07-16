@@ -1,6 +1,7 @@
 package gestores;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dominio.Insumo;
 import dominio.InsumoLiquido;
@@ -55,10 +56,10 @@ public class GestorInsumo implements Gestor<Object>{
 			}
 		}
 	}
-	/*
+	
 	@Override
-	public Object buscar(String[] nombre) {
+	public List<String> buscar(String busqueda) {
 		// TODO Auto-generated method stub
 		return null;
-	}*/
+	}
 }

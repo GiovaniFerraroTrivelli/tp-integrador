@@ -58,9 +58,10 @@ public class GestorPlanta implements Gestor<Object> {
 
 	@Override
 	public List<String> buscar(String busqueda) {
-		ArbolBinarioBusqueda<String> arbol = new ArbolBinarioBusqueda<String>();
-		for(Planta p : this.getListaPlantas()){
-			arbol.agregar(p.getNombre());
+		String primElem = this.getListaPlantas().get(0).getNombre();
+		ArbolBinarioBusqueda<String> arbol = new ArbolBinarioBusqueda<String>(primElem);
+		for(int i = 1; i < this.getListaPlantas().size(); i++){
+			arbol.agregar(this.getListaPlantas().get(i).getNombre());
 		}
 		return arbol.buscar(busqueda);
 	}
