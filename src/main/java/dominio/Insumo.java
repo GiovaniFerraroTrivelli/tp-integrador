@@ -1,6 +1,8 @@
 package dominio;
 
 public class Insumo implements Comparable<Insumo> {
+	private static Integer lastId = 0;
+	
 	protected Integer id;
 	protected String descripcion;
 	protected UnidadDeMedida unidadDeMedida;
@@ -12,11 +14,12 @@ public class Insumo implements Comparable<Insumo> {
 	
 	public Insumo(String descripcion) {
 		this.descripcion = descripcion;
+		this.id = ++lastId;
 	}
 	
 	
 	public Insumo(Integer id, UnidadDeMedida udm, Integer stock, Float peso) {
-		this.id = id;
+		this.id = ++lastId;
 		this.unidadDeMedida = udm;
 		this.stock = stock;
 		this.peso = peso;
@@ -25,6 +28,31 @@ public class Insumo implements Comparable<Insumo> {
 	public String getDescripcion() {
 		return descripcion;
 	}
+
+	public UnidadDeMedida getUnidadDeMedida() {
+		return unidadDeMedida;
+	}
+
+	public void setUnidadDeMedida(UnidadDeMedida unidadDeMedida) {
+		this.unidadDeMedida = unidadDeMedida;
+	}
+
+	@Override
+	public String toString() {
+		return "Insumo [id=" + id + ", descripcion=" + descripcion + ", unidadDeMedida=" + unidadDeMedida + ", costo="
+				+ costo + ", stock=" + stock + ", peso=" + peso + ", esRefrigerado=" + esRefrigerado + "]";
+	}
+
+
+	public Float getPeso() {
+		return peso;
+	}
+
+
+	public void setPeso(Float peso) {
+		this.peso = peso;
+	}
+
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;

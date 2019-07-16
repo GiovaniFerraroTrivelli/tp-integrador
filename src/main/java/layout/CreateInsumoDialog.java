@@ -10,6 +10,8 @@ import javax.swing.border.EmptyBorder;
 import dominio.Insumo;
 import dominio.InsumoLiquido;
 import dominio.UnidadDeMedida;
+import gestores.GestorInsumo;
+import gestores.GestorPlanta;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -28,7 +30,8 @@ public class CreateInsumoDialog extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtDescripcion;
 	private JTextField txtCosto;
-	private JTextField textField;
+	private JTextField txtPeso;
+	static GestorInsumo gestorInsumo = GestorInsumo.getInstance();
 
 	/**
 	 * Create the frame.
@@ -60,22 +63,6 @@ public class CreateInsumoDialog extends JFrame {
 		gbc_panel_2.gridx = 1;
 		gbc_panel_2.gridy = 0;
 		panel.add(panel_2, gbc_panel_2);
-		
-		JLabel lblPlanta = new JLabel("Planta:");
-		GridBagConstraints gbc_lblPlanta = new GridBagConstraints();
-		gbc_lblPlanta.anchor = GridBagConstraints.EAST;
-		gbc_lblPlanta.insets = new Insets(0, 0, 5, 5);
-		gbc_lblPlanta.gridx = 1;
-		gbc_lblPlanta.gridy = 1;
-		panel.add(lblPlanta, gbc_lblPlanta);
-		
-		JComboBox comboBox = new JComboBox();
-		GridBagConstraints gbc_comboBox = new GridBagConstraints();
-		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox.gridx = 2;
-		gbc_comboBox.gridy = 1;
-		panel.add(comboBox, gbc_comboBox);
 		
 		JLabel lblDescripcin = new JLabel("Descripción:");
 		GridBagConstraints gbc_lblDescripcin = new GridBagConstraints();
@@ -120,14 +107,14 @@ public class CreateInsumoDialog extends JFrame {
 		gbc_lblPeso.gridy = 4;
 		panel.add(lblPeso, gbc_lblPeso);
 		
-		textField = new JTextField();
+		txtPeso = new JTextField();
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(0, 0, 5, 5);
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField.gridx = 2;
 		gbc_textField.gridy = 4;
-		panel.add(textField, gbc_textField);
-		textField.setColumns(10);
+		panel.add(txtPeso, gbc_textField);
+		txtPeso.setColumns(10);
 		
 		JCheckBox chckbxS = new JCheckBox("Insumo refrigerado");
 		GridBagConstraints gbc_chckbxS = new GridBagConstraints();
@@ -143,17 +130,25 @@ public class CreateInsumoDialog extends JFrame {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
 				Insumo insumo;
 				
 				if(chckbxS.isSelected())
 				{
-					insumo = new InsumoLiquido(323232, UnidadDeMedida.M2, 5, 30.0f);
+					insumo = gestorInsumo.crearLiquido(txtDescripcion.getText());
 				}
 				else
 				{
-					//insumo = new Insumo();
+					insumo = gestorInsumo.crear(txtDescripcion.getText());
 				}
+				
+				insumo.setCosto(Float.parseFloat(txtCosto.getText()));
+				insumo.setPeso(Float.parseFloat(txtPeso.getText()));
+				insumo.setUnidadDeMedida(UnidadDeMedida.KILO);
 
+				System.out.println(gestorInsumo.getListaInsumos().toString());
+				MainMenu.refreshInsumoTable();
+				
 				dispose();
 			}
 		});

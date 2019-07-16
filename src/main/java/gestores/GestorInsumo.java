@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import dominio.Insumo;
 import dominio.InsumoLiquido;
+import dominio.Planta;
 
 public class GestorInsumo implements Gestor<Object>{
     private static final GestorInsumo INSTANCE = new GestorInsumo();
@@ -20,10 +21,16 @@ public class GestorInsumo implements Gestor<Object>{
     
     @Override
 	public Insumo crear(String descripcion) {
-		return (new Insumo(descripcion));
+    	Insumo insumo = new Insumo(descripcion);
+    	listaInsumos.add(insumo);
+		
+		return insumo;
 	}
     public InsumoLiquido crearLiquido(String descripcion) {
-    	return (new InsumoLiquido(descripcion));
+    	InsumoLiquido insumo = new InsumoLiquido(descripcion);
+    	listaInsumos.add(insumo);
+		
+		return insumo;
     }
     
 	@Override
