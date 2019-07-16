@@ -53,7 +53,7 @@ public class MainMenu {
 
 	private JFrame frmTrabajoPrctico;
 	private CardLayout cl;
-	private JTextField textField_1;
+	private JTextField txtSearch;
 	private static JTable tablePlantas;
 	private static JTable tableStock;
 	private static JTable tableInsumos;
@@ -381,16 +381,16 @@ public class MainMenu {
 				}
 			});
 			{
-				textField_1 = new JTextField();
-				textField_1.setToolTipText("Escriba aquí lo que desea buscar...");
+				txtSearch = new JTextField();
+				txtSearch.setToolTipText("Escriba aquí lo que desea buscar...");
 				GridBagConstraints gbc_textField_1 = new GridBagConstraints();
 				gbc_textField_1.gridwidth = 2;
 				gbc_textField_1.insets = new Insets(0, 0, 5, 5);
 				gbc_textField_1.fill = GridBagConstraints.BOTH;
 				gbc_textField_1.gridx = 6;
 				gbc_textField_1.gridy = 3;
-				panel.add(textField_1, gbc_textField_1);
-				textField_1.setColumns(10);
+				panel.add(txtSearch, gbc_textField_1);
+				txtSearch.setColumns(10);
 			}
 			GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
 			gbc_btnBuscar.anchor = GridBagConstraints.WEST;
@@ -576,10 +576,6 @@ public class MainMenu {
 				}
 			}
 			JButton btnBuscar = new JButton("Buscar");
-			btnBuscar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-				}
-			});
 			JButton btnEliminar = new JButton("Eliminar");
 			GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
 			gbc_btnEliminar.anchor = GridBagConstraints.WEST;
@@ -648,27 +644,26 @@ public class MainMenu {
 				
 				panel.add(btnAadirInsumo, gbc_btnAadirInsumo);
 			}
-			{
-				JLabel lblBuscarPlantas = new JLabel("Buscar plantas:");
-				GridBagConstraints gbc_lblBuscarPlantas = new GridBagConstraints();
-				gbc_lblBuscarPlantas.insets = new Insets(0, 0, 5, 5);
-				gbc_lblBuscarPlantas.anchor = GridBagConstraints.EAST;
-				gbc_lblBuscarPlantas.gridx = 7;
-				gbc_lblBuscarPlantas.gridy = 4;
-				panel.add(lblBuscarPlantas, gbc_lblBuscarPlantas);
-			}
-			{
-				textField_1 = new JTextField();
-				textField_1.setToolTipText("Escriba aquí lo que desea buscar...");
-				GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-				gbc_textField_1.gridwidth = 2;
-				gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-				gbc_textField_1.fill = GridBagConstraints.BOTH;
-				gbc_textField_1.gridx = 8;
-				gbc_textField_1.gridy = 4;
-				panel.add(textField_1, gbc_textField_1);
-				textField_1.setColumns(10);
-			}
+			
+			JLabel lblBuscarPlantas = new JLabel("Buscar plantas:");
+			GridBagConstraints gbc_lblBuscarPlantas = new GridBagConstraints();
+			gbc_lblBuscarPlantas.insets = new Insets(0, 0, 5, 5);
+			gbc_lblBuscarPlantas.anchor = GridBagConstraints.EAST;
+			gbc_lblBuscarPlantas.gridx = 7;
+			gbc_lblBuscarPlantas.gridy = 4;
+			panel.add(lblBuscarPlantas, gbc_lblBuscarPlantas);
+		
+			txtSearch = new JTextField();
+			txtSearch.setToolTipText("Escriba aquí lo que desea buscar...");
+			GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+			gbc_textField_1.gridwidth = 2;
+			gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+			gbc_textField_1.fill = GridBagConstraints.BOTH;
+			gbc_textField_1.gridx = 8;
+			gbc_textField_1.gridy = 4;
+			panel.add(txtSearch, gbc_textField_1);
+			txtSearch.setColumns(10);
+			
 			GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
 			gbc_btnBuscar.anchor = GridBagConstraints.WEST;
 			gbc_btnBuscar.gridwidth = 2;
@@ -677,6 +672,14 @@ public class MainMenu {
 			gbc_btnBuscar.gridx = 10;
 			gbc_btnBuscar.gridy = 4;
 			panel.add(btnBuscar, gbc_btnBuscar);
+			
+			btnBuscar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					System.out.println("Buscando...");
+					System.out.println(gestorPlanta.buscar(txtSearch.getText()));
+				}
+			});
+			
 			{
 				JPanel panel_1 = new JPanel();
 				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
