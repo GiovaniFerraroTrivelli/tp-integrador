@@ -92,9 +92,11 @@ public class AddInsumoDialog extends JFrame {
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Stock stockInsumo = new Stock();
+				stockInsumo.setCantidad(10);
+				stockInsumo.setPuntoPedido(5);
 				stockInsumo.setInsumo(((Insumo)comboBox.getSelectedItem()));
-				System.out.println(gestorPlanta.obtenerPlanta(plantaId).getListaStock().add(stockInsumo));//.getListaStock().add(stockInsumo);//.getListaStock().add(stockInsumo);
-				//System.out.println(gestorPlanta.obtenerPlanta(plantaId).getListaStock().add(stockInsumo));
+				gestorPlanta.obtenerPlanta(plantaId).getListaStock().add(stockInsumo);
+				MainMenu.refreshStockTable(plantaId);
 				// plantaId -> Id de la planta
 				// ((Insumo)comboBox.getSelectedItem()) -> Instancia de la clase Insumo
 				// se puede hacer esto por ejemplo -> ((Insumo)comboBox.getSelectedItem()).getId();

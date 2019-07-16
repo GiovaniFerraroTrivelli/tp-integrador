@@ -647,7 +647,7 @@ public class MainMenu {
 	
 	public static void refreshStockTable(Integer plantaId)
 	{
-		String col[] = {"ID", "Insumo", "Cantidad", "Punto pedido"};
+		String col[] = {"Insumo", "Cantidad", "Punto pedido"};
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 		ArrayList<Stock> tempListaStock = gestorPlanta.getStockByPlantaId(plantaId);
 		
@@ -655,16 +655,16 @@ public class MainMenu {
 		
 		for (int i = 0; i < tempListaStock.size(); i++)
 		{
-		   Integer id = tempListaStock.get(i).getId();
+		   
 		   String descripcion = tempListaStock.get(i).getInsumo().getDescripcion();
 		   Integer cantidad = tempListaStock.get(i).getCantidad();
 		   Integer puntopedido = tempListaStock.get(i).getPuntoPedido();
 		   
-		   Object[] data = {id, descripcion, cantidad, puntopedido};
+		   Object[] data = {descripcion, cantidad, puntopedido};
 		   tableModel.addRow(data);
 		}
 		
-		tablePlantas.setModel(tableModel);
+		tableStock.setModel(tableModel);
 	}
 	
 	public static void refreshInsumoTable()
