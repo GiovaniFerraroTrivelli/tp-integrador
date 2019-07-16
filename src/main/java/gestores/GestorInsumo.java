@@ -32,6 +32,18 @@ public class GestorInsumo implements Gestor<Object>{
 		return insumo;
     }
     
+    public Insumo getInsumoById(Integer id)
+    {
+    	for(int i = 0; i < listaInsumos.size(); i++)
+		{
+			if(listaInsumos.get(i).getId() == id)
+			{
+				return listaInsumos.get(i);		
+			}
+		}
+		return null;
+    }
+    
 	@Override
 	public void borrar(Integer id) {
 		for(int i = 0; i < listaInsumos.size(); i++)
