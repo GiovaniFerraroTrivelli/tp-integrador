@@ -2,6 +2,7 @@ package gestores;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dominio.Insumo;
 import dominio.InsumoLiquido;
@@ -46,6 +47,18 @@ public class GestorInsumo implements Gestor<Object>{
 		return null;
     }
     
+    public Insumo getInsumoByStr(String nombre)
+    {
+    	for(int i = 0; i < listaInsumos.size(); i++)
+		{
+			if(listaInsumos.get(i).getDescripcion().equals(nombre))
+			{
+				return listaInsumos.get(i);		
+			}
+		}
+		return null;
+    }
+    
 	@Override
 	public void borrar(Integer id) {
 		for(int i = 0; i < listaInsumos.size(); i++)
@@ -59,12 +72,16 @@ public class GestorInsumo implements Gestor<Object>{
 	}
 	
 	@Override
-	public List<String> buscar(String busqueda) {
+	public List<Object> buscar(String busqueda) {
 		String primElem = this.getListaInsumos().get(0).getDescripcion();
 		ArbolBinarioBusqueda<String> arbol = new ArbolBinarioBusqueda<String>(primElem);
 		for(int i = 1; i < this.getListaInsumos().size(); i++){
 			arbol.agregar(this.getListaInsumos().get(i).getDescripcion());
 		}
-		return arbol.buscar(busqueda);
+		return arbol
+				.buscar(busqueda)
+				.stream()
+				.map(s -> this.getInsumoByStr(s))
+				.collect(Collectors.toList());
 	}
 }

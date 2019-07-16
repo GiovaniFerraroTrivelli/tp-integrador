@@ -2,6 +2,7 @@ package gestores;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dominio.Planta;
 import dominio.Stock;
@@ -55,15 +56,32 @@ public class GestorPlanta implements Gestor<Object> {
 		}
 		return null;
 	}
+	
+	public Planta obtenerPlantaStr(String nombre)
+	{
+		for(int i = 0; i < listaPlantas.size(); i++)
+		{
+			if(listaPlantas.get(i).getNombre().equals(nombre))
+			{
+				return listaPlantas.get(i);		
+			}
+		}
+		return null;
+	}
+
 
 	@Override
-	public List<String> buscar(String busqueda) {
+	public List<Object> buscar(String busqueda) {
 		String primElem = this.getListaPlantas().get(0).getNombre();
 		ArbolBinarioBusqueda<String> arbol = new ArbolBinarioBusqueda<String>(primElem);
 		for(int i = 1; i < this.getListaPlantas().size(); i++){
 			arbol.agregar(this.getListaPlantas().get(i).getNombre());
 		}
-		return arbol.buscar(busqueda);
+		return arbol
+				.buscar(busqueda)
+				.stream()
+				.map(s -> this.obtenerPlantaStr(s))
+				.collect(Collectors.toList());
 	}
     
 	public ArrayList<Stock> getStockByPlantaId(Integer id)
