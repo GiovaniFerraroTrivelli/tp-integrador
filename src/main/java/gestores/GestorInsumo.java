@@ -55,6 +55,14 @@ public class GestorInsumo implements Gestor<Object> {
 		}
 		return null;
 	}
+	public Insumo getInsumoByStock(Integer stock) {
+		for (int i = 0; i < listaInsumos.size(); i++) {
+			if (listaInsumos.get(i).getStock() == stock) {
+				return listaInsumos.get(i);
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public void borrar(Integer id) {
@@ -75,4 +83,29 @@ public class GestorInsumo implements Gestor<Object> {
 		}
 		return arbol.buscar(busqueda).stream().map(s -> this.getInsumoByStr(s)).collect(Collectors.toCollection(ArrayList::new));
 	}
+	
+	public ArrayList buscarPorStock(Integer busqueda, boolean tipo) {
+		Integer primElem = this.getListaInsumos().get(0).getStock();
+		List<Integer> resultado = new ArrayList<Integer>();
+		ArbolBinarioBusqueda<Integer> arbol = new ArbolBinarioBusqueda<Integer>(primElem);
+		for(int i = 1; i < this.getListaInsumos().size(); i++) {
+			arbol.agregar(this.getListaInsumos().get(i).getStock());
+		}
+		if(tipo) resultado = arbol.rango(0, busqueda);
+		else resultado = arbol.rango(busqueda, Integer.MAX_VALUE);
+		return (ArrayList) resultado;
+	}
+	
+	public ArrayList buscarPorCosto(Float busqueda, boolean tipo) {
+		Float primElem = this.getListaInsumos().get(0).getCosto();
+		List<Float> resultado = new ArrayList<Float>();
+		ArbolBinarioBusqueda<Float> arbol = new ArbolBinarioBusqueda<Float>(primElem);
+		for(int i = 1; i < this.getListaInsumos().size(); i++) {
+			arbol.agregar(this.getListaInsumos().get(i).getCosto());
+		}
+		if(tipo) resultado = arbol.rango((float)0, busqueda); //buscar por maximo
+		else resultado = arbol.rango(busqueda, Float.MAX_VALUE); //buscar por minimo
+		return (ArrayList) resultado;
+	}
+
 }
