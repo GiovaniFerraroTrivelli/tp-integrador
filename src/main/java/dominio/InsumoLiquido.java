@@ -6,7 +6,7 @@ public class InsumoLiquido extends Insumo {
 	public InsumoLiquido(Integer id, UnidadDeMedida udm, Integer stock, Float peso) {
 		super(id, udm, stock, peso);
 	}
-	
+
 	public InsumoLiquido(String descripcion) {
 		super(descripcion);
 	}

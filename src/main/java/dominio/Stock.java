@@ -5,7 +5,7 @@ public class Stock {
 	private Integer puntoPedido;
 
 	private Insumo insumo;
-	
+
 	public void setInsumo(Insumo insumo) {
 		this.insumo = insumo;
 	}

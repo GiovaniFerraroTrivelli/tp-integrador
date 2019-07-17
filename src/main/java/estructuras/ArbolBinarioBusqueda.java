@@ -169,12 +169,13 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 
 		return lista;
 	}
-	public List<E> buscar(E busqueda){
+
+	public List<E> buscar(E busqueda) {
 		List<E> lista = new ArrayList<E>();
 		List<E> inorden = new ArrayList<E>();
 		inorden = this.inOrden();
-		for(E e : inorden) {
-			if(e.compareTo(busqueda) == 0){
+		for (E e : inorden) {
+			if (e.compareTo(busqueda) == 0) {
 				lista.add(e);
 			}
 		}
