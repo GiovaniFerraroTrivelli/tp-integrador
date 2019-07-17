@@ -1,7 +1,7 @@
 package gestores;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import dominio.Planta;
@@ -18,43 +18,33 @@ public class GestorPlanta implements Gestor<Object> {
 		return INSTANCE;
 	}
 
-	private ArrayList<Planta> listaPlantas = new ArrayList<Planta>();
+	private HashMap<Integer, Planta> listaPlantas = new HashMap<Integer, Planta>();
 
 	@Override
 	public Planta crear(String nombre) {
 		Planta planta = new Planta(nombre);
-		listaPlantas.add(planta);
+		listaPlantas.put(planta.getId(), planta);
 
 		return planta;
 	}
 
-	public ArrayList<Planta> getListaPlantas() {
+	public HashMap<Integer, Planta> getListaPlantas() {
 		return listaPlantas;
 	}
 
 	@Override
 	public void borrar(Integer id) {
-		for (int i = 0; i < listaPlantas.size(); i++) {
-			if (listaPlantas.get(i).getId() == id) {
-				listaPlantas.remove(i);
-				break;
-			}
-		}
+		listaPlantas.remove(id);
 	}
 
 	public Planta obtenerPlanta(Integer id) {
-		for (int i = 0; i < listaPlantas.size(); i++) {
-			if (listaPlantas.get(i).getId() == id) {
-				return listaPlantas.get(i);
-			}
-		}
-		return null;
+		return listaPlantas.get(id);
 	}
 
 	public Planta obtenerPlantaStr(String nombre) {
-		for (int i = 0; i < listaPlantas.size(); i++) {
-			if (listaPlantas.get(i).getNombre().equals(nombre)) {
-				return listaPlantas.get(i);
+		for (Planta planta : listaPlantas.values()) {
+			if (planta.getNombre().equals(nombre)) {
+				return planta;
 			}
 		}
 		return null;
@@ -63,7 +53,10 @@ public class GestorPlanta implements Gestor<Object> {
 	@Override
 	// TODO: Consultar a martin
 	public ArrayList buscar(String busqueda) {
-		ArrayList<Planta> listaPlantas = this.getListaPlantas();
+		if(listaPlantas.isEmpty())
+			return new ArrayList<Planta>();
+		
+		ArrayList<Planta> listaPlantas = new ArrayList<>(this.getListaPlantas().values());
 		
 		if(listaPlantas.isEmpty())
 			return new ArrayList<Planta>();
@@ -77,14 +70,8 @@ public class GestorPlanta implements Gestor<Object> {
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
-	public ArrayList<Stock> getStockByPlantaId(Integer id) {
-		for (int i = 0; i < listaPlantas.size(); i++) {
-			if (listaPlantas.get(i).getId() == id) {
-				return listaPlantas.get(i).getListaStock();
-			}
-		}
-
-		return null;
+	public HashMap<Integer, Stock> getStockByPlantaId(Integer id) {
+		return listaPlantas.get(id).getListaStock();
 	}
 
 }

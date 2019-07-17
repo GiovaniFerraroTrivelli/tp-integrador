@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dialog;
@@ -436,9 +438,9 @@ public class MainMenu {
 			JPanel panel = new JPanel();
 			pnlPlantas.add(panel, BorderLayout.CENTER);
 			GridBagLayout gbl_panel = new GridBagLayout();
-			gbl_panel.columnWidths = new int[] { 0, 165, 0, 0, 99, 111, 101, 193, 0, 179, 84 };
+			gbl_panel.columnWidths = new int[] { 0, 103, 0, 0, 99, 111, 101, 193, 0, 179, 84 };
 			gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
-			gbl_panel.columnWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+			gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 			gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 			panel.setLayout(gbl_panel);
 			{
@@ -500,58 +502,6 @@ public class MainMenu {
 			}
 			{
 				{
-					JButton btnNuevoInsumo = new JButton("Nueva planta");
-					GridBagConstraints gbc_btnNuevoInsumo = new GridBagConstraints();
-					gbc_btnNuevoInsumo.anchor = GridBagConstraints.EAST;
-					gbc_btnNuevoInsumo.insets = new Insets(0, 0, 5, 5);
-					gbc_btnNuevoInsumo.gridx = 1;
-					gbc_btnNuevoInsumo.gridy = 4;
-
-					btnNuevoInsumo.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent arg0) {
-							String plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico, "Nombre de la planta");
-
-							if (plantaName != null) {
-								gestorPlanta.crear(plantaName);
-								refreshPlantaTable(null);
-							}
-						}
-					});
-
-					panel.add(btnNuevoInsumo, gbc_btnNuevoInsumo);
-				}
-				{
-					{
-						JButton btnEditar_1 = new JButton("Editar");
-						GridBagConstraints gbc_btnEditar_1 = new GridBagConstraints();
-						gbc_btnEditar_1.insets = new Insets(0, 0, 5, 5);
-						gbc_btnEditar_1.gridx = 2;
-						gbc_btnEditar_1.gridy = 4;
-
-						btnEditar_1.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent arg0) {
-								Integer rowId = tablePlantas.getSelectedRow();
-
-								if (rowId < 0) {
-									JOptionPane.showMessageDialog(frmTrabajoPrctico,
-											"No hay ninguna planta seleccionada", "Información",
-											JOptionPane.INFORMATION_MESSAGE);
-									return;
-								}
-
-								String plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico,
-										"Nuevo nombre de la planta", (String) tablePlantas.getValueAt(rowId, 1));
-
-								if (plantaName != null) {
-									gestorPlanta.obtenerPlanta((Integer) tablePlantas.getValueAt(rowId, 0))
-											.setNombre(plantaName);
-									refreshPlantaTable(null);
-								}
-							}
-						});
-
-						panel.add(btnEditar_1, gbc_btnEditar_1);
-					}
 				}
 			}
 			JButton btnBuscar = new JButton("Buscar");
@@ -559,59 +509,115 @@ public class MainMenu {
 			GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
 			gbc_btnEliminar.anchor = GridBagConstraints.WEST;
 			gbc_btnEliminar.insets = new Insets(0, 0, 5, 5);
-			gbc_btnEliminar.gridx = 3;
+			gbc_btnEliminar.gridx = 4;
 			gbc_btnEliminar.gridy = 4;
+			
+						btnEliminar.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent arg0) {
+								Integer rowId = tablePlantas.getSelectedRow();
+			
+								if (rowId < 0) {
+									JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
+											"Información", JOptionPane.INFORMATION_MESSAGE);
+									return;
+								}
+			
+								int dialogResult = JOptionPane.showConfirmDialog(frmTrabajoPrctico,
+										"¿Está seguro que desea eliminar la planta seleccionada?", "Confirmar",
+										JOptionPane.YES_NO_OPTION);
+			
+								if (dialogResult == JOptionPane.YES_OPTION) {
+									gestorPlanta.borrar((Integer) tablePlantas.getValueAt(rowId, 0));
+									refreshPlantaTable(null);
+									refreshStockTable(0);
+			
+									JOptionPane.showMessageDialog(frmTrabajoPrctico, "La planta seleccionada ha sido borrada",
+											"Información", JOptionPane.INFORMATION_MESSAGE);
+								}
+							}
+						});
+									{
+										JButton btnEditar_1 = new JButton("Editar");
+										GridBagConstraints gbc_btnEditar_1 = new GridBagConstraints();
+										gbc_btnEditar_1.insets = new Insets(0, 0, 5, 5);
+										gbc_btnEditar_1.gridx = 3;
+										gbc_btnEditar_1.gridy = 4;
 
-			btnEliminar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					Integer rowId = tablePlantas.getSelectedRow();
+										btnEditar_1.addActionListener(new ActionListener() {
+											public void actionPerformed(ActionEvent arg0) {
+												Integer rowId = tablePlantas.getSelectedRow();
 
-					if (rowId < 0) {
-						JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
-								"Información", JOptionPane.INFORMATION_MESSAGE);
-						return;
-					}
+												if (rowId < 0) {
+													JOptionPane.showMessageDialog(frmTrabajoPrctico,
+															"No hay ninguna planta seleccionada", "Información",
+															JOptionPane.INFORMATION_MESSAGE);
+													return;
+												}
 
-					int dialogResult = JOptionPane.showConfirmDialog(frmTrabajoPrctico,
-							"¿Está seguro que desea eliminar la planta seleccionada?", "Confirmar",
-							JOptionPane.YES_NO_OPTION);
+												String plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico,
+														"Nuevo nombre de la planta", (String) tablePlantas.getValueAt(rowId, 1));
 
-					if (dialogResult == JOptionPane.YES_OPTION) {
-						gestorPlanta.borrar((Integer) tablePlantas.getValueAt(rowId, 0));
-						refreshPlantaTable(null);
-						refreshStockTable(0);
+												if (plantaName != null) {
+													gestorPlanta.obtenerPlanta((Integer) tablePlantas.getValueAt(rowId, 0))
+															.setNombre(plantaName);
+													refreshPlantaTable(null);
+												}
+											}
+										});
+										{
+											JButton btnNuevoInsumo = new JButton("Añadir");
+											GridBagConstraints gbc_btnNuevoInsumo = new GridBagConstraints();
+											gbc_btnNuevoInsumo.anchor = GridBagConstraints.EAST;
+											gbc_btnNuevoInsumo.insets = new Insets(0, 0, 5, 5);
+											gbc_btnNuevoInsumo.gridx = 2;
+											gbc_btnNuevoInsumo.gridy = 4;
 
-						JOptionPane.showMessageDialog(frmTrabajoPrctico, "La planta seleccionada ha sido borrada",
-								"Información", JOptionPane.INFORMATION_MESSAGE);
-					}
-				}
-			});
+											btnNuevoInsumo.addActionListener(new ActionListener() {
+												public void actionPerformed(ActionEvent arg0) {
+													Boolean validInput = false;
+													String plantaName;
+													
+													do {
+														plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico,
+																"Nombre de la planta");
 
-			panel.add(btnEliminar, gbc_btnEliminar);
-			{
-				JButton btnAadirInsumo = new JButton("Añadir insumo");
-				GridBagConstraints gbc_btnAadirInsumo = new GridBagConstraints();
-				gbc_btnAadirInsumo.insets = new Insets(0, 0, 5, 5);
-				gbc_btnAadirInsumo.gridx = 4;
-				gbc_btnAadirInsumo.gridy = 4;
+														if (plantaName != null) {
+															if (plantaName.length() > 0) {
+																if (gestorPlanta.buscar(plantaName).size() == 0) {
+																	gestorPlanta.crear(plantaName);
+																	refreshPlantaTable(null);
+																	validInput = true;
+																} else {
+																	JOptionPane.showMessageDialog(frmTrabajoPrctico,
+																			"Ya existe una planta con este nombre", "Información",
+																			JOptionPane.INFORMATION_MESSAGE);
+																}
+															} else {
+																JOptionPane.showMessageDialog(frmTrabajoPrctico,
+																		"Es necesario colocar un nombre para la planta", "Información",
+																		JOptionPane.INFORMATION_MESSAGE);
+															}
+														} else validInput = true;
+													} while (!validInput);
+												}
+											});
+											{
+												JLabel lblPlantas = new JLabel("Plantas:");
+												GridBagConstraints gbc_lblPlantas = new GridBagConstraints();
+												gbc_lblPlantas.anchor = GridBagConstraints.EAST;
+												gbc_lblPlantas.insets = new Insets(0, 0, 5, 5);
+												gbc_lblPlantas.gridx = 1;
+												gbc_lblPlantas.gridy = 4;
+												panel.add(lblPlantas, gbc_lblPlantas);
+											}
 
-				btnAadirInsumo.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						Integer selectedRow = tablePlantas.getSelectedRow();
+											panel.add(btnNuevoInsumo, gbc_btnNuevoInsumo);
+										}
 
-						if (selectedRow < 0) {
-							JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
-									"Información", JOptionPane.INFORMATION_MESSAGE);
-							return;
-						}
-
-						Integer selectedPlanta = (Integer) tablePlantas.getValueAt(selectedRow, 0);
-						AddInsumoDialog(selectedPlanta);
-					}
-				});
-
-				panel.add(btnAadirInsumo, gbc_btnAadirInsumo);
-			}
+										panel.add(btnEditar_1, gbc_btnEditar_1);
+									}
+						
+									panel.add(btnEliminar, gbc_btnEliminar);
 
 			JLabel lblBuscarPlantas = new JLabel("Buscar plantas:");
 			GridBagConstraints gbc_lblBuscarPlantas = new GridBagConstraints();
@@ -694,6 +700,110 @@ public class MainMenu {
 				tableStock.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				tableStock.setAutoCreateRowSorter(true);
 				tableStock.setDefaultEditor(Object.class, null);
+				{
+					JPanel panel_1 = new JPanel();
+					GridBagConstraints gbc_panel_11 = new GridBagConstraints();
+					gbc_panel_11.insets = new Insets(0, 0, 0, 5);
+					gbc_panel_11.fill = GridBagConstraints.HORIZONTAL;
+					gbc_panel_11.gridx = 6;
+					gbc_panel_11.gridy = 5;
+					panel.add(panel_1, gbc_panel_11);
+					
+					GridBagLayout gbl_panel_1 = new GridBagLayout();
+					gbl_panel_1.columnWidths = new int[]{30, 0, 0};
+					gbl_panel_1.rowHeights = new int[]{0, 0, 0, 0};
+					gbl_panel_1.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+					gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+					panel_1.setLayout(gbl_panel_1);
+					{
+						JButton btnAadirInsumo = new JButton("Añadir insumo");
+						GridBagConstraints gbc_btnAadirInsumo = new GridBagConstraints();
+						gbc_btnAadirInsumo.gridwidth = 2;
+						gbc_btnAadirInsumo.insets = new Insets(0, 0, 5, 0);
+						gbc_btnAadirInsumo.gridx = 0;
+						gbc_btnAadirInsumo.gridy = 0;
+						panel_1.add(btnAadirInsumo, gbc_btnAadirInsumo);
+						{
+							JButton btnEditarInsumo = new JButton("Editar insumo");
+							GridBagConstraints gbc_btnEditarInsumo = new GridBagConstraints();
+							gbc_btnEditarInsumo.gridwidth = 2;
+							gbc_btnEditarInsumo.insets = new Insets(0, 0, 5, 0);
+							gbc_btnEditarInsumo.gridx = 0;
+							gbc_btnEditarInsumo.gridy = 1;
+							panel_1.add(btnEditarInsumo, gbc_btnEditarInsumo);
+						}
+						
+						JButton btnEliminarInsumo = new JButton("Eliminar insumo");
+						GridBagConstraints gbc_btnEliminarInsumo = new GridBagConstraints();
+						gbc_btnEliminarInsumo.gridwidth = 2;
+						gbc_btnEliminarInsumo.gridx = 0;
+						gbc_btnEliminarInsumo.gridy = 2;
+						panel_1.add(btnEliminarInsumo, gbc_btnEliminarInsumo);
+					
+
+						btnAadirInsumo.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent arg0) {
+								Integer selectedRow = tablePlantas.getSelectedRow();
+
+								if (selectedRow < 0) {
+									JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
+											"Información", JOptionPane.INFORMATION_MESSAGE);
+									return;
+								}
+
+								Integer selectedPlanta = (Integer) tablePlantas.getValueAt(selectedRow, 0);
+								AddInsumoDialog(selectedPlanta);
+							}
+						});
+						
+						btnEliminarInsumo.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent arg0) {
+								Integer rowId = tableStock.getSelectedRow();
+
+								if (rowId < 0) {
+									JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
+											"Información", JOptionPane.INFORMATION_MESSAGE);
+									return;
+								}
+
+								int dialogResult = JOptionPane.showConfirmDialog(frmTrabajoPrctico,
+										"¿Está seguro que desea eliminar el insumo de la planta seleccionada?", "Confirmar",
+										JOptionPane.YES_NO_OPTION);
+
+								if (dialogResult == JOptionPane.YES_OPTION) {
+									Integer plantaId = (Integer) tablePlantas.getValueAt(rowId, 0);
+									Planta plantaSelect = gestorPlanta.obtenerPlanta(plantaId);
+									
+									if(plantaSelect == null)
+									{
+										JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
+												"Información", JOptionPane.INFORMATION_MESSAGE);
+										
+										return;
+									}
+									
+									Integer insumoId = (Integer) tableInsumos.getValueAt(rowId, 0);
+									Insumo insumoSelect = gestorInsumo.getInsumoById(insumoId);
+									
+									if(insumoSelect == null)
+									{
+										JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
+												"Información", JOptionPane.INFORMATION_MESSAGE);
+										
+										return;
+									}
+									
+									plantaSelect.getListaStock().remove(insumoId);
+									MainMenu.refreshStockTable(plantaId);
+									
+									JOptionPane.showMessageDialog(frmTrabajoPrctico,
+											"El insumo ha sido eliminado de la planta seleccionada", "Información",
+											JOptionPane.INFORMATION_MESSAGE);
+								}
+							}
+						});
+					}
+				}
 				JScrollPane panel_scrlpn = new JScrollPane(tableStock);
 				panel.add(panel_scrlpn, gbc_panel_1);
 			}
@@ -714,10 +824,17 @@ public class MainMenu {
 	public static void refreshPlantaTable(ArrayList<Planta> search) {
 		String col[] = { "ID", "Nombre" };
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+		
+		if(gestorPlanta.getListaPlantas().isEmpty())
+		{
+			tablePlantas.setModel(tableModel);
+			return;
+		}
+		
 		ArrayList<Planta> tempListaPlantas;
 
 		if (search == null) {
-			tempListaPlantas = gestorPlanta.getListaPlantas();
+			tempListaPlantas = new ArrayList<>(gestorPlanta.getListaPlantas().values());
 		} else {
 			tempListaPlantas = search;
 		}
@@ -736,23 +853,25 @@ public class MainMenu {
 	public static void refreshStockTable(Integer plantaId) {
 		String col[] = { "Insumo", "Cantidad", "Punto pedido" };
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-		ArrayList<Stock> tempListaStock = gestorPlanta.getStockByPlantaId(plantaId);
-
-		if (plantaId > 0) {
-			for (int i = 0; i < tempListaStock.size(); i++) {
-
-				String descripcion = tempListaStock.get(i).getInsumo().getDescripcion();
-				Integer cantidad = tempListaStock.get(i).getCantidad();
-				Integer puntopedido = tempListaStock.get(i).getPuntoPedido();
-
-				Object[] data = { descripcion, cantidad, puntopedido };
-				tableModel.addRow(data);
-			}
-
+		HashMap<Integer, Stock> tempListaStock;
+		
+		if(plantaId == 0 || (tempListaStock = gestorPlanta.getStockByPlantaId(plantaId)) == null)
+		{
 			tableStock.setModel(tableModel);
-		} else {
-			tableStock.setModel(tableModel);
+			return;
 		}
+		
+		for (Stock stock : tempListaStock.values()) {
+			String descripcion = stock.getInsumo().getDescripcion();
+			Integer cantidad = stock.getCantidad();
+			Integer puntopedido = stock.getPuntoPedido();
+
+			Object[] data = { descripcion, cantidad, puntopedido };
+			tableModel.addRow(data);
+		}
+
+		tableStock.setModel(tableModel);
+		System.out.println("Refrescando");
 	}
 
 	public static void refreshInsumoTable() {
@@ -1097,7 +1216,7 @@ public class MainMenu {
 		panel.add(txtPuntoPedido, gbc_textField_1);
 		txtPuntoPedido.setColumns(10);
 
-		JLabel lblAgregandoAPlanta = new JLabel("Agregando a planta: " + plantaId);
+		JLabel lblAgregandoAPlanta = new JLabel("Agregando a planta con ID " + plantaId);
 		GridBagConstraints gbc_lblAgregandoAPlanta = new GridBagConstraints();
 		gbc_lblAgregandoAPlanta.gridwidth = 4;
 		gbc_lblAgregandoAPlanta.gridx = 0;
@@ -1110,11 +1229,12 @@ public class MainMenu {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				Insumo insumoSelect = (Insumo) comboBox.getSelectedItem();
 				Stock stockInsumo = new Stock();
 				stockInsumo.setCantidad(Integer.parseInt(txtCantidad.getText()));
 				stockInsumo.setPuntoPedido(Integer.parseInt(txtPuntoPedido.getText()));
-				stockInsumo.setInsumo(((Insumo) comboBox.getSelectedItem()));
-				gestorPlanta.obtenerPlanta(plantaId).getListaStock().add(stockInsumo);
+				stockInsumo.setInsumo(insumoSelect);
+				gestorPlanta.obtenerPlanta(plantaId).getListaStock().put(insumoSelect.getId(), stockInsumo);
 
 				MainMenu.refreshStockTable(plantaId);
 				jdialog.dispose();
