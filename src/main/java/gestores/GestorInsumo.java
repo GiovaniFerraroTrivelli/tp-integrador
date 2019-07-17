@@ -63,6 +63,14 @@ public class GestorInsumo implements Gestor<Object> {
 		}
 		return null;
 	}
+	public Insumo getInsumoByCosto(Float costo) {
+		for (int i = 0; i < listaInsumos.size(); i++) {
+			if (listaInsumos.get(i).getCosto() == costo) {
+				return listaInsumos.get(i);
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public void borrar(Integer id) {
@@ -93,7 +101,9 @@ public class GestorInsumo implements Gestor<Object> {
 		}
 		if(tipo) resultado = arbol.rango(0, busqueda);
 		else resultado = arbol.rango(busqueda, Integer.MAX_VALUE);
-		return (ArrayList) resultado;
+		return resultado.stream()
+						.map(r -> this.getInsumoByStock(r))
+						.collect(Collectors.toCollection(ArrayList::new));
 	}
 	
 	public ArrayList buscarPorCosto(Float busqueda, boolean tipo) {
@@ -105,7 +115,9 @@ public class GestorInsumo implements Gestor<Object> {
 		}
 		if(tipo) resultado = arbol.rango((float)0, busqueda); //buscar por maximo
 		else resultado = arbol.rango(busqueda, Float.MAX_VALUE); //buscar por minimo
-		return (ArrayList) resultado;
+		return resultado.stream()
+						.map(r -> this.getInsumoByCosto(r))
+						.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 }
