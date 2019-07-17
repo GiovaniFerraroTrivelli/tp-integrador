@@ -63,7 +63,12 @@ public class GestorPlanta implements Gestor<Object> {
 	@Override
 	// TODO: Consultar a martin
 	public ArrayList buscar(String busqueda) {
-		String primElem = this.getListaPlantas().get(0).getNombre();
+		ArrayList<Planta> listaPlantas = this.getListaPlantas();
+		
+		if(listaPlantas.isEmpty())
+			return new ArrayList<Planta>();
+		
+		String primElem = listaPlantas.get(0).getNombre();
 		ArbolBinarioBusqueda<String> arbol = new ArbolBinarioBusqueda<String>(primElem);
 		for (int i = 1; i < this.getListaPlantas().size(); i++) {
 			arbol.agregar(this.getListaPlantas().get(i).getNombre());
