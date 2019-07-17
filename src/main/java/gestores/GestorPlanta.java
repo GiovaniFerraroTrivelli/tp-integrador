@@ -56,15 +56,15 @@ public class GestorPlanta implements Gestor<Object> {
 		if(listaPlantas.isEmpty())
 			return new ArrayList<Planta>();
 		
-		ArrayList<Planta> listaPlantas = new ArrayList<>(this.getListaPlantas().values());
+		ArrayList<Planta> arrListaPlantas = new ArrayList<>(this.getListaPlantas().values());
 		
-		if(listaPlantas.isEmpty())
+		if(arrListaPlantas.isEmpty())
 			return new ArrayList<Planta>();
 		
-		String primElem = listaPlantas.get(0).getNombre();
+		String primElem = arrListaPlantas.get(0).getNombre();
 		ArbolBinarioBusqueda<String> arbol = new ArbolBinarioBusqueda<String>(primElem);
-		for (int i = 1; i < this.getListaPlantas().size(); i++) {
-			arbol.agregar(this.getListaPlantas().get(i).getNombre());
+		for (int i = 1; i < arrListaPlantas.size(); i++) {
+			arbol.agregar(arrListaPlantas.get(i).getNombre());
 		}
 		return arbol.buscar(busqueda).stream().map(s -> this.obtenerPlantaStr(s))
 				.collect(Collectors.toCollection(ArrayList::new));
