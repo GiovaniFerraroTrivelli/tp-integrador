@@ -55,9 +55,19 @@ import javax.swing.ListSelectionModel;
 
 public class MainMenu {
 
+	enum SearchInsumoItems
+	{
+		nombre,
+		costoMinimo,
+		costoMaximo,
+		stockMinimo,
+		stockMaximo
+	}
+	
 	private JFrame frmTrabajoPrctico;
 	private CardLayout cl;
 	private JTextField txtSearch;
+	private JTextField txtSearchInsumo;
 	private static JTable tablePlantas;
 	private static JTable tableStock;
 	private static JTable tableInsumos;
@@ -115,6 +125,7 @@ public class MainMenu {
 	}
 
 	private void loadMainMenu() {
+		// Creamos el panel del menú principal
 		JPanel pnlMainMenu = new JPanel();
 		frmTrabajoPrctico.getContentPane().add(pnlMainMenu, "card__MainMenu");
 
@@ -182,645 +193,708 @@ public class MainMenu {
 	 * frmTrabajoPrctico.getContentPane().add(pnlInsumos, "card__Insumos");
 	 */
 	private void loadInsumosMenu() {
+
+		// ------------------------------------------------------------------------------------------------
+		// Creamos el panel de insumos!
+		// ------------------------------------------------------------------------------------------------
+		
 		JPanel pnlInsumos = new JPanel();
 		frmTrabajoPrctico.getContentPane().add(pnlInsumos, "card__Insumos");
 		pnlInsumos.setLayout(new BorderLayout(0, 0));
-		{
-			JPanel panel = new JPanel();
-			pnlInsumos.add(panel, BorderLayout.SOUTH);
-		}
-		{
-			JPanel panel = new JPanel();
-			pnlInsumos.add(panel, BorderLayout.CENTER);
-			GridBagLayout gbl_panel = new GridBagLayout();
-			gbl_panel.columnWidths = new int[] { 0, 165, 0, 99, 155, 193, 0, 179, 84 };
-			gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
-			gbl_panel.columnWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
-			gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-			panel.setLayout(gbl_panel);
-			{
-				{
-					JPanel panel_1 = new JPanel();
-					GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-					gbc_panel_1.insets = new Insets(0, 0, 5, 5);
-					gbc_panel_1.fill = GridBagConstraints.BOTH;
-					gbc_panel_1.gridx = 4;
-					gbc_panel_1.gridy = 0;
-					panel.add(panel_1, gbc_panel_1);
-				}
-				{
-					JButton btnVolver_1 = new JButton("");
-					btnVolver_1.setForeground(Color.WHITE);
-					btnVolver_1.setIcon(new ImageIcon(new ImageIcon("src/main/resources/back.png").getImage()
-							.getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+		
+		// Panel del sur
+		pnlInsumos.add(new JPanel(), BorderLayout.SOUTH);
 
-					btnVolver_1.setOpaque(false);
-					btnVolver_1.setContentAreaFilled(false);
-					btnVolver_1.setBorderPainted(false);
-					btnVolver_1.setBorder(null);
-					btnVolver_1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		// Panel del centro
+		JPanel panel = new JPanel();
+		pnlInsumos.add(panel, BorderLayout.CENTER);
+		
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[] { 0, 165, 0, 99, 155, 193, 0, 179, 84 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		panel.setLayout(gbl_panel);
+		
+		// Panel arriba de todo para que no quede tan pegado al titulo
+		GridBagConstraints gbc_panel_1a = new GridBagConstraints();
+		gbc_panel_1a.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_1a.fill = GridBagConstraints.BOTH;
+		gbc_panel_1a.gridx = 4;
+		gbc_panel_1a.gridy = 0;
+		panel.add(new JPanel(), gbc_panel_1a);
 
-					btnVolver_1.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent arg0) {
-							cl.show(frmTrabajoPrctico.getContentPane(), "card__MainMenu");
-						}
-					});
+		// Lo mismo pero abajo del titulo
+		GridBagConstraints gbc_panel_1b = new GridBagConstraints();
+		gbc_panel_1b.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_1b.fill = GridBagConstraints.BOTH;
+		gbc_panel_1b.gridx = 4;
+		gbc_panel_1b.gridy = 2;
+		panel.add(new JPanel(), gbc_panel_1b);		
 
-					GridBagConstraints gbc_btnVolver_1 = new GridBagConstraints();
-					gbc_btnVolver_1.anchor = GridBagConstraints.WEST;
-					gbc_btnVolver_1.insets = new Insets(0, 0, 5, 5);
-					gbc_btnVolver_1.gridx = 1;
-					gbc_btnVolver_1.gridy = 1;
-					panel.add(btnVolver_1, gbc_btnVolver_1);
-				}
+		// Ahora a la izquierda...
+		JPanel panel_1c = new JPanel();
+		GridBagConstraints gbc_panel_1c = new GridBagConstraints();
+		gbc_panel_1c.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_1c.fill = GridBagConstraints.BOTH;
+		gbc_panel_1c.gridx = 0;
+		gbc_panel_1c.gridy = 4;
+		panel.add(panel_1c, gbc_panel_1c);		
+		
+		// ...y ahora a la derecha :v
+		JPanel panel_1d = new JPanel();
+		GridBagConstraints gbc_panel_1d = new GridBagConstraints();
+		gbc_panel_1d.fill = GridBagConstraints.BOTH;
+		gbc_panel_1d.gridx = 9;
+		gbc_panel_1d.gridy = 4;
+		panel.add(panel_1d, gbc_panel_1d);		
+		
+		// ------------------------------------------------------------------------------------------------
+		// Boton de volver
+		// ------------------------------------------------------------------------------------------------
+		
+		JButton btnVolver_1 = new JButton("");
+		btnVolver_1.setForeground(Color.WHITE);
+		btnVolver_1.setIcon(new ImageIcon(new ImageIcon("src/main/resources/back.png").getImage()
+				.getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+
+		btnVolver_1.setOpaque(false);
+		btnVolver_1.setContentAreaFilled(false);
+		btnVolver_1.setBorderPainted(false);
+		btnVolver_1.setBorder(null);
+		btnVolver_1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+		btnVolver_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				cl.show(frmTrabajoPrctico.getContentPane(), "card__MainMenu");
+			}
+		});
+
+		GridBagConstraints gbc_btnVolver_1 = new GridBagConstraints();
+		gbc_btnVolver_1.anchor = GridBagConstraints.WEST;
+		gbc_btnVolver_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnVolver_1.gridx = 1;
+		gbc_btnVolver_1.gridy = 1;
+		panel.add(btnVolver_1, gbc_btnVolver_1);		
+
+		// ------------------------------------------------------------------------------------------------
+		// Título de arriba de todo
+		// ------------------------------------------------------------------------------------------------
+		JLabel lblPanelDeAdministracin = new JLabel("Panel de administración de insumos");
+		lblPanelDeAdministracin.setFont(new Font("Segoe UI", Font.PLAIN, 24));
+		GridBagConstraints gbc_lblPanelDeAdministracin = new GridBagConstraints();
+		gbc_lblPanelDeAdministracin.gridwidth = 6;
+		gbc_lblPanelDeAdministracin.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPanelDeAdministracin.gridx = 2;
+		gbc_lblPanelDeAdministracin.gridy = 1;
+		panel.add(lblPanelDeAdministracin, gbc_lblPanelDeAdministracin);
+
+		// ------------------------------------------------------------------------------------------------
+		// Caja de búsqueda
+		// ------------------------------------------------------------------------------------------------
+		
+		// ComboBox
+		String[] searchComboItems = {"Nombre", "Costo mínimo", "Costo máximo", "Stock mínimo", "Stock máximo" };
+		
+		JComboBox<String> comboBox = new JComboBox<String>(searchComboItems);
+		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBox.gridx = 5;
+		gbc_comboBox.gridy = 3;
+		
+		panel.add(comboBox, gbc_comboBox);
+
+		// Label de buscar
+		JLabel lblOrdenarPor = new JLabel("Buscar por:");
+		GridBagConstraints gbc_lblOrdenarPor = new GridBagConstraints();
+		gbc_lblOrdenarPor.insets = new Insets(0, 0, 5, 5);
+		gbc_lblOrdenarPor.anchor = GridBagConstraints.EAST;
+		gbc_lblOrdenarPor.gridx = 4;
+		gbc_lblOrdenarPor.gridy = 3;
+		
+		panel.add(lblOrdenarPor, gbc_lblOrdenarPor);
+
+		// Campo de texto
+		txtSearchInsumo = new JTextField();
+		txtSearchInsumo.setToolTipText("Escriba aquí lo que desea buscar...");
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.gridwidth = 2;
+		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_1.fill = GridBagConstraints.BOTH;
+		gbc_textField_1.gridx = 6;
+		gbc_textField_1.gridy = 3;
+		txtSearchInsumo.setColumns(10);
+		
+		panel.add(txtSearchInsumo, gbc_textField_1);
+		
+		// Botón de buscar
+		JButton btnBuscar = new JButton("Buscar!");
+		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
+		gbc_btnBuscar.anchor = GridBagConstraints.WEST;
+		gbc_btnBuscar.gridwidth = 2;
+		gbc_btnBuscar.fill = GridBagConstraints.VERTICAL;
+		gbc_btnBuscar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnBuscar.gridx = 8;
+		gbc_btnBuscar.gridy = 3;
+		
+		panel.add(btnBuscar, gbc_btnBuscar);
+		
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String val = txtSearchInsumo.getText();
+				System.out.println(txtSearchInsumo.getText());
+				
+				switch(comboBox.getSelectedIndex())
 				{
-					JLabel lblPanelDeAdministracin = new JLabel("Panel de administración de insumos");
-					lblPanelDeAdministracin.setFont(new Font("Segoe UI", Font.PLAIN, 24));
-					GridBagConstraints gbc_lblPanelDeAdministracin = new GridBagConstraints();
-					gbc_lblPanelDeAdministracin.gridwidth = 6;
-					gbc_lblPanelDeAdministracin.insets = new Insets(0, 0, 5, 5);
-					gbc_lblPanelDeAdministracin.gridx = 2;
-					gbc_lblPanelDeAdministracin.gridy = 1;
-					panel.add(lblPanelDeAdministracin, gbc_lblPanelDeAdministracin);
+					case 0: {
+						System.out.println("Buscar por nombre: " + val);
+						System.out.println(gestorInsumo.buscar(val));
+						
+						break;
+					}
+					case 1: {
+						System.out.println("Buscar por costo (false): " + val);
+						System.out.println(gestorInsumo.buscarPorCosto(Float.parseFloat(val), false));
+						
+						break;
+					}
+					case 2: {
+						System.out.println("Buscar por costo (true): " + val);
+						System.out.println(gestorInsumo.buscarPorCosto(Float.parseFloat(val), true));
+						
+						break;
+					}
+					case 3: {
+						System.out.println("Buscar por stock (false): " + val);
+						System.out.println(gestorInsumo.buscarPorStock(Integer.parseInt(val), false));
+						
+						break;
+					}
+					case 4: {
+						System.out.println("Buscar por stock (true): " + val);
+						System.out.println(gestorInsumo.buscarPorStock(Integer.parseInt(val), true));
+						
+						break;
+					}
 				}
 			}
-			{
-				{
-					JPanel panel_1 = new JPanel();
-					GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-					gbc_panel_1.insets = new Insets(0, 0, 5, 5);
-					gbc_panel_1.fill = GridBagConstraints.BOTH;
-					gbc_panel_1.gridx = 4;
-					gbc_panel_1.gridy = 2;
-					panel.add(panel_1, gbc_panel_1);
-				}
+		});	
+		
+		// ------------------------------------------------------------------------------------------------
+		// Botones de administración de insumos
+		// ------------------------------------------------------------------------------------------------
+		
+		// Nuevo insumo
+		JButton btnNuevoInsumo = new JButton("Nuevo insumo");
+		GridBagConstraints gbc_btnNuevoInsumo = new GridBagConstraints();
+		gbc_btnNuevoInsumo.anchor = GridBagConstraints.EAST;
+		gbc_btnNuevoInsumo.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNuevoInsumo.gridx = 1;
+		gbc_btnNuevoInsumo.gridy = 3;
+
+		btnNuevoInsumo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CreateInsumoDialog();
 			}
-			{
-				JComboBox<String> comboBox = new JComboBox<String>();
-				GridBagConstraints gbc_comboBox = new GridBagConstraints();
-				gbc_comboBox.insets = new Insets(0, 0, 5, 5);
-				gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-				gbc_comboBox.gridx = 5;
-				gbc_comboBox.gridy = 3;
+		});
 
-				comboBox.addItem("Nombre");
-				comboBox.addItem("Costo mínimo");
-				comboBox.addItem("Costo máximo");
-				comboBox.addItem("Stock mínimo");
-				comboBox.addItem("Stock máximo");
-				{
-					JButton btnNuevoInsumo = new JButton("Nuevo insumo");
-					GridBagConstraints gbc_btnNuevoInsumo = new GridBagConstraints();
-					gbc_btnNuevoInsumo.anchor = GridBagConstraints.EAST;
-					gbc_btnNuevoInsumo.insets = new Insets(0, 0, 5, 5);
-					gbc_btnNuevoInsumo.gridx = 1;
-					gbc_btnNuevoInsumo.gridy = 3;
+		panel.add(btnNuevoInsumo, gbc_btnNuevoInsumo);
+		
+		// Editar insumo
+		JButton btnEditar_1 = new JButton("Editar");
+		GridBagConstraints gbc_btnEditar_1 = new GridBagConstraints();
+		gbc_btnEditar_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEditar_1.gridx = 2;
+		gbc_btnEditar_1.gridy = 3;
+		panel.add(btnEditar_1, gbc_btnEditar_1);
 
-					btnNuevoInsumo.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent arg0) {
-							CreateInsumoDialog();
-						}
-					});
+		btnEditar_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Integer rowId = tableInsumos.getSelectedRow();
 
-					panel.add(btnNuevoInsumo, gbc_btnNuevoInsumo);
-				}
-				{
-					JButton btnEditar_1 = new JButton("Editar");
-					GridBagConstraints gbc_btnEditar_1 = new GridBagConstraints();
-					gbc_btnEditar_1.insets = new Insets(0, 0, 5, 5);
-					gbc_btnEditar_1.gridx = 2;
-					gbc_btnEditar_1.gridy = 3;
-					panel.add(btnEditar_1, gbc_btnEditar_1);
-
-					btnEditar_1.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent arg0) {
-							Integer rowId = tableInsumos.getSelectedRow();
-
-							if (rowId < 0) {
-								JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
-										"Información", JOptionPane.INFORMATION_MESSAGE);
-								return;
-							}
-
-							Insumo insumo;
-							insumo = gestorInsumo.getInsumoById((Integer) tableInsumos.getValueAt(rowId, 0));
-
-							if (insumo == null) {
-								JOptionPane.showMessageDialog(frmTrabajoPrctico,
-										"No se pudo localizar el insumo seleccionado", "Información",
-										JOptionPane.INFORMATION_MESSAGE);
-
-								return;
-							}
-
-							EditInsumoDialog(insumo);
-							refreshPlantaTable(null);
-						}
-					});
-				}
-				{
-					JButton btnEliminar = new JButton("Eliminar");
-					GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
-					gbc_btnEliminar.anchor = GridBagConstraints.WEST;
-					gbc_btnEliminar.insets = new Insets(0, 0, 5, 5);
-					gbc_btnEliminar.gridx = 3;
-					gbc_btnEliminar.gridy = 3;
-					panel.add(btnEliminar, gbc_btnEliminar);
-
-					btnEliminar.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent arg0) {
-							Integer rowId = tableInsumos.getSelectedRow();
-
-							if (rowId < 0) {
-								JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
-										"Información", JOptionPane.INFORMATION_MESSAGE);
-								return;
-							}
-
-							int dialogResult = JOptionPane.showConfirmDialog(frmTrabajoPrctico,
-									"¿Está seguro que desea eliminar el insumo seleccionado?", "Confirmar",
-									JOptionPane.YES_NO_OPTION);
-
-							if (dialogResult == JOptionPane.YES_OPTION) {
-								gestorInsumo.borrar((Integer) tableInsumos.getValueAt(rowId, 0));
-								refreshInsumoTable();
-
-								JOptionPane.showMessageDialog(frmTrabajoPrctico,
-										"El insumo seleccionado ha sido borrado", "Información",
-										JOptionPane.INFORMATION_MESSAGE);
-							}
-						}
-					});
-				}
-				{
-					JLabel lblOrdenarPor = new JLabel("Buscar por:");
-					GridBagConstraints gbc_lblOrdenarPor = new GridBagConstraints();
-					gbc_lblOrdenarPor.insets = new Insets(0, 0, 5, 5);
-					gbc_lblOrdenarPor.anchor = GridBagConstraints.EAST;
-					gbc_lblOrdenarPor.gridx = 4;
-					gbc_lblOrdenarPor.gridy = 3;
-					panel.add(lblOrdenarPor, gbc_lblOrdenarPor);
+				if (rowId < 0) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				}
 
-				panel.add(comboBox, gbc_comboBox);
-			}
-			JButton btnBuscar = new JButton("Buscar");
-			btnBuscar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
+				Insumo insumo;
+				insumo = gestorInsumo.getInsumoById((Integer) tableInsumos.getValueAt(rowId, 0));
+
+				if (insumo == null) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico,
+							"No se pudo localizar el insumo seleccionado", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
+
+					return;
 				}
-			});
-			{
-				txtSearch = new JTextField();
-				txtSearch.setToolTipText("Escriba aquí lo que desea buscar...");
-				GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-				gbc_textField_1.gridwidth = 2;
-				gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-				gbc_textField_1.fill = GridBagConstraints.BOTH;
-				gbc_textField_1.gridx = 6;
-				gbc_textField_1.gridy = 3;
-				panel.add(txtSearch, gbc_textField_1);
-				txtSearch.setColumns(10);
-			}
-			GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
-			gbc_btnBuscar.anchor = GridBagConstraints.WEST;
-			gbc_btnBuscar.gridwidth = 2;
-			gbc_btnBuscar.fill = GridBagConstraints.VERTICAL;
-			gbc_btnBuscar.insets = new Insets(0, 0, 5, 0);
-			gbc_btnBuscar.gridx = 8;
-			gbc_btnBuscar.gridy = 3;
-			panel.add(btnBuscar, gbc_btnBuscar);
-			{
-				JPanel panel_1 = new JPanel();
-				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-				gbc_panel_1.insets = new Insets(0, 0, 0, 5);
-				gbc_panel_1.fill = GridBagConstraints.BOTH;
-				gbc_panel_1.gridx = 0;
-				gbc_panel_1.gridy = 4;
-				panel.add(panel_1, gbc_panel_1);
-			}
-			{
-				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-				gbc_panel_1.gridwidth = 8;
-				gbc_panel_1.insets = new Insets(0, 0, 0, 5);
-				gbc_panel_1.fill = GridBagConstraints.BOTH;
-				gbc_panel_1.gridx = 1;
-				gbc_panel_1.gridy = 4;
 
-				tableInsumos = new JTable();
-				tableInsumos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-				tableInsumos.setAutoCreateRowSorter(true);
-				tableInsumos.setDefaultEditor(Object.class, null);
-				JScrollPane panel_scrlpn = new JScrollPane(tableInsumos);
-				panel.add(panel_scrlpn, gbc_panel_1);
+				EditInsumoDialog(insumo);
+				refreshPlantaTable(null);
 			}
-			{
-				JPanel panel_1 = new JPanel();
-				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-				gbc_panel_1.fill = GridBagConstraints.BOTH;
-				gbc_panel_1.gridx = 9;
-				gbc_panel_1.gridy = 4;
-				panel.add(panel_1, gbc_panel_1);
-			}
-		}
+		});
+		
+		// Eliminar insumo
+		JButton btnEliminar = new JButton("Eliminar");
+		GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
+		gbc_btnEliminar.anchor = GridBagConstraints.WEST;
+		gbc_btnEliminar.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEliminar.gridx = 3;
+		gbc_btnEliminar.gridy = 3;
+		panel.add(btnEliminar, gbc_btnEliminar);
 
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Integer rowId = tableInsumos.getSelectedRow();
+
+				if (rowId < 0) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+
+				int dialogResult = JOptionPane.showConfirmDialog(frmTrabajoPrctico,
+						"¿Está seguro que desea eliminar el insumo seleccionado?", "Confirmar",
+						JOptionPane.YES_NO_OPTION);
+
+				if (dialogResult == JOptionPane.YES_OPTION) {
+					gestorInsumo.borrar((Integer) tableInsumos.getValueAt(rowId, 0));
+					refreshInsumoTable();
+
+					JOptionPane.showMessageDialog(frmTrabajoPrctico,
+							"El insumo seleccionado ha sido borrado", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+		
+		// ------------------------------------------------------------------------------------------------
+		// Tabla de insumos
+		// ------------------------------------------------------------------------------------------------
+		
+		tableInsumos = new JTable();
+		tableInsumos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableInsumos.setAutoCreateRowSorter(true);
+		tableInsumos.setDefaultEditor(Object.class, null);
+		JScrollPane panel_scrlpn = new JScrollPane(tableInsumos);
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.gridwidth = 8;
+		gbc_panel_1.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.gridx = 1;
+		gbc_panel_1.gridy = 4;
+		panel.add(panel_scrlpn, gbc_panel_1);
+		
+		// Refrescamos la tabla de insumos y terminamos
 		refreshInsumoTable();
 	}
 
+
 	private void loadPlantasMenu() {
+		// ------------------------------------------------------------------------------------------------
+		// Creando el panel de plantas (por 328947349739 vez) :'v
+		// ------------------------------------------------------------------------------------------------
 		JPanel pnlPlantas = new JPanel();
 		frmTrabajoPrctico.getContentPane().add(pnlPlantas, "card__Planta");
 		pnlPlantas.setLayout(new BorderLayout(0, 0));
-		{
-			JPanel panel = new JPanel();
-			pnlPlantas.add(panel, BorderLayout.SOUTH);
-		}
-		{
-			JPanel panel = new JPanel();
-			pnlPlantas.add(panel, BorderLayout.CENTER);
-			GridBagLayout gbl_panel = new GridBagLayout();
-			gbl_panel.columnWidths = new int[] { 0, 103, 0, 0, 99, 111, 101, 193, 0, 179, 84 };
-			gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
-			gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
-			gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-			panel.setLayout(gbl_panel);
-			{
-				{
-					JPanel panel_1 = new JPanel();
-					GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-					gbc_panel_1.insets = new Insets(0, 0, 5, 5);
-					gbc_panel_1.fill = GridBagConstraints.BOTH;
-					gbc_panel_1.gridx = 6;
-					gbc_panel_1.gridy = 1;
-					panel.add(panel_1, gbc_panel_1);
-				}
-				{
-					JButton btnVolver_1 = new JButton("");
-					btnVolver_1.setForeground(Color.WHITE);
-					btnVolver_1.setIcon(new ImageIcon(new ImageIcon("src/main/resources/back.png").getImage()
-							.getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
 
-					btnVolver_1.setOpaque(false);
-					btnVolver_1.setContentAreaFilled(false);
-					btnVolver_1.setBorderPainted(false);
-					btnVolver_1.setBorder(null);
-					btnVolver_1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		pnlPlantas.add(new JPanel(), BorderLayout.SOUTH);
 
-					btnVolver_1.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent arg0) {
-							cl.show(frmTrabajoPrctico.getContentPane(), "card__MainMenu");
-						}
-					});
+		JPanel panel = new JPanel();
+		pnlPlantas.add(panel, BorderLayout.CENTER);
 
-					GridBagConstraints gbc_btnVolver_1 = new GridBagConstraints();
-					gbc_btnVolver_1.anchor = GridBagConstraints.WEST;
-					gbc_btnVolver_1.insets = new Insets(0, 0, 5, 5);
-					gbc_btnVolver_1.gridx = 1;
-					gbc_btnVolver_1.gridy = 2;
-					panel.add(btnVolver_1, gbc_btnVolver_1);
-				}
-				{
-					JLabel lblPanelDeAdministracin = new JLabel("Panel de administración de plantas");
-					lblPanelDeAdministracin.setFont(new Font("Segoe UI", Font.PLAIN, 24));
-					GridBagConstraints gbc_lblPanelDeAdministracin = new GridBagConstraints();
-					gbc_lblPanelDeAdministracin.gridwidth = 8;
-					gbc_lblPanelDeAdministracin.insets = new Insets(0, 0, 5, 5);
-					gbc_lblPanelDeAdministracin.gridx = 2;
-					gbc_lblPanelDeAdministracin.gridy = 2;
-					panel.add(lblPanelDeAdministracin, gbc_lblPanelDeAdministracin);
-				}
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[] { 0, 103, 0, 0, 99, 111, 101, 193, 0, 179, 84 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		panel.setLayout(gbl_panel);
+
+		// Título principal del panel
+		JLabel lblPanelDeAdministracin = new JLabel("Panel de administración de plantas");
+		lblPanelDeAdministracin.setFont(new Font("Segoe UI", Font.PLAIN, 24));
+		GridBagConstraints gbc_lblPanelDeAdministracin = new GridBagConstraints();
+		gbc_lblPanelDeAdministracin.gridwidth = 8;
+		gbc_lblPanelDeAdministracin.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPanelDeAdministracin.gridx = 2;
+		gbc_lblPanelDeAdministracin.gridy = 2;
+		panel.add(lblPanelDeAdministracin, gbc_lblPanelDeAdministracin);
+
+		// Botón de volver
+		JButton btnVolver_1 = new JButton("");
+		btnVolver_1.setForeground(Color.WHITE);
+		btnVolver_1.setIcon(new ImageIcon(new ImageIcon("src/main/resources/back.png").getImage()
+				.getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+
+		btnVolver_1.setOpaque(false);
+		btnVolver_1.setContentAreaFilled(false);
+		btnVolver_1.setBorderPainted(false);
+		btnVolver_1.setBorder(null);
+		btnVolver_1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+		GridBagConstraints gbc_btnVolver_1 = new GridBagConstraints();
+		gbc_btnVolver_1.anchor = GridBagConstraints.WEST;
+		gbc_btnVolver_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnVolver_1.gridx = 1;
+		gbc_btnVolver_1.gridy = 2;
+		panel.add(btnVolver_1, gbc_btnVolver_1);
+
+		btnVolver_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				cl.show(frmTrabajoPrctico.getContentPane(), "card__MainMenu");
 			}
-			{
-				{
-					JPanel panel_1 = new JPanel();
-					GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-					gbc_panel_1.insets = new Insets(0, 0, 5, 5);
-					gbc_panel_1.fill = GridBagConstraints.BOTH;
-					gbc_panel_1.gridx = 6;
-					gbc_panel_1.gridy = 3;
-					panel.add(panel_1, gbc_panel_1);
-				}
+		});
+
+		// Panelcito arriba para separar de la barra de título
+		JPanel panel_555522 = new JPanel();
+		GridBagConstraints gbc_panel_555522 = new GridBagConstraints();
+		gbc_panel_555522.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_555522.fill = GridBagConstraints.BOTH;
+		gbc_panel_555522.gridx = 6;
+		gbc_panel_555522.gridy = 1;
+		panel.add(panel_555522, gbc_panel_555522);
+
+		// Panelcito abajo del título para separar y que no quede tan pegado
+		JPanel panel_2 = new JPanel();
+		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
+		gbc_panel_2.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_2.fill = GridBagConstraints.BOTH;
+		gbc_panel_2.gridx = 6;
+		gbc_panel_2.gridy = 3;
+		panel.add(panel_2, gbc_panel_2);
+
+		// Panel a la izquierda para separar
+		JPanel panel_5 = new JPanel();
+		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
+		gbc_panel_5.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_5.fill = GridBagConstraints.BOTH;
+		gbc_panel_5.gridx = 0;
+		gbc_panel_5.gridy = 5;
+		panel.add(panel_5, gbc_panel_5);
+
+		// Y aca a la derecha
+		JPanel panel_133 = new JPanel();
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.gridx = 11;
+		gbc_panel_1.gridy = 5;
+		panel.add(panel_133, gbc_panel_1);
+
+		// ------------------------------------------------------------------------------------------------
+		// Caja de búsqueda
+		// ------------------------------------------------------------------------------------------------
+
+		// Label de buscar planta
+		JLabel lblBuscarPlantas = new JLabel("Buscar plantas:");
+		GridBagConstraints gbc_lblBuscarPlantas = new GridBagConstraints();
+		gbc_lblBuscarPlantas.insets = new Insets(0, 0, 5, 5);
+		gbc_lblBuscarPlantas.anchor = GridBagConstraints.EAST;
+		gbc_lblBuscarPlantas.gridx = 7;
+		gbc_lblBuscarPlantas.gridy = 4;
+		panel.add(lblBuscarPlantas, gbc_lblBuscarPlantas);
+
+		// Botón de buscar
+		JButton btnBuscar = new JButton("Buscar");
+		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
+		gbc_btnBuscar.anchor = GridBagConstraints.WEST;
+		gbc_btnBuscar.gridwidth = 2;
+		gbc_btnBuscar.fill = GridBagConstraints.VERTICAL;
+		gbc_btnBuscar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnBuscar.gridx = 10;
+		gbc_btnBuscar.gridy = 4;
+		panel.add(btnBuscar, gbc_btnBuscar);
+
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (txtSearch.getText().length() == 0)
+					refreshPlantaTable(null);
+				else
+					refreshPlantaTable(gestorPlanta.buscar(txtSearch.getText()));
 			}
-			{
-				{
-				}
-			}
-			JButton btnBuscar = new JButton("Buscar");
-			JButton btnEliminar = new JButton("Eliminar");
-			GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
-			gbc_btnEliminar.anchor = GridBagConstraints.WEST;
-			gbc_btnEliminar.insets = new Insets(0, 0, 5, 5);
-			gbc_btnEliminar.gridx = 4;
-			gbc_btnEliminar.gridy = 4;
-			
-						btnEliminar.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent arg0) {
-								Integer rowId = tablePlantas.getSelectedRow();
-			
-								if (rowId < 0) {
-									JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
-											"Información", JOptionPane.INFORMATION_MESSAGE);
-									return;
-								}
-			
-								int dialogResult = JOptionPane.showConfirmDialog(frmTrabajoPrctico,
-										"¿Está seguro que desea eliminar la planta seleccionada?", "Confirmar",
-										JOptionPane.YES_NO_OPTION);
-			
-								if (dialogResult == JOptionPane.YES_OPTION) {
-									gestorPlanta.borrar((Integer) tablePlantas.getValueAt(rowId, 0));
-									refreshPlantaTable(null);
-									refreshStockTable(0);
-			
-									JOptionPane.showMessageDialog(frmTrabajoPrctico, "La planta seleccionada ha sido borrada",
-											"Información", JOptionPane.INFORMATION_MESSAGE);
-								}
+		});
+
+		// Input de búsqueda
+		txtSearch = new JTextField();
+		txtSearch.setToolTipText("Escriba aquí lo que desea buscar...");
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.gridwidth = 2;
+		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_1.fill = GridBagConstraints.BOTH;
+		gbc_textField_1.gridx = 8;
+		gbc_textField_1.gridy = 4;
+		panel.add(txtSearch, gbc_textField_1);
+		txtSearch.setColumns(10);
+
+		// ------------------------------------------------------------------------------------------------
+		// Botones de administración de Planta
+		// ------------------------------------------------------------------------------------------------
+
+		JLabel lblPlantas = new JLabel("Plantas:");
+		GridBagConstraints gbc_lblPlantas = new GridBagConstraints();
+		gbc_lblPlantas.anchor = GridBagConstraints.EAST;
+		gbc_lblPlantas.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPlantas.gridx = 1;
+		gbc_lblPlantas.gridy = 4;
+		panel.add(lblPlantas, gbc_lblPlantas);
+
+		// Añadir planta
+		JButton btnNuevoInsumo = new JButton("Añadir");
+		GridBagConstraints gbc_btnNuevoInsumo = new GridBagConstraints();
+		gbc_btnNuevoInsumo.anchor = GridBagConstraints.EAST;
+		gbc_btnNuevoInsumo.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNuevoInsumo.gridx = 2;
+		gbc_btnNuevoInsumo.gridy = 4;
+
+		btnNuevoInsumo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Boolean validInput = false;
+				String plantaName;
+				
+				do {
+					plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico,
+							"Nombre de la planta");
+
+					if (plantaName != null) {
+						if (plantaName.length() > 0) {
+							if (gestorPlanta.buscar(plantaName).size() == 0) {
+								gestorPlanta.crear(plantaName);
+								refreshPlantaTable(null);
+								validInput = true;
+							} else {
+								JOptionPane.showMessageDialog(frmTrabajoPrctico,
+										"Ya existe una planta con este nombre", "Información",
+										JOptionPane.INFORMATION_MESSAGE);
 							}
-						});
-									{
-										JButton btnEditar_1 = new JButton("Editar");
-										GridBagConstraints gbc_btnEditar_1 = new GridBagConstraints();
-										gbc_btnEditar_1.insets = new Insets(0, 0, 5, 5);
-										gbc_btnEditar_1.gridx = 3;
-										gbc_btnEditar_1.gridy = 4;
+						} else {
+							JOptionPane.showMessageDialog(frmTrabajoPrctico,
+									"Es necesario colocar un nombre para la planta", "Información",
+									JOptionPane.INFORMATION_MESSAGE);
+						}
+					} else validInput = true;
+				} while (!validInput);
+			}
+		});
 
-										btnEditar_1.addActionListener(new ActionListener() {
-											public void actionPerformed(ActionEvent arg0) {
-												Integer rowId = tablePlantas.getSelectedRow();
+		panel.add(btnNuevoInsumo, gbc_btnNuevoInsumo);
 
-												if (rowId < 0) {
-													JOptionPane.showMessageDialog(frmTrabajoPrctico,
-															"No hay ninguna planta seleccionada", "Información",
-															JOptionPane.INFORMATION_MESSAGE);
-													return;
-												}
+		// Editar planta
+		JButton btnEditar_1 = new JButton("Editar");
+		GridBagConstraints gbc_btnEditar_1 = new GridBagConstraints();
+		gbc_btnEditar_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEditar_1.gridx = 3;
+		gbc_btnEditar_1.gridy = 4;
 
-												String plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico,
-														"Nuevo nombre de la planta", (String) tablePlantas.getValueAt(rowId, 1));
+		btnEditar_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Integer rowId = tablePlantas.getSelectedRow();
 
-												if (plantaName != null) {
-													gestorPlanta.obtenerPlanta((Integer) tablePlantas.getValueAt(rowId, 0))
-															.setNombre(plantaName);
-													refreshPlantaTable(null);
-												}
-											}
-										});
-										{
-											JButton btnNuevoInsumo = new JButton("Añadir");
-											GridBagConstraints gbc_btnNuevoInsumo = new GridBagConstraints();
-											gbc_btnNuevoInsumo.anchor = GridBagConstraints.EAST;
-											gbc_btnNuevoInsumo.insets = new Insets(0, 0, 5, 5);
-											gbc_btnNuevoInsumo.gridx = 2;
-											gbc_btnNuevoInsumo.gridy = 4;
-
-											btnNuevoInsumo.addActionListener(new ActionListener() {
-												public void actionPerformed(ActionEvent arg0) {
-													Boolean validInput = false;
-													String plantaName;
-													
-													do {
-														plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico,
-																"Nombre de la planta");
-
-														if (plantaName != null) {
-															if (plantaName.length() > 0) {
-																if (gestorPlanta.buscar(plantaName).size() == 0) {
-																	gestorPlanta.crear(plantaName);
-																	refreshPlantaTable(null);
-																	validInput = true;
-																} else {
-																	JOptionPane.showMessageDialog(frmTrabajoPrctico,
-																			"Ya existe una planta con este nombre", "Información",
-																			JOptionPane.INFORMATION_MESSAGE);
-																}
-															} else {
-																JOptionPane.showMessageDialog(frmTrabajoPrctico,
-																		"Es necesario colocar un nombre para la planta", "Información",
-																		JOptionPane.INFORMATION_MESSAGE);
-															}
-														} else validInput = true;
-													} while (!validInput);
-												}
-											});
-											{
-												JLabel lblPlantas = new JLabel("Plantas:");
-												GridBagConstraints gbc_lblPlantas = new GridBagConstraints();
-												gbc_lblPlantas.anchor = GridBagConstraints.EAST;
-												gbc_lblPlantas.insets = new Insets(0, 0, 5, 5);
-												gbc_lblPlantas.gridx = 1;
-												gbc_lblPlantas.gridy = 4;
-												panel.add(lblPlantas, gbc_lblPlantas);
-											}
-
-											panel.add(btnNuevoInsumo, gbc_btnNuevoInsumo);
-										}
-
-										panel.add(btnEditar_1, gbc_btnEditar_1);
-									}
-						
-									panel.add(btnEliminar, gbc_btnEliminar);
-
-			JLabel lblBuscarPlantas = new JLabel("Buscar plantas:");
-			GridBagConstraints gbc_lblBuscarPlantas = new GridBagConstraints();
-			gbc_lblBuscarPlantas.insets = new Insets(0, 0, 5, 5);
-			gbc_lblBuscarPlantas.anchor = GridBagConstraints.EAST;
-			gbc_lblBuscarPlantas.gridx = 7;
-			gbc_lblBuscarPlantas.gridy = 4;
-			panel.add(lblBuscarPlantas, gbc_lblBuscarPlantas);
-
-			txtSearch = new JTextField();
-			txtSearch.setToolTipText("Escriba aquí lo que desea buscar...");
-			GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-			gbc_textField_1.gridwidth = 2;
-			gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-			gbc_textField_1.fill = GridBagConstraints.BOTH;
-			gbc_textField_1.gridx = 8;
-			gbc_textField_1.gridy = 4;
-			panel.add(txtSearch, gbc_textField_1);
-			txtSearch.setColumns(10);
-
-			GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
-			gbc_btnBuscar.anchor = GridBagConstraints.WEST;
-			gbc_btnBuscar.gridwidth = 2;
-			gbc_btnBuscar.fill = GridBagConstraints.VERTICAL;
-			gbc_btnBuscar.insets = new Insets(0, 0, 5, 0);
-			gbc_btnBuscar.gridx = 10;
-			gbc_btnBuscar.gridy = 4;
-			panel.add(btnBuscar, gbc_btnBuscar);
-
-			btnBuscar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					if (txtSearch.getText().length() == 0)
-						refreshPlantaTable(null);
-					else
-						refreshPlantaTable(gestorPlanta.buscar(txtSearch.getText()));
+				if (rowId < 0) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico,
+							"No hay ninguna planta seleccionada", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
+					return;
 				}
-			});
 
-			{
-				JPanel panel_1 = new JPanel();
-				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-				gbc_panel_1.insets = new Insets(0, 0, 0, 5);
-				gbc_panel_1.fill = GridBagConstraints.BOTH;
-				gbc_panel_1.gridx = 0;
-				gbc_panel_1.gridy = 5;
-				panel.add(panel_1, gbc_panel_1);
+				String plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico,
+						"Nuevo nombre de la planta", (String) tablePlantas.getValueAt(rowId, 1));
+
+				if (plantaName != null) {
+					gestorPlanta.obtenerPlanta((Integer) tablePlantas.getValueAt(rowId, 0))
+							.setNombre(plantaName);
+					refreshPlantaTable(null);
+				}
 			}
-			{
-				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-				gbc_panel_1.gridwidth = 5;
-				gbc_panel_1.insets = new Insets(0, 0, 0, 5);
-				gbc_panel_1.fill = GridBagConstraints.BOTH;
-				gbc_panel_1.gridx = 1;
-				gbc_panel_1.gridy = 5;
+		});
 
-				tablePlantas = new JTable();
-				tablePlantas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-				tablePlantas.setAutoCreateRowSorter(true);
-				tablePlantas.setDefaultEditor(Object.class, null);
-				JScrollPane panel_scrlpn = new JScrollPane(tablePlantas);
+		panel.add(btnEditar_1, gbc_btnEditar_1);
 
-				tablePlantas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-					public void valueChanged(ListSelectionEvent event) {
-						if (!event.getValueIsAdjusting() && tablePlantas.getSelectedRow() != -1)
-							refreshStockTable((Integer) tablePlantas.getValueAt(tablePlantas.getSelectedRow(), 0));
-					}
-				});
+		// Botón de eliminar
+		JButton btnEliminar = new JButton("Eliminar");
+		GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
+		gbc_btnEliminar.anchor = GridBagConstraints.WEST;
+		gbc_btnEliminar.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEliminar.gridx = 4;
+		gbc_btnEliminar.gridy = 4;
 
-				panel.add(panel_scrlpn, gbc_panel_1);
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Integer rowId = tablePlantas.getSelectedRow();
+
+				if (rowId < 0) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+
+				int dialogResult = JOptionPane.showConfirmDialog(frmTrabajoPrctico,
+						"¿Está seguro que desea eliminar la planta seleccionada?", "Confirmar",
+						JOptionPane.YES_NO_OPTION);
+
+				if (dialogResult == JOptionPane.YES_OPTION) {
+					gestorPlanta.borrar((Integer) tablePlantas.getValueAt(rowId, 0));
+					refreshPlantaTable(null);
+					refreshStockTable(0);
+
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "La planta seleccionada ha sido borrada",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
-			{
-				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-				gbc_panel_1.gridwidth = 4;
-				gbc_panel_1.insets = new Insets(0, 0, 0, 5);
-				gbc_panel_1.fill = GridBagConstraints.BOTH;
-				gbc_panel_1.gridx = 7;
-				gbc_panel_1.gridy = 5;
+		});
 
-				tableStock = new JTable();
-				tableStock.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-				tableStock.setAutoCreateRowSorter(true);
-				tableStock.setDefaultEditor(Object.class, null);
-				{
-					JPanel panel_1 = new JPanel();
-					GridBagConstraints gbc_panel_11 = new GridBagConstraints();
-					gbc_panel_11.insets = new Insets(0, 0, 0, 5);
-					gbc_panel_11.fill = GridBagConstraints.HORIZONTAL;
-					gbc_panel_11.gridx = 6;
-					gbc_panel_11.gridy = 5;
-					panel.add(panel_1, gbc_panel_11);
+		panel.add(btnEliminar, gbc_btnEliminar);
+
+		// ------------------------------------------------------------------------------------------------
+		// Tabla de Plantas
+		// ------------------------------------------------------------------------------------------------
+		GridBagConstraints gbc_panel_9 = new GridBagConstraints();
+		gbc_panel_9.gridwidth = 5;
+		gbc_panel_9.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_9.fill = GridBagConstraints.BOTH;
+		gbc_panel_9.gridx = 1;
+		gbc_panel_9.gridy = 5;
+
+		tablePlantas = new JTable();
+		tablePlantas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tablePlantas.setAutoCreateRowSorter(true);
+		tablePlantas.setDefaultEditor(Object.class, null);
+
+		tablePlantas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				if (!event.getValueIsAdjusting() && tablePlantas.getSelectedRow() != -1)
+					refreshStockTable((Integer) tablePlantas.getValueAt(tablePlantas.getSelectedRow(), 0));
+			}
+		});
+
+		panel.add(new JScrollPane(tablePlantas), gbc_panel_9);
+
+		// ------------------------------------------------------------------------------------------------
+		// Tabla de Stocks
+		// ------------------------------------------------------------------------------------------------
+		GridBagConstraints gbc_panel_222 = new GridBagConstraints();
+		gbc_panel_222.gridwidth = 4;
+		gbc_panel_222.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_222.fill = GridBagConstraints.BOTH;
+		gbc_panel_222.gridx = 7;
+		gbc_panel_222.gridy = 5;
+
+		tableStock = new JTable();
+		tableStock.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableStock.setAutoCreateRowSorter(true);
+		tableStock.setDefaultEditor(Object.class, null);
+
+		panel.add(new JScrollPane(tableStock), gbc_panel_222);
+
+		// ------------------------------------------------------------------------------------------------
+		// Botones de Insumo -> Stock a Planta
+		// ------------------------------------------------------------------------------------------------
+		JPanel panel_1 = new JPanel();
+		GridBagConstraints gbc_panel_11 = new GridBagConstraints();
+		gbc_panel_11.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_11.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panel_11.gridx = 6;
+		gbc_panel_11.gridy = 5;
+		panel.add(panel_1, gbc_panel_11);
+
+		GridBagLayout gbl_panel_1 = new GridBagLayout();
+		gbl_panel_1.columnWidths = new int[]{30, 0, 0};
+		gbl_panel_1.rowHeights = new int[]{0, 0, 0, 0};
+		gbl_panel_1.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel_1.setLayout(gbl_panel_1);
+
+		// Añadir insumo
+		JButton btnAadirInsumo = new JButton("Añadir insumo");
+		GridBagConstraints gbc_btnAadirInsumo = new GridBagConstraints();
+		gbc_btnAadirInsumo.gridwidth = 2;
+		gbc_btnAadirInsumo.insets = new Insets(0, 0, 5, 0);
+		gbc_btnAadirInsumo.gridx = 0;
+		gbc_btnAadirInsumo.gridy = 0;
+		panel_1.add(btnAadirInsumo, gbc_btnAadirInsumo);
+
+		btnAadirInsumo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Integer selectedRow = tablePlantas.getSelectedRow();
+
+				if (selectedRow < 0) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+
+				Integer selectedPlanta = (Integer) tablePlantas.getValueAt(selectedRow, 0);
+				AddInsumoDialog(selectedPlanta);
+			}
+		});
+
+		// Eliminar insumo
+		JButton btnEliminarInsumo = new JButton("Eliminar insumo");
+		GridBagConstraints gbc_btnEliminarInsumo = new GridBagConstraints();
+		gbc_btnEliminarInsumo.gridwidth = 2;
+		gbc_btnEliminarInsumo.gridx = 0;
+		gbc_btnEliminarInsumo.gridy = 2;
+		panel_1.add(btnEliminarInsumo, gbc_btnEliminarInsumo);
+		
+		btnEliminarInsumo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Integer rowId = tableStock.getSelectedRow();
+
+				if (rowId < 0) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+
+				int dialogResult = JOptionPane.showConfirmDialog(frmTrabajoPrctico,
+						"¿Está seguro que desea eliminar el insumo de la planta seleccionada?", "Confirmar",
+						JOptionPane.YES_NO_OPTION);
+
+				if (dialogResult == JOptionPane.YES_OPTION) {
+					Integer plantaId = (Integer) tablePlantas.getValueAt(rowId, 0);
+					Planta plantaSelect = gestorPlanta.obtenerPlanta(plantaId);
 					
-					GridBagLayout gbl_panel_1 = new GridBagLayout();
-					gbl_panel_1.columnWidths = new int[]{30, 0, 0};
-					gbl_panel_1.rowHeights = new int[]{0, 0, 0, 0};
-					gbl_panel_1.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-					gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-					panel_1.setLayout(gbl_panel_1);
+					if(plantaSelect == null)
 					{
-						JButton btnAadirInsumo = new JButton("Añadir insumo");
-						GridBagConstraints gbc_btnAadirInsumo = new GridBagConstraints();
-						gbc_btnAadirInsumo.gridwidth = 2;
-						gbc_btnAadirInsumo.insets = new Insets(0, 0, 5, 0);
-						gbc_btnAadirInsumo.gridx = 0;
-						gbc_btnAadirInsumo.gridy = 0;
-						panel_1.add(btnAadirInsumo, gbc_btnAadirInsumo);
-						{
-							JButton btnEditarInsumo = new JButton("Editar insumo");
-							GridBagConstraints gbc_btnEditarInsumo = new GridBagConstraints();
-							gbc_btnEditarInsumo.gridwidth = 2;
-							gbc_btnEditarInsumo.insets = new Insets(0, 0, 5, 0);
-							gbc_btnEditarInsumo.gridx = 0;
-							gbc_btnEditarInsumo.gridy = 1;
-							panel_1.add(btnEditarInsumo, gbc_btnEditarInsumo);
-						}
+						JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
+								"Información", JOptionPane.INFORMATION_MESSAGE);
 						
-						JButton btnEliminarInsumo = new JButton("Eliminar insumo");
-						GridBagConstraints gbc_btnEliminarInsumo = new GridBagConstraints();
-						gbc_btnEliminarInsumo.gridwidth = 2;
-						gbc_btnEliminarInsumo.gridx = 0;
-						gbc_btnEliminarInsumo.gridy = 2;
-						panel_1.add(btnEliminarInsumo, gbc_btnEliminarInsumo);
-					
-
-						btnAadirInsumo.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent arg0) {
-								Integer selectedRow = tablePlantas.getSelectedRow();
-
-								if (selectedRow < 0) {
-									JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
-											"Información", JOptionPane.INFORMATION_MESSAGE);
-									return;
-								}
-
-								Integer selectedPlanta = (Integer) tablePlantas.getValueAt(selectedRow, 0);
-								AddInsumoDialog(selectedPlanta);
-							}
-						});
-						
-						btnEliminarInsumo.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent arg0) {
-								Integer rowId = tableStock.getSelectedRow();
-
-								if (rowId < 0) {
-									JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
-											"Información", JOptionPane.INFORMATION_MESSAGE);
-									return;
-								}
-
-								int dialogResult = JOptionPane.showConfirmDialog(frmTrabajoPrctico,
-										"¿Está seguro que desea eliminar el insumo de la planta seleccionada?", "Confirmar",
-										JOptionPane.YES_NO_OPTION);
-
-								if (dialogResult == JOptionPane.YES_OPTION) {
-									Integer plantaId = (Integer) tablePlantas.getValueAt(rowId, 0);
-									Planta plantaSelect = gestorPlanta.obtenerPlanta(plantaId);
-									
-									if(plantaSelect == null)
-									{
-										JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
-												"Información", JOptionPane.INFORMATION_MESSAGE);
-										
-										return;
-									}
-									
-									Integer insumoId = (Integer) tableInsumos.getValueAt(rowId, 0);
-									Insumo insumoSelect = gestorInsumo.getInsumoById(insumoId);
-									
-									if(insumoSelect == null)
-									{
-										JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
-												"Información", JOptionPane.INFORMATION_MESSAGE);
-										
-										return;
-									}
-									
-									plantaSelect.getListaStock().remove(insumoId);
-									MainMenu.refreshStockTable(plantaId);
-									
-									JOptionPane.showMessageDialog(frmTrabajoPrctico,
-											"El insumo ha sido eliminado de la planta seleccionada", "Información",
-											JOptionPane.INFORMATION_MESSAGE);
-								}
-							}
-						});
+						return;
 					}
+					
+					Integer insumoId = (Integer) tableInsumos.getValueAt(rowId, 0);
+					Insumo insumoSelect = gestorInsumo.getInsumoById(insumoId);
+					
+					if(insumoSelect == null)
+					{
+						JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
+								"Información", JOptionPane.INFORMATION_MESSAGE);
+						
+						return;
+					}
+					
+					plantaSelect.getListaStock().remove(insumoId);
+					MainMenu.refreshStockTable(plantaId);
+					
+					JOptionPane.showMessageDialog(frmTrabajoPrctico,
+							"El insumo ha sido eliminado de la planta seleccionada", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
 				}
-				JScrollPane panel_scrlpn = new JScrollPane(tableStock);
-				panel.add(panel_scrlpn, gbc_panel_1);
 			}
-			{
-				JPanel panel_1 = new JPanel();
-				GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-				gbc_panel_1.fill = GridBagConstraints.BOTH;
-				gbc_panel_1.gridx = 11;
-				gbc_panel_1.gridy = 5;
-				panel.add(panel_1, gbc_panel_1);
-			}
-		}
+		});
+
+		// Editar insumo
+		JButton btnEditarInsumo = new JButton("Editar insumo");
+		GridBagConstraints gbc_btnEditarInsumo = new GridBagConstraints();
+		gbc_btnEditarInsumo.gridwidth = 2;
+		gbc_btnEditarInsumo.insets = new Insets(0, 0, 5, 0);
+		gbc_btnEditarInsumo.gridx = 0;
+		gbc_btnEditarInsumo.gridy = 1;
+		panel_1.add(btnEditarInsumo, gbc_btnEditarInsumo);
 
 		refreshPlantaTable(null);
 		refreshStockTable(0);
-	}
-
+	}	
+	
 	public static void refreshPlantaTable(ArrayList<Planta> search) {
 		String col[] = { "ID", "Nombre" };
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);

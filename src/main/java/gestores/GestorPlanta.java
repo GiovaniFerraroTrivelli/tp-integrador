@@ -63,9 +63,11 @@ public class GestorPlanta implements Gestor<Object> {
 		
 		String primElem = arrListaPlantas.get(0).getNombre();
 		ArbolBinarioBusqueda<String> arbol = new ArbolBinarioBusqueda<String>(primElem);
+		
 		for (int i = 1; i < arrListaPlantas.size(); i++) {
 			arbol.agregar(arrListaPlantas.get(i).getNombre());
 		}
+		
 		return arbol.buscar(busqueda).stream().map(s -> this.obtenerPlantaStr(s))
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
