@@ -1,16 +1,20 @@
 package gestores;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import dominio.Insumo;
 import dominio.InsumoLiquido;
+import dominio.Planta;
+import dominio.Stock;
 import estructuras.ArbolBinarioBusqueda;
 
 public class GestorInsumo implements Gestor<Object> {
 	private static final GestorInsumo INSTANCE = new GestorInsumo();
-	private ArrayList<Insumo> listaInsumos = new ArrayList<Insumo>();
+	private HashMap<Integer, Insumo> listaInsumos = new HashMap<Integer, Insumo>();
 
 	private GestorInsumo() {
 	}
@@ -20,20 +24,23 @@ public class GestorInsumo implements Gestor<Object> {
 	}
 
 	public ArrayList<Insumo> getListaInsumos() {
-		return listaInsumos;
+		if(listaInsumos.isEmpty())
+			return new ArrayList<Insumo>();
+		
+		return new ArrayList<Insumo>(listaInsumos.values());
 	}
 
 	@Override
 	public Insumo crear(String descripcion) {
 		Insumo insumo = new Insumo(descripcion);
-		listaInsumos.add(insumo);
+		listaInsumos.put(insumo.getId(), insumo);
 
 		return insumo;
 	}
 
 	public InsumoLiquido crearLiquido(String descripcion) {
 		InsumoLiquido insumo = new InsumoLiquido(descripcion);
-		listaInsumos.add(insumo);
+		listaInsumos.put(insumo.getId(), insumo);
 
 		return insumo;
 	}
@@ -48,38 +55,70 @@ public class GestorInsumo implements Gestor<Object> {
 	}
 
 	public Insumo getInsumoByStr(String nombre) {
-		for (int i = 0; i < listaInsumos.size(); i++) {
-			if (listaInsumos.get(i).getDescripcion().equals(nombre)) {
-				return listaInsumos.get(i);
-			}
+		for(Insumo i : getListaInsumos())
+		{
+			if(i.getDescripcion().equals(nombre))
+				return i;
 		}
+
 		return null;
 	}
 	public Insumo getInsumoByStock(Integer stock) {
-		for (int i = 0; i < listaInsumos.size(); i++) {
-			if (listaInsumos.get(i).getStock() == stock) {
-				return listaInsumos.get(i);
-			}
+		for(Insumo i : getListaInsumos())
+		{
+			if(i.getStock() == stock)
+				return i;
 		}
+		
 		return null;
 	}
 	public Insumo getInsumoByCosto(Float costo) {
-		for (int i = 0; i < listaInsumos.size(); i++) {
-			if (listaInsumos.get(i).getCosto() == costo) {
-				return listaInsumos.get(i);
-			}
+		for(Insumo i : getListaInsumos())
+		{
+			if(i.getCosto() == costo)
+				return i;
 		}
+		
 		return null;
 	}
 
+	public Integer getCantidadStockById(Integer id)
+	{
+		HashMap<Integer, Planta> listaPlantas = GestorPlanta.getInstance().getListaPlantas();
+		
+		if(listaPlantas.isEmpty())
+			return 0;
+		
+		Integer cantidad = 0;
+		
+		Collection<Planta> listaPlantasCol = listaPlantas.values();
+		
+		HashMap<Integer, Stock> listaStock;
+		
+		for (Planta planta : listaPlantasCol)
+		{
+			listaStock = planta.getListaStock();
+			
+			if(listaStock.get(id) != null)
+				cantidad += listaStock.get(id).getCantidad();
+		}
+		
+		return cantidad;
+	}
+	
 	@Override
 	public void borrar(Integer id) {
-		for (int i = 0; i < listaInsumos.size(); i++) {
-			if (listaInsumos.get(i).getId() == id) {
-				listaInsumos.remove(i);
-				break;
-			}
-		}
+		listaInsumos.remove(id);
+		
+		HashMap<Integer, Planta> listaPlantas = GestorPlanta.getInstance().getListaPlantas();
+		
+		if(listaPlantas.isEmpty())
+			return;
+		
+		Collection<Planta> listaPlantasCol = listaPlantas.values();
+		
+		for (Planta planta : listaPlantasCol)
+			planta.getListaStock().remove(id);
 	}
 
 	@Override
@@ -96,11 +135,18 @@ public class GestorInsumo implements Gestor<Object> {
 		Integer primElem = this.getListaInsumos().get(0).getStock();
 		List<Integer> resultado = new ArrayList<Integer>();
 		ArbolBinarioBusqueda<Integer> arbol = new ArbolBinarioBusqueda<Integer>(primElem);
+		System.out.println("----------------------------------------------------------------------");
 		for(int i = 1; i < this.getListaInsumos().size(); i++) {
 			arbol.agregar(this.getListaInsumos().get(i).getStock());
+			System.out.println("Agregando " + this.getListaInsumos().get(i).getDescripcion());
 		}
-		if(tipo) resultado = arbol.rango(0, busqueda);
-		else resultado = arbol.rango(busqueda, Integer.MAX_VALUE);
+		System.out.println("----------------------------------------------------------------------");
+		
+		if(tipo)
+			resultado = arbol.rango(0, busqueda);
+		else
+			resultado = arbol.rango(busqueda, Integer.MAX_VALUE);
+		
 		return resultado.stream()
 						.map(r -> this.getInsumoByStock(r))
 						.collect(Collectors.toCollection(ArrayList::new));

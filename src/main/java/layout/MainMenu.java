@@ -55,15 +55,10 @@ import javax.swing.ListSelectionModel;
 
 public class MainMenu {
 
-	enum SearchInsumoItems
-	{
-		nombre,
-		costoMinimo,
-		costoMaximo,
-		stockMinimo,
-		stockMaximo
+	enum SearchInsumoItems {
+		nombre, costoMinimo, costoMaximo, stockMinimo, stockMaximo
 	}
-	
+
 	private JFrame frmTrabajoPrctico;
 	private CardLayout cl;
 	private static JTable tablePlantas;
@@ -150,6 +145,7 @@ public class MainMenu {
 		JButton insumob = new JButton(insumoIcon);
 		insumob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				refreshInsumoTable(null);
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Insumos");
 			}
 		});
@@ -157,6 +153,8 @@ public class MainMenu {
 		JButton plantab = new JButton(plantaIcon);
 		plantab.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				refreshPlantaTable(null);
+				refreshStockTable(0);
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Planta");
 			}
 		});
@@ -195,25 +193,25 @@ public class MainMenu {
 		// ------------------------------------------------------------------------------------------------
 		// Creamos el panel de insumos!
 		// ------------------------------------------------------------------------------------------------
-		
+
 		JPanel pnlInsumos = new JPanel();
 		frmTrabajoPrctico.getContentPane().add(pnlInsumos, "card__Insumos");
 		pnlInsumos.setLayout(new BorderLayout(0, 0));
-		
+
 		// Panel del sur
 		pnlInsumos.add(new JPanel(), BorderLayout.SOUTH);
 
 		// Panel del centro
 		JPanel panel = new JPanel();
 		pnlInsumos.add(panel, BorderLayout.CENTER);
-		
+
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 0, 165, 0, 99, 155, 193, 0, 179, 84 };
 		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
 		gbl_panel.columnWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
-		
+
 		// Panel arriba de todo para que no quede tan pegado al titulo
 		GridBagConstraints gbc_panel_1a = new GridBagConstraints();
 		gbc_panel_1a.insets = new Insets(0, 0, 5, 5);
@@ -228,7 +226,7 @@ public class MainMenu {
 		gbc_panel_1b.fill = GridBagConstraints.BOTH;
 		gbc_panel_1b.gridx = 4;
 		gbc_panel_1b.gridy = 2;
-		panel.add(new JPanel(), gbc_panel_1b);		
+		panel.add(new JPanel(), gbc_panel_1b);
 
 		// Ahora a la izquierda...
 		JPanel panel_1c = new JPanel();
@@ -237,24 +235,24 @@ public class MainMenu {
 		gbc_panel_1c.fill = GridBagConstraints.BOTH;
 		gbc_panel_1c.gridx = 0;
 		gbc_panel_1c.gridy = 4;
-		panel.add(panel_1c, gbc_panel_1c);		
-		
+		panel.add(panel_1c, gbc_panel_1c);
+
 		// ...y ahora a la derecha :v
 		JPanel panel_1d = new JPanel();
 		GridBagConstraints gbc_panel_1d = new GridBagConstraints();
 		gbc_panel_1d.fill = GridBagConstraints.BOTH;
 		gbc_panel_1d.gridx = 9;
 		gbc_panel_1d.gridy = 4;
-		panel.add(panel_1d, gbc_panel_1d);		
-		
+		panel.add(panel_1d, gbc_panel_1d);
+
 		// ------------------------------------------------------------------------------------------------
 		// Boton de volver
 		// ------------------------------------------------------------------------------------------------
-		
+
 		JButton btnVolver_1 = new JButton("");
 		btnVolver_1.setForeground(Color.WHITE);
-		btnVolver_1.setIcon(new ImageIcon(new ImageIcon("src/main/resources/back.png").getImage()
-				.getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+		btnVolver_1.setIcon(new ImageIcon(new ImageIcon("src/main/resources/back.png").getImage().getScaledInstance(32,
+				32, Image.SCALE_DEFAULT)));
 
 		btnVolver_1.setOpaque(false);
 		btnVolver_1.setContentAreaFilled(false);
@@ -273,7 +271,7 @@ public class MainMenu {
 		gbc_btnVolver_1.insets = new Insets(0, 0, 5, 5);
 		gbc_btnVolver_1.gridx = 1;
 		gbc_btnVolver_1.gridy = 1;
-		panel.add(btnVolver_1, gbc_btnVolver_1);		
+		panel.add(btnVolver_1, gbc_btnVolver_1);
 
 		// ------------------------------------------------------------------------------------------------
 		// Título de arriba de todo
@@ -290,17 +288,17 @@ public class MainMenu {
 		// ------------------------------------------------------------------------------------------------
 		// Caja de búsqueda
 		// ------------------------------------------------------------------------------------------------
-		
+
 		// ComboBox
-		String[] searchComboItems = {"Nombre", "Costo mínimo", "Costo máximo", "Stock mínimo", "Stock máximo" };
-		
+		String[] searchComboItems = { "Nombre", "Costo mínimo", "Costo máximo", "Stock mínimo", "Stock máximo" };
+
 		JComboBox<String> comboBox = new JComboBox<String>(searchComboItems);
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox.gridx = 5;
 		gbc_comboBox.gridy = 3;
-		
+
 		panel.add(comboBox, gbc_comboBox);
 
 		// Label de buscar
@@ -310,7 +308,7 @@ public class MainMenu {
 		gbc_lblOrdenarPor.anchor = GridBagConstraints.EAST;
 		gbc_lblOrdenarPor.gridx = 4;
 		gbc_lblOrdenarPor.gridy = 3;
-		
+
 		panel.add(lblOrdenarPor, gbc_lblOrdenarPor);
 
 		// Campo de texto
@@ -323,9 +321,9 @@ public class MainMenu {
 		gbc_textField_1.gridx = 6;
 		gbc_textField_1.gridy = 3;
 		txtSearchInsumo.setColumns(10);
-		
+
 		panel.add(txtSearchInsumo, gbc_textField_1);
-		
+
 		// Botón de buscar
 		JButton btnBuscar = new JButton("Buscar!");
 		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
@@ -335,54 +333,62 @@ public class MainMenu {
 		gbc_btnBuscar.insets = new Insets(0, 0, 5, 0);
 		gbc_btnBuscar.gridx = 8;
 		gbc_btnBuscar.gridy = 3;
-		
+
 		panel.add(btnBuscar, gbc_btnBuscar);
-		
+
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String val = txtSearchInsumo.getText();
 				System.out.println(txtSearchInsumo.getText());
-				
-				switch(comboBox.getSelectedIndex())
+
+				if(val.length() == 0)
 				{
-					case 0: {
-						System.out.println("Buscar por nombre: " + val);
-						System.out.println(gestorInsumo.buscar(val));
-						
-						break;
-					}
-					case 1: {
-						System.out.println("Buscar por costo (false): " + val);
-						System.out.println(gestorInsumo.buscarPorCosto(Float.parseFloat(val), false));
-						
-						break;
-					}
-					case 2: {
-						System.out.println("Buscar por costo (true): " + val);
-						System.out.println(gestorInsumo.buscarPorCosto(Float.parseFloat(val), true));
-						
-						break;
-					}
-					case 3: {
-						System.out.println("Buscar por stock (false): " + val);
-						System.out.println(gestorInsumo.buscarPorStock(Integer.parseInt(val), false));
-						
-						break;
-					}
-					case 4: {
-						System.out.println("Buscar por stock (true): " + val);
-						System.out.println(gestorInsumo.buscarPorStock(Integer.parseInt(val), true));
-						
-						break;
-					}
+					refreshInsumoTable(null);
+					return;
+				}
+				
+				switch (comboBox.getSelectedIndex()) {
+				case 0: {
+					System.out.println("Buscar por nombre: " + val);
+					ArrayList<Insumo> resultados = gestorInsumo.buscar(val);
+					System.out.println(resultados);
+					refreshInsumoTable(resultados);
+
+					break;
+				}
+				case 1: {
+					System.out.println("Buscar por costo (false): " + val);
+					refreshInsumoTable(gestorInsumo.buscarPorCosto(Float.parseFloat(val), false));
+
+					break;
+				}
+				case 2: {
+					System.out.println("Buscar por costo (true): " + val);
+					refreshInsumoTable(gestorInsumo.buscarPorCosto(Float.parseFloat(val), true));
+
+					break;
+				}
+				case 3: {
+					System.out.println("Buscar por stock (false): " + val);
+					System.out.println(gestorInsumo.buscarPorStock(Integer.parseInt(val), false));
+					refreshInsumoTable(gestorInsumo.buscarPorStock(Integer.parseInt(val), false));
+
+					break;
+				}
+				case 4: {
+					System.out.println("Buscar por stock (true): " + val);
+					refreshInsumoTable(gestorInsumo.buscarPorStock(Integer.parseInt(val), true));
+
+					break;
+				}
 				}
 			}
-		});	
-		
+		});
+
 		// ------------------------------------------------------------------------------------------------
 		// Botones de administración de insumos
 		// ------------------------------------------------------------------------------------------------
-		
+
 		// Nuevo insumo
 		JButton btnNuevoInsumo = new JButton("Nuevo insumo");
 		GridBagConstraints gbc_btnNuevoInsumo = new GridBagConstraints();
@@ -398,7 +404,7 @@ public class MainMenu {
 		});
 
 		panel.add(btnNuevoInsumo, gbc_btnNuevoInsumo);
-		
+
 		// Editar insumo
 		JButton btnEditar_1 = new JButton("Editar");
 		GridBagConstraints gbc_btnEditar_1 = new GridBagConstraints();
@@ -412,8 +418,8 @@ public class MainMenu {
 				Integer rowId = tableInsumos.getSelectedRow();
 
 				if (rowId < 0) {
-					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
-							"Información", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 
@@ -421,9 +427,8 @@ public class MainMenu {
 				insumo = gestorInsumo.getInsumoById((Integer) tableInsumos.getValueAt(rowId, 0));
 
 				if (insumo == null) {
-					JOptionPane.showMessageDialog(frmTrabajoPrctico,
-							"No se pudo localizar el insumo seleccionado", "Información",
-							JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No se pudo localizar el insumo seleccionado",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
 
 					return;
 				}
@@ -432,7 +437,7 @@ public class MainMenu {
 				refreshPlantaTable(null);
 			}
 		});
-		
+
 		// Eliminar insumo
 		JButton btnEliminar = new JButton("Eliminar");
 		GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
@@ -447,8 +452,8 @@ public class MainMenu {
 				Integer rowId = tableInsumos.getSelectedRow();
 
 				if (rowId < 0) {
-					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
-							"Información", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 
@@ -458,19 +463,18 @@ public class MainMenu {
 
 				if (dialogResult == JOptionPane.YES_OPTION) {
 					gestorInsumo.borrar((Integer) tableInsumos.getValueAt(rowId, 0));
-					refreshInsumoTable();
+					refreshInsumoTable(null);
 
-					JOptionPane.showMessageDialog(frmTrabajoPrctico,
-							"El insumo seleccionado ha sido borrado", "Información",
-							JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "El insumo seleccionado ha sido borrado",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
-		
+
 		// ------------------------------------------------------------------------------------------------
 		// Tabla de insumos
 		// ------------------------------------------------------------------------------------------------
-		
+
 		tableInsumos = new JTable();
 		tableInsumos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableInsumos.setAutoCreateRowSorter(true);
@@ -483,11 +487,7 @@ public class MainMenu {
 		gbc_panel_1.gridx = 1;
 		gbc_panel_1.gridy = 4;
 		panel.add(panel_scrlpn, gbc_panel_1);
-		
-		// Refrescamos la tabla de insumos y terminamos
-		refreshInsumoTable();
 	}
-
 
 	private void loadPlantasMenu() {
 		// ------------------------------------------------------------------------------------------------
@@ -522,8 +522,8 @@ public class MainMenu {
 		// Botón de volver
 		JButton btnVolver_1 = new JButton("");
 		btnVolver_1.setForeground(Color.WHITE);
-		btnVolver_1.setIcon(new ImageIcon(new ImageIcon("src/main/resources/back.png").getImage()
-				.getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+		btnVolver_1.setIcon(new ImageIcon(new ImageIcon("src/main/resources/back.png").getImage().getScaledInstance(32,
+				32, Image.SCALE_DEFAULT)));
 
 		btnVolver_1.setOpaque(false);
 		btnVolver_1.setContentAreaFilled(false);
@@ -648,10 +648,9 @@ public class MainMenu {
 			public void actionPerformed(ActionEvent arg0) {
 				Boolean validInput = false;
 				String plantaName;
-				
+
 				do {
-					plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico,
-							"Nombre de la planta");
+					plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico, "Nombre de la planta");
 
 					if (plantaName != null) {
 						if (plantaName.length() > 0) {
@@ -660,16 +659,16 @@ public class MainMenu {
 								refreshPlantaTable(null);
 								validInput = true;
 							} else {
-								JOptionPane.showMessageDialog(frmTrabajoPrctico,
-										"Ya existe una planta con este nombre", "Información",
-										JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(frmTrabajoPrctico, "Ya existe una planta con este nombre",
+										"Información", JOptionPane.INFORMATION_MESSAGE);
 							}
 						} else {
 							JOptionPane.showMessageDialog(frmTrabajoPrctico,
 									"Es necesario colocar un nombre para la planta", "Información",
 									JOptionPane.INFORMATION_MESSAGE);
 						}
-					} else validInput = true;
+					} else
+						validInput = true;
 				} while (!validInput);
 			}
 		});
@@ -688,18 +687,16 @@ public class MainMenu {
 				Integer rowId = tablePlantas.getSelectedRow();
 
 				if (rowId < 0) {
-					JOptionPane.showMessageDialog(frmTrabajoPrctico,
-							"No hay ninguna planta seleccionada", "Información",
-							JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 
-				String plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico,
-						"Nuevo nombre de la planta", (String) tablePlantas.getValueAt(rowId, 1));
+				String plantaName = JOptionPane.showInputDialog(frmTrabajoPrctico, "Nuevo nombre de la planta",
+						(String) tablePlantas.getValueAt(rowId, 1));
 
 				if (plantaName != null) {
-					gestorPlanta.obtenerPlanta((Integer) tablePlantas.getValueAt(rowId, 0))
-							.setNombre(plantaName);
+					gestorPlanta.obtenerPlanta((Integer) tablePlantas.getValueAt(rowId, 0)).setNombre(plantaName);
 					refreshPlantaTable(null);
 				}
 			}
@@ -795,10 +792,10 @@ public class MainMenu {
 		panel.add(panel_1, gbc_panel_11);
 
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[]{30, 0, 0};
-		gbl_panel_1.rowHeights = new int[]{0, 0, 0, 0};
-		gbl_panel_1.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_1.columnWidths = new int[] { 30, 0, 0 };
+		gbl_panel_1.rowHeights = new int[] { 0, 0, 0, 0 };
+		gbl_panel_1.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel_1.setLayout(gbl_panel_1);
 
 		// Añadir insumo
@@ -832,14 +829,14 @@ public class MainMenu {
 		gbc_btnEliminarInsumo.gridx = 0;
 		gbc_btnEliminarInsumo.gridy = 2;
 		panel_1.add(btnEliminarInsumo, gbc_btnEliminarInsumo);
-		
+
 		btnEliminarInsumo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Integer rowId = tableStock.getSelectedRow();
 
 				if (rowId < 0) {
-					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
-							"Información", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 
@@ -850,29 +847,27 @@ public class MainMenu {
 				if (dialogResult == JOptionPane.YES_OPTION) {
 					Integer plantaId = (Integer) tablePlantas.getValueAt(rowId, 0);
 					Planta plantaSelect = gestorPlanta.obtenerPlanta(plantaId);
-					
-					if(plantaSelect == null)
-					{
+
+					if (plantaSelect == null) {
 						JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
 								"Información", JOptionPane.INFORMATION_MESSAGE);
-						
+
 						return;
 					}
-					
+
 					Integer insumoId = (Integer) tableInsumos.getValueAt(rowId, 0);
 					Insumo insumoSelect = gestorInsumo.getInsumoById(insumoId);
-					
-					if(insumoSelect == null)
-					{
+
+					if (insumoSelect == null) {
 						JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado",
 								"Información", JOptionPane.INFORMATION_MESSAGE);
-						
+
 						return;
 					}
-					
+
 					plantaSelect.getListaStock().remove(insumoId);
 					MainMenu.refreshStockTable(plantaId);
-					
+
 					JOptionPane.showMessageDialog(frmTrabajoPrctico,
 							"El insumo ha sido eliminado de la planta seleccionada", "Información",
 							JOptionPane.INFORMATION_MESSAGE);
@@ -888,21 +883,17 @@ public class MainMenu {
 		gbc_btnEditarInsumo.gridx = 0;
 		gbc_btnEditarInsumo.gridy = 1;
 		panel_1.add(btnEditarInsumo, gbc_btnEditarInsumo);
+	}
 
-		refreshPlantaTable(null);
-		refreshStockTable(0);
-	}	
-	
 	public static void refreshPlantaTable(ArrayList<Planta> search) {
 		String col[] = { "ID", "Nombre" };
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-		
-		if(gestorPlanta.getListaPlantas().isEmpty())
-		{
+
+		if (gestorPlanta.getListaPlantas().isEmpty()) {
 			tablePlantas.setModel(tableModel);
 			return;
 		}
-		
+
 		ArrayList<Planta> tempListaPlantas;
 
 		if (search == null) {
@@ -926,13 +917,12 @@ public class MainMenu {
 		String col[] = { "Insumo", "Cantidad", "Punto pedido" };
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 		HashMap<Integer, Stock> tempListaStock;
-		
-		if(plantaId == 0 || (tempListaStock = gestorPlanta.getStockByPlantaId(plantaId)) == null)
-		{
+
+		if (plantaId == 0 || (tempListaStock = gestorPlanta.getStockByPlantaId(plantaId)) == null) {
 			tableStock.setModel(tableModel);
 			return;
 		}
-		
+
 		for (Stock stock : tempListaStock.values()) {
 			String descripcion = stock.getInsumo().getDescripcion();
 			Integer cantidad = stock.getCantidad();
@@ -943,13 +933,18 @@ public class MainMenu {
 		}
 
 		tableStock.setModel(tableModel);
-		System.out.println("Refrescando");
 	}
 
-	public static void refreshInsumoTable() {
-		String col[] = { "ID", "Descripción", "Costo", "Peso", "Refrigerado" };
+	public static void refreshInsumoTable(ArrayList<Insumo> search) {
+		String col[] = { "ID", "Descripción", "Costo", "Peso", "Refrigerado", "Stock" };
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-		ArrayList<Insumo> tempListaInsumos = gestorInsumo.getListaInsumos();
+		
+		ArrayList<Insumo> tempListaInsumos;
+		
+		if(search == null)
+			tempListaInsumos = gestorInsumo.getListaInsumos();
+		else
+			tempListaInsumos = search;
 
 		for (int i = 0; i < tempListaInsumos.size(); i++) {
 			Integer id = tempListaInsumos.get(i).getId();
@@ -957,8 +952,9 @@ public class MainMenu {
 			Float costo = tempListaInsumos.get(i).getCosto();
 			Float peso = tempListaInsumos.get(i).getPeso();
 			String refrigerado = tempListaInsumos.get(i) instanceof InsumoLiquido ? "Si" : "No";
+			Integer stock = tempListaInsumos.get(i).getStock();
 
-			Object[] data = { id, descripcion, costo, peso, refrigerado };
+			Object[] data = { id, descripcion, costo, peso, refrigerado, stock };
 			tableModel.addRow(data);
 		}
 
@@ -1078,8 +1074,7 @@ public class MainMenu {
 				insumo.setPeso(Float.parseFloat(txtPeso.getText()));
 				insumo.setUnidadDeMedida(UnidadDeMedida.KILO);
 
-				System.out.println(gestorInsumo.getListaInsumos().toString());
-				MainMenu.refreshInsumoTable();
+				MainMenu.refreshInsumoTable(null);
 
 				jdialog.dispose();
 			}
@@ -1193,8 +1188,7 @@ public class MainMenu {
 				insumo.setPeso(Float.parseFloat(txtPeso.getText()));
 				insumo.setUnidadDeMedida(UnidadDeMedida.KILO);
 
-				System.out.println(gestorInsumo.getListaInsumos().toString());
-				MainMenu.refreshInsumoTable();
+				MainMenu.refreshInsumoTable(null);
 
 				jdialog.dispose();
 			}

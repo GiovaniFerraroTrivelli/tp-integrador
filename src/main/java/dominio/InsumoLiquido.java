@@ -2,9 +2,10 @@ package dominio;
 
 public class InsumoLiquido extends Insumo {
 	private Float densidad;
+	private Float volumen;
 
-	public InsumoLiquido(Integer id, UnidadDeMedida udm, Integer stock, Float peso) {
-		super(id, udm, stock, peso);
+	public InsumoLiquido(Integer id, UnidadDeMedida udm, Float peso) {
+		super(id, udm, peso);
 	}
 
 	public InsumoLiquido(String descripcion) {
@@ -15,10 +16,16 @@ public class InsumoLiquido extends Insumo {
 		this.densidad = densidad;
 	}
 
-	public Float calcularPeso() {
-		return (this.densidad * this.stock / 1000);
+	public void setVolumen(Float volumen)
+	{
+		this.volumen = volumen;
 	}
-
+	
+	public Float calcularPeso()
+	{
+		return (this.densidad * this.volumen / 1000);
+	}
+	
 	public Float calcularPeso(Float volumen) {
 		return (this.densidad * volumen / 1000);
 	}

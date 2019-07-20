@@ -1,5 +1,7 @@
 package dominio;
 
+import gestores.GestorInsumo;
+
 public class Insumo implements Comparable<Insumo> {
 	private static Integer lastId = 0;
 
@@ -7,7 +9,6 @@ public class Insumo implements Comparable<Insumo> {
 	protected String descripcion;
 	protected UnidadDeMedida unidadDeMedida;
 	protected Float costo;
-	protected Integer stock;
 	protected Float peso; /* peso en kg */
 	protected Boolean esRefrigerado;
 
@@ -16,10 +17,9 @@ public class Insumo implements Comparable<Insumo> {
 		this.id = ++lastId;
 	}
 
-	public Insumo(Integer id, UnidadDeMedida udm, Integer stock, Float peso) {
+	public Insumo(Integer id, UnidadDeMedida udm, Float peso) {
 		this.id = ++lastId;
 		this.unidadDeMedida = udm;
-		this.stock = stock;
 		this.peso = peso;
 	}
 
@@ -61,16 +61,12 @@ public class Insumo implements Comparable<Insumo> {
 	}
 
 	public Integer getStock() {
-		return stock;
+		return GestorInsumo.getInstance().getCantidadStockById(this.id);
 	}
-
-	public void setStock(Integer stock) {
-		this.stock = stock;
-	}
-
+	
 	@Override
 	public int compareTo(Insumo otro) {
-		return (this.stock - otro.stock);
+		return (this.getStock() - otro.getStock());
 	}
 
 	public Integer getId() {

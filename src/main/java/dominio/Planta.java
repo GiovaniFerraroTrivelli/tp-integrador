@@ -20,7 +20,7 @@ public class Planta {
 	}
 
 	public Double costoTotal() {
-		return new ArrayList<>(listaStock.values()).stream().mapToDouble((i) -> (i.getInsumo().getStock() * i.getInsumo().getCosto())).sum();
+		return new ArrayList<>(listaStock.values()).stream().mapToDouble((i) -> (i.getCantidad() * i.getInsumo().getCosto())).sum();
 	}
 
 	public List<Insumo> stockEntre(Integer s1, Integer s2) {
