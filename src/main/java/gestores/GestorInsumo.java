@@ -46,9 +46,10 @@ public class GestorInsumo implements Gestor<Object> {
 	}
 
 	public Insumo getInsumoById(Integer id) {
-		for (int i = 0; i < listaInsumos.size(); i++) {
-			if (listaInsumos.get(i).getId() == id) {
-				return listaInsumos.get(i);
+		for (Insumo insumo : getListaInsumos())
+		{
+			if (insumo.getId() == id) {
+				return insumo;
 			}
 		}
 		return null;
@@ -144,18 +145,14 @@ public class GestorInsumo implements Gestor<Object> {
 	}
 	
 	public ArrayList buscarPorStock(Integer busqueda, boolean tipo) {
-		ArrayList<Insumo> listInsumosCopy = getListaInsumos();
+		ArrayList<Insumo> listInsumosCopy = new ArrayList<Insumo>(getListaInsumos());
 		Integer primElem = this.getListaInsumos().get(0).getStock();
 		List<Integer> resultado = new ArrayList<Integer>();
 		ArbolBinarioBusqueda<Integer> arbol = new ArbolBinarioBusqueda<Integer>(primElem);
-		System.out.println("----------------------------------------------------------------------");
-		System.out.println(this.getListaInsumos());
+
 		for(int i = 1; i < this.getListaInsumos().size(); i++) {
 			arbol.agregar(this.getListaInsumos().get(i).getStock());
-			System.out.println("Agregando " + this.getListaInsumos().get(i).getDescripcion());
 		}
-		System.out.println("----------------------------------------------------------------------");
-
 		
 		if(tipo)
 			resultado = arbol.rango(0, busqueda);
@@ -166,17 +163,20 @@ public class GestorInsumo implements Gestor<Object> {
 		Insumo a = this.getInsumoByStock(resultado.get(0));	
 		listaInsumosAux.add(a);	
 		
+		Insumo b;
+		Insumo c;
+		
 		for(int i=1; i < resultado.size() ; i++) {
-			Insumo b = this.getInsumoByStock(resultado.get(i));
+			b = this.getInsumoByStock(resultado.get(i), listInsumosCopy);
 			
-			if(listaInsumosAux.contains(b)) {
+			if(listaInsumosAux.contains(b))
+			{
 				listInsumosCopy.remove(b);
-				Insumo c = this.getInsumoByStock(resultado.get(i), listInsumosCopy);
+				c = this.getInsumoByStock(resultado.get(i), listInsumosCopy);
+				
 				listaInsumosAux.add(c);
 			}
-			else {
-			listaInsumosAux.add(b);
-			}
+			else listaInsumosAux.add(b);
 		}
 		
 		return listaInsumosAux;		
