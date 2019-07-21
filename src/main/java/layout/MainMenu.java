@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.awt.Color;
@@ -323,32 +325,10 @@ public class MainMenu {
 
 		panel.add(lblOrdenarPor, gbc_lblOrdenarPor);
 
-		// Campo de texto
 		JTextField txtSearchInsumo = new JTextField();
-		txtSearchInsumo.setToolTipText("Escriba aquí lo que desea buscar...");
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.gridwidth = 2;
-		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_1.fill = GridBagConstraints.BOTH;
-		gbc_textField_1.gridx = 6;
-		gbc_textField_1.gridy = 3;
-		txtSearchInsumo.setColumns(10);
-
-		panel.add(txtSearchInsumo, gbc_textField_1);
-
-		// Botón de buscar
-		JButton btnBuscar = new JButton("Buscar!");
-		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
-		gbc_btnBuscar.anchor = GridBagConstraints.WEST;
-		gbc_btnBuscar.gridwidth = 2;
-		gbc_btnBuscar.fill = GridBagConstraints.VERTICAL;
-		gbc_btnBuscar.insets = new Insets(0, 0, 5, 0);
-		gbc_btnBuscar.gridx = 8;
-		gbc_btnBuscar.gridy = 3;
-
-		panel.add(btnBuscar, gbc_btnBuscar);
-
-		btnBuscar.addActionListener(new ActionListener() {
+		
+		// Event
+		ActionListener searchAction = new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String val = txtSearchInsumo.getText();
 				System.out.println(txtSearchInsumo.getText());
@@ -395,7 +375,32 @@ public class MainMenu {
 				}
 				}
 			}
-		});
+		};
+		
+		// Campo de texto
+		txtSearchInsumo.setToolTipText("Escriba aquí lo que desea buscar...");
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.gridwidth = 2;
+		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_1.fill = GridBagConstraints.BOTH;
+		gbc_textField_1.gridx = 6;
+		gbc_textField_1.gridy = 3;
+		txtSearchInsumo.setColumns(10);
+		txtSearchInsumo.addActionListener(searchAction);
+
+		panel.add(txtSearchInsumo, gbc_textField_1);
+
+		// Botón de buscar
+		JButton btnBuscar = new JButton("Buscar");
+		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
+		gbc_btnBuscar.anchor = GridBagConstraints.WEST;
+		gbc_btnBuscar.gridwidth = 2;
+		gbc_btnBuscar.fill = GridBagConstraints.VERTICAL;
+		gbc_btnBuscar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnBuscar.gridx = 8;
+		gbc_btnBuscar.gridy = 3;
+		panel.add(btnBuscar, gbc_btnBuscar);
+		btnBuscar.addActionListener(searchAction);
 
 		// ------------------------------------------------------------------------------------------------
 		// Botones de administración de insumos
@@ -1332,10 +1337,12 @@ public class MainMenu {
 		JDialog jdialog = new JDialog(frmTrabajoPrctico, "Crear insumo", Dialog.ModalityType.DOCUMENT_MODAL);
 		JPanel contentPane;
 
-		JTextField txtDescripcion;
-		JTextField txtCosto;
-		JTextField txtPeso;
-
+		JTextField txtDescripcion = new JTextField();
+		JTextField txtCosto = new JTextField();
+		JTextField txtPeso = new JTextField();
+		JCheckBox chckbxS = new JCheckBox("Insumo refrigerado");
+		JButton btnGuardar = new JButton("Guardar");
+		
 		jdialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		jdialog.setResizable(false);
@@ -1362,6 +1369,57 @@ public class MainMenu {
 		gbc_panel_2.gridy = 0;
 		panel.add(panel_2, gbc_panel_2);
 
+		KeyAdapter validForm = new KeyAdapter() {
+	        public void keyReleased(KeyEvent e) {
+	            if(txtDescripcion.getText().length() == 0 || txtCosto.getText().length() == 0 || txtPeso.getText().length() == 0)
+	            	btnGuardar.setEnabled(false);
+	            else
+	            {
+	            	btnGuardar.setEnabled(true);
+	            }
+	        }
+		};
+
+		ActionListener saveInsumo = new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if(txtCosto.getText().length() == 0 || txtPeso.getText().length() == 0 || txtDescripcion.getText().length() == 0)
+					return;
+				
+				Float costo;
+				Float peso;
+				
+				try
+				{
+			        costo = Float.parseFloat(txtCosto.getText());
+			        peso = Float.parseFloat(txtPeso.getText());
+			    }
+				catch(NumberFormatException e)
+				{
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "Uno o más datos ingresados no son válidos",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+					
+					return;
+			    }
+				
+				Insumo insumo;
+
+				if (chckbxS.isSelected()) {
+					insumo = gestorInsumo.crearLiquido(txtDescripcion.getText());
+				} else {
+					insumo = gestorInsumo.crear(txtDescripcion.getText());
+				}
+
+				insumo.setCosto(costo);
+				insumo.setPeso(peso);
+				insumo.setUnidadDeMedida(UnidadDeMedida.KILO);
+
+				MainMenu.refreshInsumoTable(null);
+
+				jdialog.dispose();
+			}
+		};
+		
 		JLabel lblDescripcin = new JLabel("Descripción:");
 		GridBagConstraints gbc_lblDescripcin = new GridBagConstraints();
 		gbc_lblDescripcin.anchor = GridBagConstraints.EAST;
@@ -1370,7 +1428,6 @@ public class MainMenu {
 		gbc_lblDescripcin.gridy = 2;
 		panel.add(lblDescripcin, gbc_lblDescripcin);
 
-		txtDescripcion = new JTextField();
 		GridBagConstraints gbc_txtDescripcion = new GridBagConstraints();
 		gbc_txtDescripcion.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtDescripcion.anchor = GridBagConstraints.NORTH;
@@ -1378,6 +1435,8 @@ public class MainMenu {
 		gbc_txtDescripcion.gridx = 2;
 		gbc_txtDescripcion.gridy = 2;
 		panel.add(txtDescripcion, gbc_txtDescripcion);
+		txtDescripcion.addKeyListener(validForm);
+		txtDescripcion.addActionListener(saveInsumo);
 		txtDescripcion.setColumns(10);
 
 		JLabel lblCosto = new JLabel("Costo:");
@@ -1388,7 +1447,6 @@ public class MainMenu {
 		gbc_lblCosto.gridy = 3;
 		panel.add(lblCosto, gbc_lblCosto);
 
-		txtCosto = new JTextField();
 		GridBagConstraints gbc_txtCosto = new GridBagConstraints();
 		gbc_txtCosto.insets = new Insets(0, 0, 5, 5);
 		gbc_txtCosto.fill = GridBagConstraints.HORIZONTAL;
@@ -1396,6 +1454,8 @@ public class MainMenu {
 		gbc_txtCosto.gridy = 3;
 		panel.add(txtCosto, gbc_txtCosto);
 		txtCosto.setColumns(10);
+		txtCosto.addKeyListener(validForm);
+		txtCosto.addActionListener(saveInsumo);
 
 		JLabel lblPeso = new JLabel("Peso:");
 		GridBagConstraints gbc_lblPeso = new GridBagConstraints();
@@ -1405,7 +1465,6 @@ public class MainMenu {
 		gbc_lblPeso.gridy = 4;
 		panel.add(lblPeso, gbc_lblPeso);
 
-		txtPeso = new JTextField();
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(0, 0, 5, 5);
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
@@ -1413,8 +1472,9 @@ public class MainMenu {
 		gbc_textField.gridy = 4;
 		panel.add(txtPeso, gbc_textField);
 		txtPeso.setColumns(10);
+		txtPeso.addKeyListener(validForm);
+		txtPeso.addActionListener(saveInsumo);
 
-		JCheckBox chckbxS = new JCheckBox("Insumo refrigerado");
 		GridBagConstraints gbc_chckbxS = new GridBagConstraints();
 		gbc_chckbxS.anchor = GridBagConstraints.WEST;
 		gbc_chckbxS.insets = new Insets(0, 0, 0, 5);
@@ -1425,27 +1485,8 @@ public class MainMenu {
 		JPanel panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
 
-		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-				Insumo insumo;
-
-				if (chckbxS.isSelected()) {
-					insumo = gestorInsumo.crearLiquido(txtDescripcion.getText());
-				} else {
-					insumo = gestorInsumo.crear(txtDescripcion.getText());
-				}
-
-				insumo.setCosto(Float.parseFloat(txtCosto.getText()));
-				insumo.setPeso(Float.parseFloat(txtPeso.getText()));
-				insumo.setUnidadDeMedida(UnidadDeMedida.KILO);
-
-				MainMenu.refreshInsumoTable(null);
-
-				jdialog.dispose();
-			}
-		});
+		btnGuardar.setEnabled(false);
+		btnGuardar.addActionListener(saveInsumo);
 		panel_1.add(btnGuardar);
 
 		JButton btnCancelar = new JButton("Cancelar");
