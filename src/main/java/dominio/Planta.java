@@ -85,6 +85,6 @@ public class Planta {
 	
 	@Override
 	public String toString() {
-		return "Planta [id=" + id + ", nombre=" + nombre + ", listaStock=" + listaStock + "]";
+		return nombre;
 	}
 }

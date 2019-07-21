@@ -21,6 +21,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -38,6 +39,7 @@ import dominio.Planta;
 import dominio.Planta.TipoPlanta;
 import dominio.Stock;
 import dominio.UnidadDeMedida;
+import gestores.GestorCamino;
 import gestores.GestorInsumo;
 import gestores.GestorPlanta;
 
@@ -51,6 +53,8 @@ import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.BoxLayout;
+import javax.swing.JList;
 
 public class MainMenu {
 	private JFrame frmTrabajoPrctico;
@@ -58,8 +62,10 @@ public class MainMenu {
 	private static JTable tablePlantas;
 	private static JTable tableStock;
 	private static JTable tableInsumos;
+	private static JList<Planta> caminoList;
 	static GestorPlanta gestorPlanta = GestorPlanta.getInstance();
 	static GestorInsumo gestorInsumo = GestorInsumo.getInstance();
+	static GestorCamino gestorCamino = GestorCamino.getInstance();
 
 	/**
 	 * Launch the application.
@@ -109,6 +115,9 @@ public class MainMenu {
 
 		// Loading content of third panel (Stock)
 		loadPlantasMenu();
+		
+		// Loading content of fourth panel (Caminos)
+		loadCaminosMenu();
 	}
 
 	private void loadMainMenu() {
@@ -133,7 +142,7 @@ public class MainMenu {
 				new ImageIcon(resourcesPath + "Info.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 
 		JButton camionb = new JButton(camionIcon);
-		JButton caminob = new JButton(caminoIcon);
+		
 		JButton infob = new JButton(infoIcon);
 
 		JButton insumob = new JButton(insumoIcon);
@@ -150,6 +159,14 @@ public class MainMenu {
 				refreshPlantaTable(null);
 				refreshStockTable(0);
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Planta");
+			}
+		});
+		
+		JButton caminob = new JButton(caminoIcon);
+		caminob.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				refreshCaminoList();
+				cl.show(frmTrabajoPrctico.getContentPane(), "card__Camino");
 			}
 		});
 
@@ -286,7 +303,8 @@ public class MainMenu {
 		// ComboBox
 		String[] searchComboItems = { "Nombre", "Costo mínimo", "Costo máximo", "Stock mínimo", "Stock máximo" };
 
-		JComboBox<String> comboBox = new JComboBox<String>(searchComboItems);
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setModel(new DefaultComboBoxModel<String>(searchComboItems));
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
@@ -951,6 +969,180 @@ public class MainMenu {
 		panel_1.add(btnEditarInsumo, gbc_btnEditarInsumo);
 	}
 
+	private void loadCaminosMenu() {
+		// ------------------------------------------------------------------------------------------------
+		// Creando el panel de caminos
+		// ------------------------------------------------------------------------------------------------
+		JPanel pnlCaminos = new JPanel();
+		frmTrabajoPrctico.getContentPane().add(pnlCaminos, "card__Camino");
+		pnlCaminos.setLayout(new BorderLayout(0, 0));
+
+		pnlCaminos.add(new JPanel(), BorderLayout.SOUTH);
+
+		JPanel panel = new JPanel();
+		pnlCaminos.add(panel, BorderLayout.CENTER);
+
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[] { 20, 150, 150, 150, 150, 150, 150, 150, 150, 150, 40 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		panel.setLayout(gbl_panel);
+
+		// Título principal del panel
+		JLabel lblPanelDeAdministracin = new JLabel("Panel de administración de caminos");
+		lblPanelDeAdministracin.setFont(new Font("Segoe UI", Font.PLAIN, 24));
+		GridBagConstraints gbc_lblPanelDeAdministracin = new GridBagConstraints();
+		gbc_lblPanelDeAdministracin.gridwidth = 8;
+		gbc_lblPanelDeAdministracin.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPanelDeAdministracin.gridx = 2;
+		gbc_lblPanelDeAdministracin.gridy = 2;
+		panel.add(lblPanelDeAdministracin, gbc_lblPanelDeAdministracin);
+
+		// Botón de volver
+		JButton btnVolver_1 = new JButton("");
+		btnVolver_1.setForeground(Color.WHITE);
+		btnVolver_1.setIcon(new ImageIcon(new ImageIcon("src/main/resources/back.png").getImage().getScaledInstance(32,
+				32, Image.SCALE_DEFAULT)));
+
+		btnVolver_1.setOpaque(false);
+		btnVolver_1.setContentAreaFilled(false);
+		btnVolver_1.setBorderPainted(false);
+		btnVolver_1.setBorder(null);
+		btnVolver_1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+		GridBagConstraints gbc_btnVolver_1 = new GridBagConstraints();
+		gbc_btnVolver_1.anchor = GridBagConstraints.WEST;
+		gbc_btnVolver_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnVolver_1.gridx = 1;
+		gbc_btnVolver_1.gridy = 2;
+		panel.add(btnVolver_1, gbc_btnVolver_1);
+
+		btnVolver_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				cl.show(frmTrabajoPrctico.getContentPane(), "card__MainMenu");
+			}
+		});
+
+		// Panelcito arriba para separar de la barra de título
+		JPanel panel_555522 = new JPanel();
+		GridBagConstraints gbc_panel_555522 = new GridBagConstraints();
+		gbc_panel_555522.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_555522.fill = GridBagConstraints.BOTH;
+		gbc_panel_555522.gridx = 6;
+		gbc_panel_555522.gridy = 1;
+		panel.add(panel_555522, gbc_panel_555522);
+
+		// Panelcito abajo del título para separar y que no quede tan pegado
+		JPanel panel_2 = new JPanel();
+		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
+		gbc_panel_2.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_2.fill = GridBagConstraints.BOTH;
+		gbc_panel_2.gridx = 6;
+		gbc_panel_2.gridy = 3;
+		panel.add(panel_2, gbc_panel_2);
+
+		// Panel a la izquierda para separar
+		JPanel panel_5 = new JPanel();
+		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
+		gbc_panel_5.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_5.fill = GridBagConstraints.BOTH;
+		gbc_panel_5.gridx = 0;
+		gbc_panel_5.gridy = 5;
+		panel.add(panel_5, gbc_panel_5);
+
+		// Y aca a la derecha
+		JPanel panel_133 = new JPanel();
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.gridx = 11;
+		gbc_panel_1.gridy = 5;
+		panel.add(panel_133, gbc_panel_1);
+		
+		// Añadir camino
+		JButton btnNuevoCamino = new JButton("Añadir");
+		GridBagConstraints gbc_btnNuevoCamino = new GridBagConstraints();
+		gbc_btnNuevoCamino.anchor = GridBagConstraints.EAST;
+		gbc_btnNuevoCamino.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNuevoCamino.gridx = 2;
+		gbc_btnNuevoCamino.gridy = 4;
+
+		btnNuevoCamino.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CreateCaminoDialog();
+			}
+		});
+
+		panel.add(btnNuevoCamino, gbc_btnNuevoCamino);
+
+		// ------------------------------------------------------------------------------------------------
+		// Lista de plantas (izquierda), origen
+		// ------------------------------------------------------------------------------------------------
+		GridBagConstraints gbc_panel_91 = new GridBagConstraints();
+		gbc_panel_91.gridwidth = 3;
+		gbc_panel_91.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_91.fill = GridBagConstraints.BOTH;
+		gbc_panel_91.gridx = 1;
+		gbc_panel_91.gridy = 5;
+
+		JList<Planta> caminoOrigin = new JList<Planta>();
+		caminoOrigin.setLayoutOrientation(JList.VERTICAL);
+		caminoOrigin.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		panel.add(new JScrollPane(caminoOrigin), gbc_panel_91);		
+		
+		// ------------------------------------------------------------------------------------------------
+		// Lista de plantas (derecha), destino
+		// ------------------------------------------------------------------------------------------------
+		GridBagConstraints gbc_panel_222 = new GridBagConstraints();
+		gbc_panel_222.gridwidth = 3;
+		gbc_panel_222.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_222.fill = GridBagConstraints.BOTH;
+		gbc_panel_222.gridx = 7;
+		gbc_panel_222.gridy = 5;
+
+		JList<Planta> caminoEnd = new JList<Planta>();
+		caminoEnd.setLayoutOrientation(JList.VERTICAL);
+		caminoEnd.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		panel.add(new JScrollPane(caminoEnd), gbc_panel_222);
+		
+		// ------------------------------------------------------------------------------------------------
+		// Lista de plantas (centro)
+		// ------------------------------------------------------------------------------------------------
+		GridBagConstraints gbc_panel_9 = new GridBagConstraints();
+		gbc_panel_9.gridwidth = 3;
+		gbc_panel_9.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_9.fill = GridBagConstraints.BOTH;
+		gbc_panel_9.gridx = 4;
+		gbc_panel_9.gridy = 5;
+
+		caminoList = new JList<Planta>();
+		caminoList.setListData(gestorPlanta.getListaPlantas().values().toArray(new Planta[0]));
+		caminoList.setLayoutOrientation(JList.VERTICAL);
+		caminoList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		caminoList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				if (!event.getValueIsAdjusting() && caminoList.getSelectedIndex() != -1)
+				{
+					caminoOrigin.setListData(gestorCamino.getStartingPlantas((Planta)caminoList.getSelectedValue()).toArray(new Planta[0]));
+					System.out.println("origen: " + gestorCamino.getStartingPlantas((Planta)caminoList.getSelectedValue()).toArray(new Planta[0]).toString());
+					caminoEnd.setListData(gestorCamino.getEndingPlantas((Planta)caminoList.getSelectedValue()).toArray(new Planta[0]));
+					System.out.println("destino: " + gestorCamino.getEndingPlantas((Planta)caminoList.getSelectedValue()).toArray(new Planta[0]).toString());
+				}
+			}
+		});
+
+		panel.add(new JScrollPane(caminoList), gbc_panel_9);
+
+	}
+	
+	public static void refreshCaminoList()
+	{
+		caminoList.setListData(gestorPlanta.getListaPlantas().values().toArray(new Planta[0]));
+	}
+	
 	public static void refreshPlantaTable(ArrayList<Planta> search) {
 		String col[] = { "ID", "Nombre", "Tipo" };
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
@@ -1026,6 +1218,114 @@ public class MainMenu {
 		}
 
 		tableInsumos.setModel(tableModel);
+	}
+
+	public void CreateCaminoDialog() {
+		JDialog jdialog = new JDialog(frmTrabajoPrctico, "Crear camino", Dialog.ModalityType.DOCUMENT_MODAL);
+		JPanel contentPane;
+
+		JComboBox<Planta> comboStart;
+		JComboBox<Planta> comboEnd;
+		
+		jdialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		jdialog.setResizable(false);
+		jdialog.setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		jdialog.setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
+
+		JPanel panel = new JPanel();
+		contentPane.add(panel, BorderLayout.CENTER);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[] { 119, 58, 86, 32, 0 };
+		gbl_panel.rowHeights = new int[] { 55, 0, 20, 0, 0, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		panel.setLayout(gbl_panel);
+
+		JPanel panel_2 = new JPanel();
+		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
+		gbc_panel_2.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_2.fill = GridBagConstraints.BOTH;
+		gbc_panel_2.gridx = 1;
+		gbc_panel_2.gridy = 0;
+		panel.add(panel_2, gbc_panel_2);
+
+		JLabel lblDescripcin = new JLabel("Planta de origen:");
+		GridBagConstraints gbc_lblDescripcin = new GridBagConstraints();
+		gbc_lblDescripcin.anchor = GridBagConstraints.EAST;
+		gbc_lblDescripcin.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDescripcin.gridx = 1;
+		gbc_lblDescripcin.gridy = 2;
+		panel.add(lblDescripcin, gbc_lblDescripcin);
+
+		comboStart = new JComboBox<Planta>();
+		comboStart.setModel(new DefaultComboBoxModel<Planta>(gestorPlanta.getListaPlantas().values().toArray(new Planta[0])));
+		
+		GridBagConstraints gbc_comboStart = new GridBagConstraints();
+		gbc_comboStart.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboStart.anchor = GridBagConstraints.NORTH;
+		gbc_comboStart.insets = new Insets(0, 0, 5, 5);
+		gbc_comboStart.gridx = 2;
+		gbc_comboStart.gridy = 2;
+		panel.add(comboStart, gbc_comboStart);
+
+		JLabel lblCosto = new JLabel("Planta de destino:");
+		GridBagConstraints gbc_lblCosto = new GridBagConstraints();
+		gbc_lblCosto.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCosto.anchor = GridBagConstraints.EAST;
+		gbc_lblCosto.gridx = 1;
+		gbc_lblCosto.gridy = 3;
+		panel.add(lblCosto, gbc_lblCosto);
+
+		comboEnd = new JComboBox<Planta>();
+		comboEnd.setModel(new DefaultComboBoxModel<Planta>(gestorPlanta.getListaPlantas().values().toArray(new Planta[0])));
+
+		GridBagConstraints gbc_comboEnd = new GridBagConstraints();
+		gbc_comboEnd.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboEnd.anchor = GridBagConstraints.NORTH;
+		gbc_comboEnd.insets = new Insets(0, 0, 5, 5);
+		gbc_comboEnd.gridx = 2;
+		gbc_comboEnd.gridy = 3;
+		panel.add(comboEnd, gbc_comboEnd);
+
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1, BorderLayout.SOUTH);
+
+		JButton btnGuardar = new JButton("Guardar");
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println(gestorCamino.createCamino((Planta)comboStart.getSelectedItem(), (Planta)comboEnd.getSelectedItem()));
+				
+				/*Insumo insumo;
+
+				if (chckbxS.isSelected()) {
+					insumo = gestorInsumo.crearLiquido(txtDescripcion.getText());
+				} else {
+					insumo = gestorInsumo.crear(txtDescripcion.getText());
+				}
+
+				insumo.setCosto(Float.parseFloat(txtCosto.getText()));
+				insumo.setPeso(Float.parseFloat(txtPeso.getText()));
+				insumo.setUnidadDeMedida(UnidadDeMedida.KILO); */
+
+				refreshCaminoList();
+
+				jdialog.dispose();
+			}
+		});
+		panel_1.add(btnGuardar);
+
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				jdialog.dispose();
+			}
+		});
+		panel_1.add(btnCancelar);
+		jdialog.setVisible(true);
 	}
 
 	public void CreateInsumoDialog() {
