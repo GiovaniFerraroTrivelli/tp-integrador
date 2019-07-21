@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dialog;
@@ -36,13 +35,13 @@ import javax.swing.table.DefaultTableModel;
 import dominio.Insumo;
 import dominio.InsumoLiquido;
 import dominio.Planta;
+import dominio.Planta.TipoPlanta;
 import dominio.Stock;
 import dominio.UnidadDeMedida;
 import gestores.GestorInsumo;
 import gestores.GestorPlanta;
 
 import java.awt.Insets;
-import java.awt.List;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -54,11 +53,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 public class MainMenu {
-
-	enum SearchInsumoItems {
-		nombre, costoMinimo, costoMaximo, stockMinimo, stockMaximo
-	}
-
 	private JFrame frmTrabajoPrctico;
 	private CardLayout cl;
 	private static JTable tablePlantas;
@@ -739,6 +733,78 @@ public class MainMenu {
 
 		panel.add(btnEliminar, gbc_btnEliminar);
 
+		// Botón de establecer tipo
+		JButton btnType = new JButton("Establecer tipo");
+		GridBagConstraints gbc_btnType = new GridBagConstraints();
+		gbc_btnType.anchor = GridBagConstraints.WEST;
+		gbc_btnType.insets = new Insets(0, 0, 5, 5);
+		gbc_btnType.gridx = 5;
+		gbc_btnType.gridy = 4;
+
+		btnType.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Integer rowId = tablePlantas.getSelectedRow();
+
+				if (rowId < 0) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna planta seleccionada",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				
+				Boolean validInput = false;
+				Planta curPlanta = gestorPlanta.obtenerPlanta((Integer) tablePlantas.getValueAt(rowId, 0));
+				Planta tempPlanta;
+				
+				TipoPlanta[] items = Planta.TipoPlanta.values();
+				
+				do {
+					TipoPlanta tipoPlanta = (TipoPlanta) JOptionPane.showInputDialog(frmTrabajoPrctico, 
+					        "Establecer tipo de planta",
+					        "Tipo de planta",
+					        JOptionPane.QUESTION_MESSAGE,
+					        null,
+					        items,
+					        curPlanta.getTipo()
+					);
+					
+					System.out.println(tipoPlanta);
+			
+					if(tipoPlanta != null)
+					{
+						switch(tipoPlanta)
+						{
+							case plantaProduccion: // produccion
+							{
+								curPlanta.setTipo(Planta.TipoPlanta.plantaProduccion);
+								validInput = true;
+							}
+							case plantaAcopioInicial:
+							case plantaAcopioFinal:
+							{
+								tempPlanta = gestorPlanta.getFirstPlantaWithTipo(tipoPlanta);
+								
+								if(tempPlanta != null && tempPlanta != curPlanta)
+								{
+									JOptionPane.showMessageDialog(frmTrabajoPrctico, "Ya hay una planta de este tipo.",
+											"Información", JOptionPane.INFORMATION_MESSAGE);
+								}
+								else
+								{
+									curPlanta.setTipo(tipoPlanta);
+									validInput = true;
+								}
+							}
+						}
+					}
+					else validInput = true;
+				} while (!validInput);				
+				
+				refreshPlantaTable(null);
+			}
+		});
+
+		panel.add(btnType, gbc_btnType);
+		
 		// ------------------------------------------------------------------------------------------------
 		// Tabla de Plantas
 		// ------------------------------------------------------------------------------------------------
@@ -886,7 +952,7 @@ public class MainMenu {
 	}
 
 	public static void refreshPlantaTable(ArrayList<Planta> search) {
-		String col[] = { "ID", "Nombre" };
+		String col[] = { "ID", "Nombre", "Tipo" };
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 
 		if (gestorPlanta.getListaPlantas().isEmpty()) {
@@ -905,8 +971,9 @@ public class MainMenu {
 		for (int i = 0; i < tempListaPlantas.size(); i++) {
 			int id = tempListaPlantas.get(i).getId();
 			String nombre = tempListaPlantas.get(i).getNombre();
+			String tipo = tempListaPlantas.get(i).getTipo().toString();
 
-			Object[] data = { id, nombre };
+			Object[] data = { id, nombre, tipo };
 			tableModel.addRow(data);
 		}
 

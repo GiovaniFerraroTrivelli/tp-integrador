@@ -7,16 +7,31 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Planta {
-	private static Integer lastId = 0;
-
+	
+	public enum TipoPlanta
+	{
+		plantaProduccion("Planta de producción"),
+		plantaAcopioInicial("Planta de acopio inicial"),
+		plantaAcopioFinal("Planta de acopio final");
+		
+		private String desc;
+		public String getDesc() { return this.desc; } 
+		private TipoPlanta(String desc) { this.desc = desc; }
+		
+		@Override
+		public String toString() { return this.desc; }
+	};
+	
 	private Integer id;
 	private String nombre;
+	private TipoPlanta tipo;
 
 	private HashMap<Integer, Stock> listaStock = new HashMap<Integer, Stock>(); 
 
-	public Planta(String nombre) {
-		this.id = ++lastId;
+	public Planta(Integer id, String nombre) {
+		this.id = id;
 		this.nombre = nombre;
+		this.tipo = TipoPlanta.plantaProduccion;
 	}
 
 	public Double costoTotal() {
@@ -58,6 +73,16 @@ public class Planta {
 		this.nombre = nombre;
 	}
 
+	public TipoPlanta getTipo()
+	{
+		return this.tipo;
+	}
+	
+	public void setTipo(TipoPlanta tipo)
+	{
+		this.tipo = tipo;
+	}
+	
 	@Override
 	public String toString() {
 		return "Planta [id=" + id + ", nombre=" + nombre + ", listaStock=" + listaStock + "]";

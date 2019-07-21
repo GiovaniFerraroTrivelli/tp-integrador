@@ -5,14 +5,15 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import dominio.Planta;
+import dominio.Planta.TipoPlanta;
 import dominio.Stock;
 import estructuras.ArbolBinarioBusqueda;
 
 public class GestorPlanta implements Gestor<Object> {
+	private static Integer lastPlantaId = 0;
 	private static final GestorPlanta INSTANCE = new GestorPlanta();
 
-	private GestorPlanta() {
-	}
+	private GestorPlanta() {}
 
 	public static GestorPlanta getInstance() {
 		return INSTANCE;
@@ -22,7 +23,7 @@ public class GestorPlanta implements Gestor<Object> {
 
 	@Override
 	public Planta crear(String nombre) {
-		Planta planta = new Planta(nombre);
+		Planta planta = new Planta(++lastPlantaId, nombre);
 		listaPlantas.put(planta.getId(), planta);
 
 		return planta;
@@ -47,6 +48,17 @@ public class GestorPlanta implements Gestor<Object> {
 				return planta;
 			}
 		}
+		return null;
+	}
+	
+	public Planta getFirstPlantaWithTipo(TipoPlanta tipo)
+	{
+		for(Planta planta : listaPlantas.values())
+		{
+			if(planta.getTipo() == tipo)
+				return planta;
+		}
+		
 		return null;
 	}
 

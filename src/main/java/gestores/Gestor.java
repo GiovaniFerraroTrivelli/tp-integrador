@@ -1,7 +1,6 @@
 package gestores;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract interface Gestor<E> {
 
