@@ -73,9 +73,8 @@ public class GestorInsumo implements Gestor<Object> {
 		return null;
 	}
 	
-	public Insumo getInsumoByStock(Integer stock, Insumo a) {	
-		ArrayList<Insumo> listInsumosCopy = getListaInsumos();
-		listInsumosCopy.remove(a);
+	public Insumo getInsumoByStock(Integer stock, ArrayList<Insumo> listInsumosCopy) {	
+	
 		for(Insumo i : listInsumosCopy)
 		{
 			if(i.getStock() == stock)
@@ -145,15 +144,18 @@ public class GestorInsumo implements Gestor<Object> {
 	}
 	
 	public ArrayList buscarPorStock(Integer busqueda, boolean tipo) {
+		ArrayList<Insumo> listInsumosCopy = getListaInsumos();
 		Integer primElem = this.getListaInsumos().get(0).getStock();
 		List<Integer> resultado = new ArrayList<Integer>();
 		ArbolBinarioBusqueda<Integer> arbol = new ArbolBinarioBusqueda<Integer>(primElem);
 		System.out.println("----------------------------------------------------------------------");
+		System.out.println(this.getListaInsumos());
 		for(int i = 1; i < this.getListaInsumos().size(); i++) {
 			arbol.agregar(this.getListaInsumos().get(i).getStock());
 			System.out.println("Agregando " + this.getListaInsumos().get(i).getDescripcion());
 		}
 		System.out.println("----------------------------------------------------------------------");
+
 		
 		if(tipo)
 			resultado = arbol.rango(0, busqueda);
@@ -168,11 +170,13 @@ public class GestorInsumo implements Gestor<Object> {
 			Insumo b = this.getInsumoByStock(resultado.get(i));
 			
 			if(listaInsumosAux.contains(b)) {
-				Insumo c = this.getInsumoByStock(i, b);
+				listInsumosCopy.remove(b);
+				Insumo c = this.getInsumoByStock(resultado.get(i), listInsumosCopy);
 				listaInsumosAux.add(c);
 			}
-			
+			else {
 			listaInsumosAux.add(b);
+			}
 		}
 		
 		return listaInsumosAux;		
