@@ -1,17 +1,17 @@
 package gestores;
 import java.util.ArrayList;
 
-import dominio.Camino;
+import dominio.Ruta;
 import dominio.Planta;
 
-public class GestorCamino implements Gestor<Object> {
-	private static final GestorCamino INSTANCE = new GestorCamino();
-	private ArrayList<Camino> listaCaminos = new ArrayList<Camino>();
+public class GestorRuta implements Gestor<Object> {
+	private static final GestorRuta INSTANCE = new GestorRuta();
+	private ArrayList<Ruta> listaCaminos = new ArrayList<Ruta>();
 
-	private GestorCamino() {
+	private GestorRuta() {
 	}
 
-	public static GestorCamino getInstance() {
+	public static GestorRuta getInstance() {
 		return INSTANCE;
 	}
 
@@ -19,7 +19,7 @@ public class GestorCamino implements Gestor<Object> {
 	{
 		ArrayList<Planta> resultado = new ArrayList<Planta>();
 		
-		for(Camino camino : listaCaminos)
+		for(Ruta camino : listaCaminos)
 		{
 			if(camino.getOrigen() == planta)
 			{
@@ -34,7 +34,7 @@ public class GestorCamino implements Gestor<Object> {
 	{
 		ArrayList<Planta> resultado = new ArrayList<Planta>();
 		
-		for(Camino camino : listaCaminos)
+		for(Ruta camino : listaCaminos)
 		{
 			if(camino.getDestino() == planta)
 			{
@@ -45,9 +45,9 @@ public class GestorCamino implements Gestor<Object> {
 		return resultado;
 	}
 	
-	public void deleteCamino(Planta origen, Planta destino)
+	public void deleteRuta(Planta origen, Planta destino)
 	{
-		for(Camino camino : listaCaminos)
+		for(Ruta camino : listaCaminos)
 		{
 			if(camino.getOrigen() == origen && camino.getDestino() == destino)
 			{
@@ -56,14 +56,14 @@ public class GestorCamino implements Gestor<Object> {
 		}
 	}
 	
-	public ArrayList<Camino> getListaCaminos()
+	public ArrayList<Ruta> getListaRutas()
 	{
 		return this.listaCaminos;
 	}
 	
-	public Camino createCamino(Planta origen, Planta destino)
+	public Ruta createRuta(Planta origen, Planta destino)
 	{
-		Camino camino = new Camino(origen, destino);
+		Ruta camino = new Ruta(origen, destino);
 		listaCaminos.add(camino);
 		return camino;
 	}

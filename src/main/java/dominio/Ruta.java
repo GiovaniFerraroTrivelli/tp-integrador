@@ -1,6 +1,6 @@
 package dominio;
 
-public class Camino {
+public class Ruta {
 	
 	private Planta origen;
 	private Planta destino;
@@ -8,9 +8,9 @@ public class Camino {
 	private Integer duracion;
 	private Integer pesoMaximo;
 	
-	Camino() { }
+	Ruta() { }
 	
-	public Camino(Planta origen, Planta destino)
+	public Ruta(Planta origen, Planta destino)
 	{
 		this.origen = origen;
 		this.destino = destino;

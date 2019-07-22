@@ -35,15 +35,14 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
+import dominio.Camion;
 import dominio.Insumo;
 import dominio.InsumoLiquido;
-import dominio.Planta;
 import dominio.Planta.TipoPlanta;
 import dominio.Stock;
 import dominio.UnidadDeMedida;
-import gestores.GestorCamino;
-import gestores.GestorInsumo;
-import gestores.GestorPlanta;
+import dominio.Planta;
+import gestores.*;
 
 import java.awt.Insets;
 
@@ -64,10 +63,12 @@ public class MainMenu {
 	private static JTable tablePlantas;
 	private static JTable tableStock;
 	private static JTable tableInsumos;
-	private static JList<Planta> caminoList;
+	private static JTable tableCamiones;
+	private static JList<Planta> listRuta;
 	static GestorPlanta gestorPlanta = GestorPlanta.getInstance();
 	static GestorInsumo gestorInsumo = GestorInsumo.getInstance();
-	static GestorCamino gestorCamino = GestorCamino.getInstance();
+	static GestorRuta gestorRuta = GestorRuta.getInstance();
+	static GestorCamion gestorCamion = GestorCamion.getInstance();
 
 	/**
 	 * Launch the application.
@@ -118,8 +119,14 @@ public class MainMenu {
 		// Loading content of third panel (Stock)
 		loadPlantasMenu();
 		
-		// Loading content of fourth panel (Caminos)
-		loadCaminosMenu();
+		// Loading content of fourth panel (Ruta)
+		loadRutasMenu();
+		
+		// Loading content of quinto panel, ya me canse de hablar en ingles (Camiones)
+		loadCamionesMenu();
+		
+		// Loading content of info panel
+		loadInfoMenu();
 	}
 
 	private void loadMainMenu() {
@@ -136,16 +143,13 @@ public class MainMenu {
 				new ImageIcon(resourcesPath + "Insumo.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		ImageIcon camionIcon = new ImageIcon(
 				new ImageIcon(resourcesPath + "Camion.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
-		ImageIcon caminoIcon = new ImageIcon(
+		ImageIcon rutaIcon = new ImageIcon(
 				new ImageIcon(resourcesPath + "Camino.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		ImageIcon plantaIcon = new ImageIcon(
 				new ImageIcon(resourcesPath + "Planta.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		ImageIcon infoIcon = new ImageIcon(
 				new ImageIcon(resourcesPath + "Info.png").getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 
-		JButton camionb = new JButton(camionIcon);
-		
-		JButton infob = new JButton(infoIcon);
 
 		JButton insumob = new JButton(insumoIcon);
 		insumob.addActionListener(new ActionListener() {
@@ -164,24 +168,39 @@ public class MainMenu {
 			}
 		});
 		
-		JButton caminob = new JButton(caminoIcon);
-		caminob.addActionListener(new ActionListener() {
+		JButton rutab = new JButton(rutaIcon);
+		rutab.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				refreshCaminoList();
-				cl.show(frmTrabajoPrctico.getContentPane(), "card__Camino");
+				refreshRutaList();
+				cl.show(frmTrabajoPrctico.getContentPane(), "card__Rutas");
 			}
 		});
-
+		
+		JButton infob = new JButton(infoIcon);
+		infob.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				cl.show(frmTrabajoPrctico.getContentPane(), "card__Info");
+			}
+		});
+		
+		JButton camionb = new JButton(camionIcon);
+		camionb.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				refreshCamionTable();
+				cl.show(frmTrabajoPrctico.getContentPane(), "card__Camiones");
+			}
+		});
+		
 		ArrayList<JButton> botones = new ArrayList<JButton>();
 		botones.add(insumob);
 		botones.add(camionb);
-		botones.add(caminob);
+		botones.add(rutab);
 		botones.add(plantab);
 		botones.add(infob);
 
 		insumob.setText("Insumos");
 		camionb.setText("Camiones");
-		caminob.setText("Caminos");
+		rutab.setText("Rutas");
 		plantab.setText("Plantas");
 		infob.setText("Información");
 
@@ -974,12 +993,213 @@ public class MainMenu {
 		panel_1.add(btnEditarInsumo, gbc_btnEditarInsumo);
 	}
 
-	private void loadCaminosMenu() {
+	private void loadCamionesMenu() {
+
 		// ------------------------------------------------------------------------------------------------
-		// Creando el panel de caminos
+		// Creamos el panel de insumos!
+		// ------------------------------------------------------------------------------------------------
+
+		JPanel pnlInsumos = new JPanel();
+		frmTrabajoPrctico.getContentPane().add(pnlInsumos, "card__Camiones");
+		pnlInsumos.setLayout(new BorderLayout(0, 0));
+
+		// Panel del sur
+		pnlInsumos.add(new JPanel(), BorderLayout.SOUTH);
+
+		// Panel del centro
+		JPanel panel = new JPanel();
+		pnlInsumos.add(panel, BorderLayout.CENTER);
+
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[] { 0, 165, 0, 99, 155, 193, 0, 179, 84 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		panel.setLayout(gbl_panel);
+
+		// Panel arriba de todo para que no quede tan pegado al titulo
+		GridBagConstraints gbc_panel_1a = new GridBagConstraints();
+		gbc_panel_1a.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_1a.fill = GridBagConstraints.BOTH;
+		gbc_panel_1a.gridx = 4;
+		gbc_panel_1a.gridy = 0;
+		panel.add(new JPanel(), gbc_panel_1a);
+
+		// Lo mismo pero abajo del titulo
+		GridBagConstraints gbc_panel_1b = new GridBagConstraints();
+		gbc_panel_1b.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_1b.fill = GridBagConstraints.BOTH;
+		gbc_panel_1b.gridx = 4;
+		gbc_panel_1b.gridy = 2;
+		panel.add(new JPanel(), gbc_panel_1b);
+
+		// Ahora a la izquierda...
+		JPanel panel_1c = new JPanel();
+		GridBagConstraints gbc_panel_1c = new GridBagConstraints();
+		gbc_panel_1c.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_1c.fill = GridBagConstraints.BOTH;
+		gbc_panel_1c.gridx = 0;
+		gbc_panel_1c.gridy = 4;
+		panel.add(panel_1c, gbc_panel_1c);
+
+		// ...y ahora a la derecha :v
+		JPanel panel_1d = new JPanel();
+		GridBagConstraints gbc_panel_1d = new GridBagConstraints();
+		gbc_panel_1d.fill = GridBagConstraints.BOTH;
+		gbc_panel_1d.gridx = 9;
+		gbc_panel_1d.gridy = 4;
+		panel.add(panel_1d, gbc_panel_1d);
+
+		// ------------------------------------------------------------------------------------------------
+		// Boton de volver
+		// ------------------------------------------------------------------------------------------------
+
+		JButton btnVolver_1 = new JButton("");
+		btnVolver_1.setForeground(Color.WHITE);
+		btnVolver_1.setIcon(new ImageIcon(new ImageIcon("src/main/resources/back.png").getImage().getScaledInstance(32,
+				32, Image.SCALE_DEFAULT)));
+
+		btnVolver_1.setOpaque(false);
+		btnVolver_1.setContentAreaFilled(false);
+		btnVolver_1.setBorderPainted(false);
+		btnVolver_1.setBorder(null);
+		btnVolver_1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+		btnVolver_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				cl.show(frmTrabajoPrctico.getContentPane(), "card__MainMenu");
+			}
+		});
+
+		GridBagConstraints gbc_btnVolver_1 = new GridBagConstraints();
+		gbc_btnVolver_1.anchor = GridBagConstraints.WEST;
+		gbc_btnVolver_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnVolver_1.gridx = 1;
+		gbc_btnVolver_1.gridy = 1;
+		panel.add(btnVolver_1, gbc_btnVolver_1);
+
+		// ------------------------------------------------------------------------------------------------
+		// Título de arriba de todo
+		// ------------------------------------------------------------------------------------------------
+		JLabel lblPanelDeAdministracin = new JLabel("Panel de administración de camiones");
+		lblPanelDeAdministracin.setFont(new Font("Segoe UI", Font.PLAIN, 24));
+		GridBagConstraints gbc_lblPanelDeAdministracin = new GridBagConstraints();
+		gbc_lblPanelDeAdministracin.gridwidth = 6;
+		gbc_lblPanelDeAdministracin.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPanelDeAdministracin.gridx = 2;
+		gbc_lblPanelDeAdministracin.gridy = 1;
+		panel.add(lblPanelDeAdministracin, gbc_lblPanelDeAdministracin);
+
+		// ------------------------------------------------------------------------------------------------
+		// Botones de administración de insumos
+		// ------------------------------------------------------------------------------------------------
+
+		// Nuevo insumo
+		JButton btnNuevoCamion = new JButton("Nuevo camión");
+		GridBagConstraints gbc_btnNuevoCamion = new GridBagConstraints();
+		gbc_btnNuevoCamion.anchor = GridBagConstraints.EAST;
+		gbc_btnNuevoCamion.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNuevoCamion.gridx = 1;
+		gbc_btnNuevoCamion.gridy = 3;
+
+		btnNuevoCamion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CreateCamionDialog();
+			}
+		});
+
+		panel.add(btnNuevoCamion, gbc_btnNuevoCamion);
+
+		// Editar insumo
+		JButton btnEditar_1 = new JButton("Editar");
+		GridBagConstraints gbc_btnEditar_1 = new GridBagConstraints();
+		gbc_btnEditar_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEditar_1.gridx = 2;
+		gbc_btnEditar_1.gridy = 3;
+		panel.add(btnEditar_1, gbc_btnEditar_1);
+
+		btnEditar_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Integer rowId = tableCamiones.getSelectedRow();
+
+				if (rowId < 0) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún camión seleccionado", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+
+				Camion camion;
+				camion = gestorCamion.getCamionById((Integer) tableCamiones.getValueAt(rowId, 0));
+
+				if (camion == null) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No se pudo localizar el camión seleccionado",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+
+					return;
+				}
+
+				EditCamionDialog(camion);
+				refreshPlantaTable(null);
+			}
+		});
+
+		// Eliminar insumo
+		JButton btnEliminar = new JButton("Eliminar");
+		GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
+		gbc_btnEliminar.anchor = GridBagConstraints.WEST;
+		gbc_btnEliminar.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEliminar.gridx = 3;
+		gbc_btnEliminar.gridy = 3;
+		panel.add(btnEliminar, gbc_btnEliminar);
+
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Integer rowId = tableCamiones.getSelectedRow();
+
+				if (rowId < 0) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún camión seleccionado", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+
+				int dialogResult = JOptionPane.showConfirmDialog(frmTrabajoPrctico,
+						"¿Está seguro que desea eliminar el camión seleccionado?", "Confirmar",
+						JOptionPane.YES_NO_OPTION);
+
+				if (dialogResult == JOptionPane.YES_OPTION) {
+					gestorCamion.borrar((Integer) tableCamiones.getValueAt(rowId, 0));
+					refreshCamionTable();
+
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "El camión seleccionado ha sido borrado",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+
+		// ------------------------------------------------------------------------------------------------
+		// Tabla de insumos
+		// ------------------------------------------------------------------------------------------------
+
+		tableCamiones = new JTable();
+		tableCamiones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableCamiones.setAutoCreateRowSorter(true);
+		tableCamiones.setDefaultEditor(Object.class, null);
+		JScrollPane panel_scrlpn = new JScrollPane(tableCamiones);
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.gridwidth = 8;
+		gbc_panel_1.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.gridx = 1;
+		gbc_panel_1.gridy = 4;
+		panel.add(panel_scrlpn, gbc_panel_1);
+	}
+	
+	private void loadRutasMenu() {
+		// ------------------------------------------------------------------------------------------------
+		// Creando el panel de rutas
 		// ------------------------------------------------------------------------------------------------
 		JPanel pnlCaminos = new JPanel();
-		frmTrabajoPrctico.getContentPane().add(pnlCaminos, "card__Camino");
+		frmTrabajoPrctico.getContentPane().add(pnlCaminos, "card__Rutas");
 		pnlCaminos.setLayout(new BorderLayout(0, 0));
 
 		pnlCaminos.add(new JPanel(), BorderLayout.SOUTH);
@@ -995,7 +1215,7 @@ public class MainMenu {
 		panel.setLayout(gbl_panel);
 
 		// Título principal del panel
-		JLabel lblPanelDeAdministracin = new JLabel("Panel de administración de caminos");
+		JLabel lblPanelDeAdministracin = new JLabel("Panel de administración de rutas");
 		lblPanelDeAdministracin.setFont(new Font("Segoe UI", Font.PLAIN, 24));
 		GridBagConstraints gbc_lblPanelDeAdministracin = new GridBagConstraints();
 		gbc_lblPanelDeAdministracin.gridwidth = 8;
@@ -1074,7 +1294,7 @@ public class MainMenu {
 
 		btnNuevoCamino.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				CreateCaminoDialog();
+				CreateRutaDialog();
 			}
 		});
 
@@ -1122,30 +1342,166 @@ public class MainMenu {
 		gbc_panel_9.gridx = 4;
 		gbc_panel_9.gridy = 5;
 
-		caminoList = new JList<Planta>();
-		caminoList.setListData(gestorPlanta.getListaPlantas().values().toArray(new Planta[0]));
-		caminoList.setLayoutOrientation(JList.VERTICAL);
-		caminoList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listRuta = new JList<Planta>();
+		listRuta.setListData(gestorPlanta.getListaPlantas().values().toArray(new Planta[0]));
+		listRuta.setLayoutOrientation(JList.VERTICAL);
+		listRuta.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		caminoList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		listRuta.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
-				if (!event.getValueIsAdjusting() && caminoList.getSelectedIndex() != -1)
+				if (!event.getValueIsAdjusting() && listRuta.getSelectedIndex() != -1)
 				{
-					caminoOrigin.setListData(gestorCamino.getStartingPlantas((Planta)caminoList.getSelectedValue()).toArray(new Planta[0]));
-					System.out.println("origen: " + gestorCamino.getStartingPlantas((Planta)caminoList.getSelectedValue()).toArray(new Planta[0]).toString());
-					caminoEnd.setListData(gestorCamino.getEndingPlantas((Planta)caminoList.getSelectedValue()).toArray(new Planta[0]));
-					System.out.println("destino: " + gestorCamino.getEndingPlantas((Planta)caminoList.getSelectedValue()).toArray(new Planta[0]).toString());
+					caminoOrigin.setListData(gestorRuta.getStartingPlantas((Planta)listRuta.getSelectedValue()).toArray(new Planta[0]));
+					System.out.println("origen: " + gestorRuta.getStartingPlantas((Planta)listRuta.getSelectedValue()).toArray(new Planta[0]).toString());
+					caminoEnd.setListData(gestorRuta.getEndingPlantas((Planta)listRuta.getSelectedValue()).toArray(new Planta[0]));
+					System.out.println("destino: " + gestorRuta.getEndingPlantas((Planta)listRuta.getSelectedValue()).toArray(new Planta[0]).toString());
 				}
 			}
 		});
 
-		panel.add(new JScrollPane(caminoList), gbc_panel_9);
+		panel.add(new JScrollPane(listRuta), gbc_panel_9);
 
 	}
 	
-	public static void refreshCaminoList()
+
+	private void loadInfoMenu() {
+		// ------------------------------------------------------------------------------------------------
+		// Creando el panel de informacion, donde estaran los grafos visualizados
+		// ------------------------------------------------------------------------------------------------
+		JPanel pnlInfo = new JPanel();
+		frmTrabajoPrctico.getContentPane().add(pnlInfo, "card__Info");
+		pnlInfo.setLayout(new BorderLayout(0, 0));
+
+		pnlInfo.add(new JPanel(), BorderLayout.SOUTH);
+
+		JPanel panel = new JPanel();
+		pnlInfo.add(panel, BorderLayout.CENTER);
+
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[] { 20, 150, 150, 150, 150, 150, 150, 150, 150, 150, 40 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		panel.setLayout(gbl_panel);
+
+		// Título principal del panel
+		JLabel lblPanelDeAdministracin = new JLabel("Visualización de la información guardada"); // TODO: pensar un nombre mejor
+		lblPanelDeAdministracin.setFont(new Font("Segoe UI", Font.PLAIN, 24));
+		GridBagConstraints gbc_lblPanelDeAdministracin = new GridBagConstraints();
+		gbc_lblPanelDeAdministracin.gridwidth = 8;
+		gbc_lblPanelDeAdministracin.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPanelDeAdministracin.gridx = 2;
+		gbc_lblPanelDeAdministracin.gridy = 2;
+		panel.add(lblPanelDeAdministracin, gbc_lblPanelDeAdministracin);
+
+		// Botón de volver
+		JButton btnVolver_1 = new JButton("");
+		btnVolver_1.setForeground(Color.WHITE);
+		btnVolver_1.setIcon(new ImageIcon(new ImageIcon("src/main/resources/back.png").getImage().getScaledInstance(32,
+				32, Image.SCALE_DEFAULT)));
+
+		btnVolver_1.setOpaque(false);
+		btnVolver_1.setContentAreaFilled(false);
+		btnVolver_1.setBorderPainted(false);
+		btnVolver_1.setBorder(null);
+		btnVolver_1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+		GridBagConstraints gbc_btnVolver_1 = new GridBagConstraints();
+		gbc_btnVolver_1.anchor = GridBagConstraints.WEST;
+		gbc_btnVolver_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnVolver_1.gridx = 1;
+		gbc_btnVolver_1.gridy = 2;
+		panel.add(btnVolver_1, gbc_btnVolver_1);
+
+		btnVolver_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				cl.show(frmTrabajoPrctico.getContentPane(), "card__MainMenu");
+			}
+		});
+
+		// Panelcito arriba para separar de la barra de título
+		JPanel panel_555522 = new JPanel();
+		GridBagConstraints gbc_panel_555522 = new GridBagConstraints();
+		gbc_panel_555522.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_555522.fill = GridBagConstraints.BOTH;
+		gbc_panel_555522.gridx = 6;
+		gbc_panel_555522.gridy = 1;
+		panel.add(panel_555522, gbc_panel_555522);
+
+		// Panelcito abajo del título para separar y que no quede tan pegado
+		JPanel panel_2 = new JPanel();
+		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
+		gbc_panel_2.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_2.fill = GridBagConstraints.BOTH;
+		gbc_panel_2.gridx = 6;
+		gbc_panel_2.gridy = 3;
+		panel.add(panel_2, gbc_panel_2);
+
+		// Panel a la izquierda para separar
+		JPanel panel_5 = new JPanel();
+		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
+		gbc_panel_5.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_5.fill = GridBagConstraints.BOTH;
+		gbc_panel_5.gridx = 0;
+		gbc_panel_5.gridy = 5;
+		panel.add(panel_5, gbc_panel_5);
+
+		// Y aca a la derecha
+		JPanel panel_133 = new JPanel();
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.gridx = 11;
+		gbc_panel_1.gridy = 5;
+		panel.add(panel_133, gbc_panel_1);
+		
+		// ------------------------------------------------------------------------------------------------
+		// Panel para visualización
+		// ------------------------------------------------------------------------------------------------
+		GridBagConstraints gbc_panel_91 = new GridBagConstraints();
+		gbc_panel_91.gridwidth = 9;
+		gbc_panel_91.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_91.fill = GridBagConstraints.BOTH;
+		gbc_panel_91.gridx = 1;
+		gbc_panel_91.gridy = 5;
+
+		JPanel panelGrafos = new JPanel();
+		// TODO: Codigo del panel de grafos
+		panelGrafos.setBackground(Color.RED);
+		panel.add(panelGrafos, gbc_panel_91);
+	}
+	
+	public static void refreshCamionTable()
 	{
-		caminoList.setListData(gestorPlanta.getListaPlantas().values().toArray(new Planta[0]));
+		String col[] = { "ID", "Marca", "Modelo", "Año", "Dominio", "Costo/km", "Transp. líquidos", "Capacidad" };
+		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+
+		ArrayList<Camion> listaCamiones = gestorCamion.getListaCamiones();
+		
+		if (listaCamiones.isEmpty()) {
+			tableCamiones.setModel(tableModel);
+			return;
+		}
+
+		for (Camion camion : listaCamiones) {
+			int id = camion.getId();
+			String marca = camion.getMarca();
+			String modelo = camion.getModelo();
+			Integer anio = camion.getAnio();
+			String dominio = camion.getDominio();
+			Float costoKm = camion.getCostoKm();
+			String transpLiq = camion.getTransportaLiq() ? "Sí" : "No";
+			Float capacidad = camion.getCapacidad();
+
+			Object[] data = { id, marca, modelo, anio, dominio, costoKm, transpLiq, capacidad };
+			tableModel.addRow(data);
+		}
+
+		tableCamiones.setModel(tableModel);
+	}
+	
+	public static void refreshRutaList()
+	{
+		listRuta.setListData(gestorPlanta.getListaPlantas().values().toArray(new Planta[0]));
 	}
 	
 	public static void refreshPlantaTable(ArrayList<Planta> search) {
@@ -1225,8 +1581,8 @@ public class MainMenu {
 		tableInsumos.setModel(tableModel);
 	}
 
-	public void CreateCaminoDialog() {
-		JDialog jdialog = new JDialog(frmTrabajoPrctico, "Crear camino", Dialog.ModalityType.DOCUMENT_MODAL);
+	public void CreateRutaDialog() {
+		JDialog jdialog = new JDialog(frmTrabajoPrctico, "Crear ruta", Dialog.ModalityType.DOCUMENT_MODAL);
 		JPanel contentPane;
 
 		JComboBox<Planta> comboStart;
@@ -1302,7 +1658,7 @@ public class MainMenu {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println(gestorCamino.createCamino((Planta)comboStart.getSelectedItem(), (Planta)comboEnd.getSelectedItem()));
+				System.out.println(gestorRuta.createRuta((Planta)comboStart.getSelectedItem(), (Planta)comboEnd.getSelectedItem()));
 				
 				/*Insumo insumo;
 
@@ -1316,7 +1672,7 @@ public class MainMenu {
 				insumo.setPeso(Float.parseFloat(txtPeso.getText()));
 				insumo.setUnidadDeMedida(UnidadDeMedida.KILO); */
 
-				refreshCaminoList();
+				refreshRutaList();
 
 				jdialog.dispose();
 			}
@@ -1613,6 +1969,348 @@ public class MainMenu {
 		jdialog.setVisible(true);
 	}
 
+	public void CreateCamionDialog()
+	{
+		JDialog jdialog = new JDialog(frmTrabajoPrctico, "Añadir camión", Dialog.ModalityType.DOCUMENT_MODAL);
+		JPanel contentPane;
+		JTextField txtMarca;
+		JTextField txtModelo;
+		JTextField txtAnio;
+		JTextField txtDominio;
+		JTextField txtCostoKm;
+		JTextField txtCapacidad;
+		JCheckBox chckbxS = new JCheckBox("Transporta líquidos");
+
+		jdialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		jdialog.setResizable(false);
+		jdialog.setMinimumSize(new Dimension(100, 100));
+		jdialog.setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		jdialog.setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
+
+		JPanel panel = new JPanel();
+		contentPane.add(panel, BorderLayout.CENTER);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[] { 86, 58, 205, 32, 0 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		panel.setLayout(gbl_panel);
+
+		JLabel lblMarca = new JLabel("Marca:");
+		GridBagConstraints gbc_lblMarca = new GridBagConstraints();
+		gbc_lblMarca.anchor = GridBagConstraints.EAST;
+		gbc_lblMarca.insets = new Insets(0, 0, 5, 5);
+		gbc_lblMarca.gridx = 1;
+		gbc_lblMarca.gridy = 1;
+		panel.add(lblMarca, gbc_lblMarca);
+
+		txtMarca = new JTextField();
+		GridBagConstraints gbc_txtMarca = new GridBagConstraints();
+		gbc_txtMarca.insets = new Insets(0, 0, 5, 5);
+		gbc_txtMarca.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtMarca.gridx = 2;
+		gbc_txtMarca.gridy = 1;
+		panel.add(txtMarca, gbc_txtMarca);
+		txtMarca.setColumns(10);
+		
+		JLabel lblModelo = new JLabel("Modelo:");
+		GridBagConstraints gbc_lblModelo = new GridBagConstraints();
+		gbc_lblModelo.anchor = GridBagConstraints.EAST;
+		gbc_lblModelo.insets = new Insets(0, 0, 5, 5);
+		gbc_lblModelo.gridx = 1;
+		gbc_lblModelo.gridy = 2;
+		panel.add(lblModelo, gbc_lblModelo);
+
+		txtModelo = new JTextField();
+		GridBagConstraints gbc_txtModelo = new GridBagConstraints();
+		gbc_txtModelo.insets = new Insets(0, 0, 5, 5);
+		gbc_txtModelo.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtModelo.gridx = 2;
+		gbc_txtModelo.gridy = 2;
+		panel.add(txtModelo, gbc_txtModelo);
+		txtModelo.setColumns(10);
+
+		JLabel lblAnio = new JLabel("Año:");
+		GridBagConstraints gbc_lblAnio = new GridBagConstraints();
+		gbc_lblAnio.anchor = GridBagConstraints.EAST;
+		gbc_lblAnio.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAnio.gridx = 1;
+		gbc_lblAnio.gridy = 3;
+		panel.add(lblAnio, gbc_lblAnio);
+
+		txtAnio = new JTextField();
+		GridBagConstraints gbc_txtAnio = new GridBagConstraints();
+		gbc_txtAnio.insets = new Insets(0, 0, 5, 5);
+		gbc_txtAnio.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtAnio.gridx = 2;
+		gbc_txtAnio.gridy = 3;
+		panel.add(txtAnio, gbc_txtAnio);
+		txtAnio.setColumns(10);
+
+		JLabel lblDominio = new JLabel("Dominio:");
+		GridBagConstraints gbc_lblDominio = new GridBagConstraints();
+		gbc_lblDominio.anchor = GridBagConstraints.EAST;
+		gbc_lblDominio.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDominio.gridx = 1;
+		gbc_lblDominio.gridy = 4;
+		panel.add(lblDominio, gbc_lblDominio);
+
+		txtDominio = new JTextField();
+		GridBagConstraints gbc_txtDominio = new GridBagConstraints();
+		gbc_txtDominio.insets = new Insets(0, 0, 5, 5);
+		gbc_txtDominio.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtDominio.gridx = 2;
+		gbc_txtDominio.gridy = 4;
+		panel.add(txtDominio, gbc_txtDominio);
+		txtAnio.setColumns(10);
+
+		JLabel lblCostoKm = new JLabel("Costo/km:");
+		GridBagConstraints gbc_lblCostoKm = new GridBagConstraints();
+		gbc_lblCostoKm.anchor = GridBagConstraints.EAST;
+		gbc_lblCostoKm.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCostoKm.gridx = 1;
+		gbc_lblCostoKm.gridy = 5;
+		panel.add(lblCostoKm, gbc_lblCostoKm);
+
+		txtCostoKm = new JTextField();
+		GridBagConstraints gbc_txtCostoKm = new GridBagConstraints();
+		gbc_txtCostoKm.insets = new Insets(0, 0, 5, 5);
+		gbc_txtCostoKm.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtCostoKm.gridx = 2;
+		gbc_txtCostoKm.gridy = 5;
+		panel.add(txtCostoKm, gbc_txtCostoKm);
+		txtAnio.setColumns(10);
+
+		JLabel lblCapacidad = new JLabel("Capacidad:");
+		GridBagConstraints gbc_lblCapacidad = new GridBagConstraints();
+		gbc_lblCapacidad.anchor = GridBagConstraints.EAST;
+		gbc_lblCapacidad.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCapacidad.gridx = 1;
+		gbc_lblCapacidad.gridy = 6;
+		panel.add(lblCapacidad, gbc_lblCapacidad);
+
+		txtCapacidad = new JTextField();
+		GridBagConstraints gbc_txtCapacidad = new GridBagConstraints();
+		gbc_txtCapacidad.insets = new Insets(0, 0, 5, 5);
+		gbc_txtCapacidad.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtCapacidad.gridx = 2;
+		gbc_txtCapacidad.gridy = 6;
+		panel.add(txtCapacidad, gbc_txtCapacidad);
+		txtAnio.setColumns(10);
+		
+		GridBagConstraints gbc_chckbxS = new GridBagConstraints();
+		gbc_chckbxS.anchor = GridBagConstraints.WEST;
+		gbc_chckbxS.insets = new Insets(0, 0, 0, 5);
+		gbc_chckbxS.gridx = 2;
+		gbc_chckbxS.gridy = 7;
+		panel.add(chckbxS, gbc_chckbxS);
+		
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1, BorderLayout.SOUTH);
+
+		JButton btnGuardar = new JButton("Guardar");
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Camion camion = gestorCamion.crearCamion();
+				camion.setMarca(txtMarca.getText());
+				camion.setModelo(txtModelo.getText());
+				camion.setAnio(Integer.parseInt(txtAnio.getText()));
+				camion.setDominio(txtDominio.getText());
+				camion.setCostoKm(Float.parseFloat(txtCostoKm.getText()));
+				camion.setTransportaLiq(chckbxS.isSelected());
+				camion.setCapacidad(Float.parseFloat(txtCapacidad.getText()));
+
+				refreshCamionTable();
+				jdialog.dispose();
+			}
+		});
+		panel_1.add(btnGuardar);
+
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				jdialog.dispose();
+			}
+		});
+		panel_1.add(btnCancelar);
+		jdialog.setVisible(true);
+	}
+	
+	public void EditCamionDialog(Camion camion)
+	{
+		JDialog jdialog = new JDialog(frmTrabajoPrctico, "Modificar camión", Dialog.ModalityType.DOCUMENT_MODAL);
+		JPanel contentPane;
+		JTextField txtMarca;
+		JTextField txtModelo;
+		JTextField txtAnio;
+		JTextField txtDominio;
+		JTextField txtCostoKm;
+		JTextField txtCapacidad;
+		JCheckBox chckbxS = new JCheckBox("Transporta líquidos");
+
+		jdialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		jdialog.setResizable(false);
+		jdialog.setMinimumSize(new Dimension(100, 100));
+		jdialog.setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		jdialog.setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
+
+		JPanel panel = new JPanel();
+		contentPane.add(panel, BorderLayout.CENTER);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[] { 86, 58, 205, 32, 0 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		panel.setLayout(gbl_panel);
+
+		JLabel lblMarca = new JLabel("Marca:");
+		GridBagConstraints gbc_lblMarca = new GridBagConstraints();
+		gbc_lblMarca.anchor = GridBagConstraints.EAST;
+		gbc_lblMarca.insets = new Insets(0, 0, 5, 5);
+		gbc_lblMarca.gridx = 1;
+		gbc_lblMarca.gridy = 1;
+		panel.add(lblMarca, gbc_lblMarca);
+
+		txtMarca = new JTextField(camion.getMarca());
+		GridBagConstraints gbc_txtMarca = new GridBagConstraints();
+		gbc_txtMarca.insets = new Insets(0, 0, 5, 5);
+		gbc_txtMarca.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtMarca.gridx = 2;
+		gbc_txtMarca.gridy = 1;
+		panel.add(txtMarca, gbc_txtMarca);
+		txtMarca.setColumns(10);
+		
+		JLabel lblModelo = new JLabel("Modelo:");
+		GridBagConstraints gbc_lblModelo = new GridBagConstraints();
+		gbc_lblModelo.anchor = GridBagConstraints.EAST;
+		gbc_lblModelo.insets = new Insets(0, 0, 5, 5);
+		gbc_lblModelo.gridx = 1;
+		gbc_lblModelo.gridy = 2;
+		panel.add(lblModelo, gbc_lblModelo);
+
+		txtModelo = new JTextField(camion.getModelo());
+		GridBagConstraints gbc_txtModelo = new GridBagConstraints();
+		gbc_txtModelo.insets = new Insets(0, 0, 5, 5);
+		gbc_txtModelo.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtModelo.gridx = 2;
+		gbc_txtModelo.gridy = 2;
+		panel.add(txtModelo, gbc_txtModelo);
+		txtModelo.setColumns(10);
+
+		JLabel lblAnio = new JLabel("Año:");
+		GridBagConstraints gbc_lblAnio = new GridBagConstraints();
+		gbc_lblAnio.anchor = GridBagConstraints.EAST;
+		gbc_lblAnio.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAnio.gridx = 1;
+		gbc_lblAnio.gridy = 3;
+		panel.add(lblAnio, gbc_lblAnio);
+
+		txtAnio = new JTextField(camion.getAnio().toString());
+		GridBagConstraints gbc_txtAnio = new GridBagConstraints();
+		gbc_txtAnio.insets = new Insets(0, 0, 5, 5);
+		gbc_txtAnio.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtAnio.gridx = 2;
+		gbc_txtAnio.gridy = 3;
+		panel.add(txtAnio, gbc_txtAnio);
+		txtAnio.setColumns(10);
+
+		JLabel lblDominio = new JLabel("Dominio:");
+		GridBagConstraints gbc_lblDominio = new GridBagConstraints();
+		gbc_lblDominio.anchor = GridBagConstraints.EAST;
+		gbc_lblDominio.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDominio.gridx = 1;
+		gbc_lblDominio.gridy = 4;
+		panel.add(lblDominio, gbc_lblDominio);
+
+		txtDominio = new JTextField(camion.getDominio());
+		GridBagConstraints gbc_txtDominio = new GridBagConstraints();
+		gbc_txtDominio.insets = new Insets(0, 0, 5, 5);
+		gbc_txtDominio.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtDominio.gridx = 2;
+		gbc_txtDominio.gridy = 4;
+		panel.add(txtDominio, gbc_txtDominio);
+		txtAnio.setColumns(10);
+
+		JLabel lblCostoKm = new JLabel("Costo/km:");
+		GridBagConstraints gbc_lblCostoKm = new GridBagConstraints();
+		gbc_lblCostoKm.anchor = GridBagConstraints.EAST;
+		gbc_lblCostoKm.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCostoKm.gridx = 1;
+		gbc_lblCostoKm.gridy = 5;
+		panel.add(lblCostoKm, gbc_lblCostoKm);
+
+		txtCostoKm = new JTextField(camion.getCostoKm().toString());
+		GridBagConstraints gbc_txtCostoKm = new GridBagConstraints();
+		gbc_txtCostoKm.insets = new Insets(0, 0, 5, 5);
+		gbc_txtCostoKm.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtCostoKm.gridx = 2;
+		gbc_txtCostoKm.gridy = 5;
+		panel.add(txtCostoKm, gbc_txtCostoKm);
+		txtAnio.setColumns(10);
+
+		JLabel lblCapacidad = new JLabel("Capacidad:");
+		GridBagConstraints gbc_lblCapacidad = new GridBagConstraints();
+		gbc_lblCapacidad.anchor = GridBagConstraints.EAST;
+		gbc_lblCapacidad.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCapacidad.gridx = 1;
+		gbc_lblCapacidad.gridy = 6;
+		panel.add(lblCapacidad, gbc_lblCapacidad);
+
+		txtCapacidad = new JTextField(camion.getCapacidad().toString());
+		GridBagConstraints gbc_txtCapacidad = new GridBagConstraints();
+		gbc_txtCapacidad.insets = new Insets(0, 0, 5, 5);
+		gbc_txtCapacidad.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtCapacidad.gridx = 2;
+		gbc_txtCapacidad.gridy = 6;
+		panel.add(txtCapacidad, gbc_txtCapacidad);
+		txtAnio.setColumns(10);
+		
+		GridBagConstraints gbc_chckbxS = new GridBagConstraints();
+		gbc_chckbxS.anchor = GridBagConstraints.WEST;
+		gbc_chckbxS.insets = new Insets(0, 0, 0, 5);
+		gbc_chckbxS.gridx = 2;
+		gbc_chckbxS.gridy = 7;
+		chckbxS.setSelected(camion.getTransportaLiq());
+		panel.add(chckbxS, gbc_chckbxS);
+		
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1, BorderLayout.SOUTH);
+
+		JButton btnGuardar = new JButton("Guardar");
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				camion.setMarca(txtMarca.getText());
+				camion.setModelo(txtModelo.getText());
+				camion.setAnio(Integer.parseInt(txtAnio.getText()));
+				camion.setDominio(txtDominio.getText());
+				camion.setCostoKm(Float.parseFloat(txtCostoKm.getText()));
+				camion.setTransportaLiq(chckbxS.isSelected());
+				camion.setCapacidad(Float.parseFloat(txtCapacidad.getText()));
+
+				refreshCamionTable();
+				jdialog.dispose();
+			}
+		});
+		panel_1.add(btnGuardar);
+
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				jdialog.dispose();
+			}
+		});
+		panel_1.add(btnCancelar);
+		jdialog.setVisible(true);
+	}
+	
 	public void AddInsumoDialog(Integer plantaId) {
 		JDialog jdialog = new JDialog(frmTrabajoPrctico, "Añadir insumo a planta", Dialog.ModalityType.DOCUMENT_MODAL);
 		JPanel contentPane;
