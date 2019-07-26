@@ -41,6 +41,7 @@ import dominio.InsumoLiquido;
 import dominio.Planta.TipoPlanta;
 import dominio.Stock;
 import dominio.UnidadDeMedida;
+import estructuras.Grafo;
 import dominio.Planta;
 import gestores.*;
 
@@ -1468,6 +1469,10 @@ public class MainMenu {
 		// TODO: Codigo del panel de grafos
 		panelGrafos.setBackground(Color.RED);
 		panel.add(panelGrafos, gbc_panel_91);
+		
+		
+		/*CODIGOS DE GRAFOS (FRAN)*/
+		/*Grafo grafo = new Grafo(gestorPlanta.getListaPlantas(), gestorRuta.getListaRutas());*/
 	}
 	
 	public static void refreshCamionTable()
