@@ -1,4 +1,4 @@
-package estructuras;
+package estructurasAuxiliares;
 
 public class Vertice<T> {
 

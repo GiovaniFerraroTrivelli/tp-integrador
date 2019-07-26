@@ -1,4 +1,4 @@
-package estructuras;
+package estructurasAuxiliares;
 
 import java.util.ArrayList;
 import java.util.List;

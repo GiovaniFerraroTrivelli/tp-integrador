@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import dominio.Planta;
 import dominio.Planta.TipoPlanta;
 import dominio.Stock;
-import estructuras.ArbolBinarioBusqueda;
+import estructurasAuxiliares.ArbolBinarioBusqueda;
 
 public class GestorPlanta implements Gestor<Object> {
 	private static Integer lastPlantaId = 0;
