@@ -1,6 +1,6 @@
 package estructuras;
 
-public class AristaAux<T> {
+public class Arista<T> {
 	private Vertice<T> inicio;
 	private Vertice<T> fin;
 	private Number valor;
