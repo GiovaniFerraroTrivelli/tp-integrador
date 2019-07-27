@@ -23,7 +23,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
