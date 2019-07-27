@@ -50,6 +50,7 @@ public class GrafoPanel extends JPanel{
         this.colaColores.add(Color.CYAN);*/
 
         refreshVertices();
+        refreshAristas();
         
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent event) {
