@@ -1468,10 +1468,6 @@ public class MainMenu {
 		JPanel panelGrafos = GrafoPanel.getInstance();
 		// TODO: Codigo del panel de grafos
 		panel.add(panelGrafos, gbc_panel_91);
-		
-		
-		/*CODIGOS DE GRAFOS (FRAN)*/
-		/*Grafo grafo = new Grafo(gestorPlanta.getListaPlantas(), gestorRuta.getListaRutas());*/
 	}
 	
 	public static void refreshCamionTable()

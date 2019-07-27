@@ -90,7 +90,6 @@ public class GrafoPanel extends JPanel{
     }
 
 	public static void refreshVertices() {
-		aristas.clear();
 		vertices.clear();
 		
 		Runnable r = () -> {
@@ -134,6 +133,40 @@ public class GrafoPanel extends JPanel{
 		Thread hilo = new Thread(r);
 		
 		hilo.start();	
+	}
+	
+	public static void refreshAristas() {
+		aristas.clear();
+		
+		Runnable r = () -> {
+			GestorRuta gestorRuta = GestorRuta.getInstance();
+			
+			ArrayList<Ruta> listaRutas = new ArrayList<Ruta>(gestorRuta.getListaRutas());
+			
+			for(Ruta rut: listaRutas) {
+				
+				VerticeLayout verticeOrigen = vertices.stream().filter(v -> v.getNombre() == rut.getOrigen().getNombre()).findFirst().get(); 
+				VerticeLayout verticeDestino = vertices.stream().filter(v -> v.getNombre() == rut.getDestino().getNombre()).findFirst().get(); 
+				
+				AristaLayout a = new AristaLayout();
+				a.setOrigen(verticeOrigen);
+				a.setDestino(verticeDestino);
+				aristas.add(a);
+			}
+			
+			/*sacado del codigo de martin, no se bien que hace aun*/
+			try {
+				SwingUtilities.invokeAndWait(() -> {
+					getInstance().repaint();
+				});
+			} catch (InvocationTargetException | InterruptedException e) {
+				e.printStackTrace();
+			}
+
+		};
+		
+		Thread hilo = new Thread(r);
+		hilo.start();
 	}
 	
     private void actualizarVertice(VerticeLayout v, Point puntoNuevo) {
