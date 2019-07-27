@@ -38,13 +38,11 @@ public class GrafoPanel extends JPanel{
     
     private static final GrafoPanel INSTANCE = new GrafoPanel();
     
-    public static GrafoPanel getInstance()
-    {
+    public static GrafoPanel getInstance(){
     	return INSTANCE;
     }
     
-    GrafoPanel()
-    { 
+    GrafoPanel(){ 
         /*this.colaColores = new LinkedList<Color>();
         this.colaColores.add(Color.RED);
         this.colaColores.add(Color.BLUE);
@@ -89,7 +87,15 @@ public class GrafoPanel extends JPanel{
         });
     }
 
-	public static void refreshVertices() {
+	public List<VerticeLayout> getVertices() {
+		return vertices;
+	}
+
+	public List<AristaLayout> getAristas() {
+		return aristas;
+	}
+
+	public void refreshVertices() {
 		vertices.clear();
 		
 		Runnable r = () -> {
@@ -186,7 +192,7 @@ public class GrafoPanel extends JPanel{
     }
     
     private VerticeLayout clicEnUnNodo(Point p) {
-        for (VerticeLayout v : this.vertices) {
+        for (VerticeLayout v : this.getVertices()) {
             if (v.getNodo().contains(p)) {
                 return v;
             }
@@ -195,8 +201,8 @@ public class GrafoPanel extends JPanel{
     }
     
     private void dibujarVertices(Graphics2D g2d) {
-    	System.out.println(this.vertices);
-        for (VerticeLayout v : this.vertices) {
+    	System.out.println(this.getVertices());
+        for (VerticeLayout v : this.getVertices()) {
             g2d.setPaint(Color.BLUE);
             g2d.drawString(v.etiqueta(),v.getCoordenadaX()+25,v.getCoordenadaY()+25);
             g2d.setPaint(v.getColor());
@@ -205,7 +211,7 @@ public class GrafoPanel extends JPanel{
     }
 
     private void dibujarAristas(Graphics2D g2d) {
-        for (AristaLayout a : this.aristas) {
+        for (AristaLayout a : this.getAristas()) {
             g2d.setPaint(a.getColor());
             g2d.setStroke ( a.getFormatoLinea());
             g2d.draw(a.getLinea());
