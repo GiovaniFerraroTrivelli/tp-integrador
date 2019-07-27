@@ -10,7 +10,7 @@ import dominio.Insumo;
 import dominio.InsumoLiquido;
 import dominio.Planta;
 import dominio.Stock;
-import estructuras.ArbolBinarioBusqueda;
+import estructurasAuxiliares.ArbolBinarioBusqueda;
 
 public class GestorInsumo implements Gestor<Object> {
 	private static final GestorInsumo INSTANCE = new GestorInsumo();
