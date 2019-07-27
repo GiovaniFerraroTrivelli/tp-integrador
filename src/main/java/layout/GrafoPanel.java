@@ -96,7 +96,7 @@ public class GrafoPanel extends JPanel{
 		return aristas;
 	}
 
-	public void refreshVertices() {
+	public static void refreshVertices() {
 		vertices.clear();
 		
 		Runnable r = () -> {
