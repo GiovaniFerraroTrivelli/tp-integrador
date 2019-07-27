@@ -10,6 +10,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,32 +18,40 @@ import java.util.Queue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import dominio.Planta;
+import dominio.Ruta;
+import gestores.GestorPlanta;
+import gestores.GestorRuta;
 
 public class GrafoPanel extends JPanel{
 	
-	private JFrame framePadre;
 	//private Queue<Color> colaColores;
-    private List<VerticeLayout> vertices;
-    private List<AristaLayout> aristas;
     private int xRepintado = 0;
     private int yRepintado = 0;
     private VerticeLayout aristaSeleccionada = null;
-    private GrafoController controller;
     private Boolean arrastrando = false;
     
-    public GrafoPanel() {
-        this.framePadre = (JFrame) this.getParent();
-        this.controller = new GrafoController(this);
-        this.vertices = new ArrayList<>();
-        this.aristas = new ArrayList<>();
-
-        
+    private static List<VerticeLayout> vertices = new ArrayList<>();
+    private static List<AristaLayout> aristas = new ArrayList<>();
+    
+    private static final GrafoPanel INSTANCE = new GrafoPanel();
+    
+    public static GrafoPanel getInstance()
+    {
+    	return INSTANCE;
+    }
+    
+    GrafoPanel()
+    { 
         /*this.colaColores = new LinkedList<Color>();
         this.colaColores.add(Color.RED);
         this.colaColores.add(Color.BLUE);
         this.colaColores.add(Color.ORANGE);
         this.colaColores.add(Color.CYAN);*/
-        this.controller.inicalizarVertices();
+
+        refreshVertices();
         
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent event) {
@@ -79,7 +88,54 @@ public class GrafoPanel extends JPanel{
             }
         });
     }
-    
+
+	public static void refreshVertices() {
+		aristas.clear();
+		vertices.clear();
+		
+		Runnable r = () -> {
+			
+			GestorPlanta gestorPlanta = GestorPlanta.getInstance();
+			
+			ArrayList<Planta> listaPlantas = new ArrayList<Planta>(gestorPlanta.getListaPlantas().values());
+			
+			int posicionY = 100;
+			int posicionX = 0;
+			int i = 0;
+			//Color c = null;
+			
+			for(Planta p : listaPlantas){
+				i++;
+				posicionX +=60; 
+				
+				/*SETEA LA POSICION EN Y*/
+				if( i % 2 == 0 ) {
+					posicionY = 100;
+					//c = Color.BLUE;
+				} else {
+					posicionY = 200;
+					//c = Color.RED;
+				}
+				
+				VerticeLayout v = new VerticeLayout(posicionX, posicionY, Color.BLUE);
+				v.setId(p.getId());
+				v.setNombre(p.getNombre());
+				vertices.add(v);
+			}
+			try {
+				SwingUtilities.invokeAndWait(() -> {
+					getInstance().repaint();
+				});
+			} catch (InvocationTargetException | InterruptedException e) {
+				e.printStackTrace();
+			}
+		};
+		
+		Thread hilo = new Thread(r);
+		
+		hilo.start();	
+	}
+	
     private void actualizarVertice(VerticeLayout v, Point puntoNuevo) {
         int OFFSET_X = v.getNombre().length()*20;
         int OFFSET_Y = 31;
@@ -105,15 +161,8 @@ public class GrafoPanel extends JPanel{
         return null;
     }
     
-    public void agregar(AristaLayout arista){
-        this.aristas.add(arista);
-    }
-    
-    public void agregar(VerticeLayout vert){
-        this.vertices.add(vert);
-    }
-
     private void dibujarVertices(Graphics2D g2d) {
+    	System.out.println(this.vertices);
         for (VerticeLayout v : this.vertices) {
             g2d.setPaint(Color.BLUE);
             g2d.drawString(v.etiqueta(),v.getCoordenadaX()+25,v.getCoordenadaY()+25);
@@ -135,23 +184,24 @@ public class GrafoPanel extends JPanel{
             flecha.addPoint(a.getDestino().getCoordenadaX()+20, a.getDestino().getCoordenadaY()+10);
             flecha.addPoint(a.getDestino().getCoordenadaX(), a.getDestino().getCoordenadaY()+18);
             g2d.fillPolygon(flecha);
+            //dibujarFlecha(g2d, ) ????????????????????
         }
     }
 
-    protected void paintComponent(Graphics g) {    	
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         dibujarVertices(g2d);
-      //  dibujarAristas(g2d);
+        dibujarAristas(g2d);
     }
 
     public Dimension getPreferredSize() {
         return new Dimension(900, 400);
     }
-
+    
     private void dibujarFlecha(Graphics2D g2, Point tip, Point tail, Color color){
         double phi;
         int barb;      

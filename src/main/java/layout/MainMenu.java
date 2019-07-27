@@ -179,6 +179,7 @@ public class MainMenu {
 		JButton infob = new JButton(infoIcon);
 		infob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				GrafoPanel.refreshVertices();
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Info");
 			}
 		});
@@ -1464,9 +1465,8 @@ public class MainMenu {
 		gbc_panel_91.gridx = 1;
 		gbc_panel_91.gridy = 5;
 
-		JPanel panelGrafos = new JPanel();
+		JPanel panelGrafos = GrafoPanel.getInstance();
 		// TODO: Codigo del panel de grafos
-		panelGrafos.setBackground(Color.RED);
 		panel.add(panelGrafos, gbc_panel_91);
 		
 		
