@@ -12,7 +12,7 @@ public class VerticeLayout {
 	
 	private Integer coordenadaX;
 	private Integer coordenadaY;
-	public final Integer RADIO = 20;
+	public final Integer DIAMETRO = 20;
 	private Shape nodo;
 	
 	private String nombre;
@@ -20,11 +20,11 @@ public class VerticeLayout {
 	
 	public VerticeLayout() {}
 	
-    public VerticeLayout(Integer coordenadaX, Integer coordenadaY,Color color) {
+    public VerticeLayout(Integer coordenadaX, Integer coordenadaY, Color color) {
         this.colorBase = color;
         this.coordenadaX = coordenadaX;
         this.coordenadaY = coordenadaY;
-        this.nodo = new Ellipse2D.Double(coordenadaX,coordenadaY,RADIO,RADIO);
+        this.nodo = new Ellipse2D.Double(coordenadaX, coordenadaY, DIAMETRO, DIAMETRO);
     }
 
 	public Paint getColor() {
@@ -88,7 +88,7 @@ public class VerticeLayout {
     }
 	
     public void update() {
-    	this.nodo = new Ellipse2D.Double(coordenadaX,coordenadaY,RADIO,RADIO);
+    	this.nodo = new Ellipse2D.Double(coordenadaX, coordenadaY, DIAMETRO, DIAMETRO);
     }
     
 }
