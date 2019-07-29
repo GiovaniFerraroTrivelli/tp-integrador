@@ -9,31 +9,37 @@ import java.awt.Stroke;
 import java.awt.geom.Line2D;
 
 public class AristaLayout {
-    
-	private VerticeLayout origen;
-    private VerticeLayout destino;
-    private Shape linea;
-    private Stroke formatoLinea;
-    private Paint color;
-    private int offset;
 
-    public AristaLayout() {
-    }
-    
-    public AristaLayout(VerticeLayout origen, VerticeLayout destino, Color color) {
-    	this.offset = origen.DIAMETRO/2;
-    	
-    	this.formatoLinea = new BasicStroke();
-    	this.color = color;
-    	this.origen = origen;
-    	this.destino = destino;
-    	this.linea = new Line2D.Double(origen.getCoordenadaX() + offset, origen.getCoordenadaY() + offset, destino.getCoordenadaX() + offset, destino.getCoordenadaY() + offset);
-    }
-    
-    public Paint getColor() {
-        if(this.color == null) this.color = new GradientPaint(origen.getCoordenadaX() + 10,origen.getCoordenadaY() + 10,destino.getColorBase(),destino.getCoordenadaX() + 10, destino.getCoordenadaY() + 10,origen.getColorBase());
-        return color;
-    }
+	private VerticeLayout origen;
+	private VerticeLayout destino;
+	private Shape linea;
+	private Stroke formatoLinea;
+	private Paint color;
+	private int offset;
+	private Float longitud;
+
+	public AristaLayout() {
+	}
+
+	public AristaLayout(VerticeLayout origen, VerticeLayout destino, Float distancia, Color color) {
+		this.offset = origen.DIAMETRO / 2;
+
+		this.longitud = distancia;
+		this.formatoLinea = new BasicStroke();
+		this.color = color;
+		this.origen = origen;
+		this.destino = destino;
+		this.linea = new Line2D.Double(origen.getCoordenadaX() + offset, origen.getCoordenadaY() + offset,
+				destino.getCoordenadaX() + offset, destino.getCoordenadaY() + offset);
+	}
+
+	public Paint getColor() {
+		if (this.color == null)
+			this.color = new GradientPaint(origen.getCoordenadaX() + 10, origen.getCoordenadaY() + 10,
+					destino.getColorBase(), destino.getCoordenadaX() + 10, destino.getCoordenadaY() + 10,
+					origen.getColorBase());
+		return color;
+	}
 
 	public VerticeLayout getOrigen() {
 		return origen;
@@ -67,13 +73,21 @@ public class AristaLayout {
 		this.formatoLinea = formatoLinea;
 	}
 
+	public Float getLongitud() {
+		return longitud;
+	}
+
+	public void setLongitud(Float longitud) {
+		this.longitud = longitud;
+	}
+
 	public void setColor(Paint color) {
 		this.color = color;
 	}
-    
-    public void update() {
-    	this.linea = new Line2D.Double(origen.getCoordenadaX() + offset, origen.getCoordenadaY() + offset, destino.getCoordenadaX() + offset, destino.getCoordenadaY() + offset);
-    }
-    
+
+	public void update() {
+		this.linea = new Line2D.Double(origen.getCoordenadaX() + offset, origen.getCoordenadaY() + offset,
+				destino.getCoordenadaX() + offset, destino.getCoordenadaY() + offset);
+	}
 
 }

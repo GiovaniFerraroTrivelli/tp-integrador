@@ -6,26 +6,27 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
 public class VerticeLayout {
-	
+
 	private Paint color;
 	private Color colorBase;
-	
+
 	private Integer coordenadaX;
 	private Integer coordenadaY;
 	public final Integer DIAMETRO = 20;
 	private Shape nodo;
-	
+
 	private String nombre;
 	private Integer id;
-	
-	public VerticeLayout() {}
-	
-    public VerticeLayout(Integer coordenadaX, Integer coordenadaY, Color color) {
-        this.colorBase = color;
-        this.coordenadaX = coordenadaX;
-        this.coordenadaY = coordenadaY;
-        this.nodo = new Ellipse2D.Double(coordenadaX, coordenadaY, DIAMETRO, DIAMETRO);
-    }
+
+	public VerticeLayout() {
+	}
+
+	public VerticeLayout(Integer coordenadaX, Integer coordenadaY, Color color) {
+		this.colorBase = color;
+		this.coordenadaX = coordenadaX;
+		this.coordenadaY = coordenadaY;
+		this.nodo = new Ellipse2D.Double(coordenadaX, coordenadaY, DIAMETRO, DIAMETRO);
+	}
 
 	public Paint getColor() {
 		return color;
@@ -82,13 +83,13 @@ public class VerticeLayout {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-    
-    public String etiqueta() {
-    	return "["+id+"]"+this.nombre;
-    }
-	
-    public void update() {
-    	this.nodo = new Ellipse2D.Double(coordenadaX, coordenadaY, DIAMETRO, DIAMETRO);
-    }
-    
+
+	public String etiqueta() {
+		return "[" + id + "]" + this.nombre;
+	}
+
+	public void update() {
+		this.nodo = new Ellipse2D.Double(coordenadaX, coordenadaY, DIAMETRO, DIAMETRO);
+	}
+
 }
