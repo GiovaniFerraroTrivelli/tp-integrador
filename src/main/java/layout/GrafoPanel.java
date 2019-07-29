@@ -5,11 +5,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Line2D;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +37,6 @@ public class GrafoPanel extends JPanel {
 	}
 
 	GrafoPanel() {
-		/*
-		 * this.colaColores = new LinkedList<Color>(); this.colaColores.add(Color.RED);
-		 * this.colaColores.add(Color.BLUE); this.colaColores.add(Color.ORANGE);
-		 * this.colaColores.add(Color.CYAN);
-		 */
-
 		addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent event) {
 
@@ -149,7 +141,7 @@ public class GrafoPanel extends JPanel {
 				VerticeLayout verticeDestino = vertices.stream()
 						.filter(v -> v.getNombre() == rut.getDestino().getNombre()).findFirst().get();
 
-				AristaLayout a = new AristaLayout(verticeOrigen, verticeDestino, rut.getDistancia(), Color.RED);
+				AristaLayout a = new AristaLayout(verticeOrigen, verticeDestino, rut, Color.RED);
 				aristas.add(a);
 			}
 
@@ -198,8 +190,8 @@ public class GrafoPanel extends JPanel {
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		dibujarAristas(g2d);
-		dibujarVertices(g2d);
+		this.dibujarAristas(g2d);
+		this.dibujarVertices(g2d);
 	}
 
 	private void dibujarVertices(Graphics2D g2d) {
@@ -207,8 +199,6 @@ public class GrafoPanel extends JPanel {
 		for (VerticeLayout v : this.getVertices()) {
 			g2d.setPaint(Color.BLUE);
 			g2d.drawString(v.etiqueta(), v.getCoordenadaX() + 25, v.getCoordenadaY() + 25);
-			g2d.drawString("[" + v.getCoordenadaX().toString() + ", " + v.getCoordenadaY().toString() + "]",
-					v.getCoordenadaX() + 35, v.getCoordenadaY() + 35);
 			g2d.setPaint(v.getColor());
 			g2d.fill(v.getNodo());
 		}
@@ -216,11 +206,12 @@ public class GrafoPanel extends JPanel {
 
 	private void dibujarAristas(Graphics2D g2d) {
 		for (AristaLayout a : this.getAristas()) {
+			int puntoMedioX = (int) (a.getOrigen().getCoordenadaX() + a.getDestino().getCoordenadaX())/2;
+			int puntoMedioY = (int) (a.getOrigen().getCoordenadaY() + a.getDestino().getCoordenadaY())/2;
+			
 			g2d.setPaint(a.getColor());
 			g2d.setStroke(a.getFormatoLinea());
-			// g2d.drawString("[km]", a.getDestino().getCoordenadaX() -
-			// a.getOrigen().getCoordenadaX(),
-			// a.getDestino().getCoordenadaY()-a.getOrigen().getCoordenadaY());
+			g2d.drawString(/*a.getRutaAsociada().getDistancia()+*/"[km]", puntoMedioX+20, puntoMedioY+20);
 			g2d.draw(a.getLinea());
 		}
 	}

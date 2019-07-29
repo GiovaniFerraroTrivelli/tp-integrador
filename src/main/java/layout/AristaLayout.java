@@ -8,6 +8,8 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
 
+import dominio.Ruta;
+
 public class AristaLayout {
 
 	private VerticeLayout origen;
@@ -16,21 +18,29 @@ public class AristaLayout {
 	private Stroke formatoLinea;
 	private Paint color;
 	private int offset;
-	private Float longitud;
+	private Ruta rutaAsociada;
 
 	public AristaLayout() {
 	}
 
-	public AristaLayout(VerticeLayout origen, VerticeLayout destino, Float distancia, Color color) {
+	public AristaLayout(VerticeLayout origen, VerticeLayout destino, Ruta rutaAsociada, Color color) {
 		this.offset = origen.DIAMETRO / 2;
 
-		this.longitud = distancia;
+		this.rutaAsociada = rutaAsociada;
 		this.formatoLinea = new BasicStroke();
 		this.color = color;
 		this.origen = origen;
 		this.destino = destino;
 		this.linea = new Line2D.Double(origen.getCoordenadaX() + offset, origen.getCoordenadaY() + offset,
 				destino.getCoordenadaX() + offset, destino.getCoordenadaY() + offset);
+	}
+
+	public Ruta getRutaAsociada() {
+		return rutaAsociada;
+	}
+
+	public void setRutaAsociada(Ruta rutaAsociada) {
+		this.rutaAsociada = rutaAsociada;
 	}
 
 	public Paint getColor() {
@@ -71,14 +81,6 @@ public class AristaLayout {
 
 	public void setFormatoLinea(Stroke formatoLinea) {
 		this.formatoLinea = formatoLinea;
-	}
-
-	public Float getLongitud() {
-		return longitud;
-	}
-
-	public void setLongitud(Float longitud) {
-		this.longitud = longitud;
 	}
 
 	public void setColor(Paint color) {
