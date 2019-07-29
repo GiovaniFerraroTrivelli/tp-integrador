@@ -29,8 +29,8 @@ public class GrafoPanel extends JPanel{
     private VerticeLayout verticeSeleccionado = null;
     private Boolean arrastrando = false;
     
-    private static List<VerticeLayout> vertices = new ArrayList<>();
-    private static List<AristaLayout> aristas = new ArrayList<>();
+    private List<VerticeLayout> vertices = new ArrayList<>();
+    private List<AristaLayout> aristas = new ArrayList<>();
     
     private static final GrafoPanel INSTANCE = new GrafoPanel();
     
@@ -46,13 +46,13 @@ public class GrafoPanel extends JPanel{
         this.colaColores.add(Color.CYAN);*/
         
         addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent event) {
+            public void mousePressed(MouseEvent event) {
 
                     VerticeLayout v = clicEnUnNodo(event.getPoint());
                     if(v != null) {
                     	verticeSeleccionado = v; 
                     	verticeSeleccionado.setColor(Color.CYAN);
-                    	//actualizarVertice(verticeSeleccionado, event.getPoint());
+                    	actualizarVertice(verticeSeleccionado, event.getPoint());
                     }
                     
                 
@@ -63,7 +63,7 @@ public class GrafoPanel extends JPanel{
                if(verticeSeleccionado != null) {
             	   verticeSeleccionado.setColor(Color.BLUE);
             	   actualizarVertice(verticeSeleccionado, event.getPoint());
-            	   refreshAristas();
+            	   inicializarAristas();
                }
                verticeSeleccionado = null;
                arrastrando = false;
@@ -76,7 +76,7 @@ public class GrafoPanel extends JPanel{
             public void mouseDragged(MouseEvent event) {
                 if(verticeSeleccionado != null) {
                 	actualizarVertice(verticeSeleccionado ,event.getPoint());
-                	refreshAristas();
+                	inicializarAristas();
                 } 
             }
         });
@@ -90,7 +90,7 @@ public class GrafoPanel extends JPanel{
 		return aristas;
 	}
 
-	public static void refreshVertices() {
+	public void inicializarVertices() {
 		vertices.clear();
 		
 		Runnable r = () -> {
@@ -136,7 +136,7 @@ public class GrafoPanel extends JPanel{
 		hilo.start();	
 	}
 	
-	public static void refreshAristas() {
+	public void inicializarAristas() {
 		aristas.clear();
 		
 		Runnable r = () -> {

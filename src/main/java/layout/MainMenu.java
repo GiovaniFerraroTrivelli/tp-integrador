@@ -71,6 +71,7 @@ public class MainMenu {
 	static GestorInsumo gestorInsumo = GestorInsumo.getInstance();
 	static GestorRuta gestorRuta = GestorRuta.getInstance();
 	static GestorCamion gestorCamion = GestorCamion.getInstance();
+	static GrafoPanel grafoPanel = GrafoPanel.getInstance();
 
 	/**
 	 * Launch the application.
@@ -188,8 +189,8 @@ public class MainMenu {
 		JButton infob = new JButton(infoIcon);
 		infob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				GrafoPanel.refreshVertices();
-				GrafoPanel.refreshAristas();
+				grafoPanel.inicializarVertices();
+				grafoPanel.inicializarAristas();
 				comboInsumos.setModel(new DefaultComboBoxModel<Insumo>(gestorInsumo.getListaInsumos().toArray(new Insumo[0])));
 				comboInsumos.setSelectedIndex(-1);
 				
@@ -1508,10 +1509,9 @@ public class MainMenu {
 		gbc_panel_91.gridx = 1;
 		gbc_panel_91.gridy = 6;
 
-		JPanel panelGrafos = GrafoPanel.getInstance();
-		panelGrafos.setBackground(Color.WHITE);
-		panelGrafos.setBorder(BorderFactory.createLineBorder(new Color(0x7A8A99)));
-		panel.add(panelGrafos, gbc_panel_91);
+		grafoPanel.setBackground(Color.WHITE);
+		grafoPanel.setBorder(BorderFactory.createLineBorder(new Color(0x7A8A99)));
+		panel.add(grafoPanel, gbc_panel_91);
 	}
 	
 	public static void refreshCamionTable()
