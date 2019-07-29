@@ -1,140 +1,354 @@
 @startuml
 
-hide enum methods
-
 package dominio{
-    class Grafo{
 
-    }
-
-    class Insumo{
-        -id: Integer
-        -descripcion: String
-        -costo: Float
-        -peso: Float
-        -esRefrigerado: Boolean
+    class Insumo {
+    	-{static}lastId: Integer
+    	#id: Integer
+    	#descripcion: String
+    	#costo: Float
+    	#peso: Float
+    	#esRefrigerado: Boolean
+    	+Insumo(String)
+    	+Insumo(Integer, UnidadDeMedida, Float)
+    	+getDescripcion(): String
+    	+getUnidadDeMedida(): UnidadDeMedida
+    	+setUnidadDeMedida(UnidadDeMedida): Void
+    	+toString(): String
+    	+getPeso(): Float
+    	+setPeso(Float): Void
+    	+setDescripcion(String): String
+    	+getCosto(): Float
+    	+setCosto(Float): Void
+    	+getStock(): Integer
+    	+getId(): Integer    
         +compareTo(Insumo): int //<<Override>>//
     }
 
-    enum UnidadMedida{
-        +KILO
-        +PIEZA
-        +GRAMO
-        +METRO
-        +LITRO
-        +M3
-        +M2
-        +CM2
-        +CM
+    class InsumoLiquido  {
+    	-densidad: Float
+    	-volumen: Float
+    	+InsumoLiquido(Integer, UnidadDeMedida, Float)
+    	+InsumoLiquido(String)
+    	+setDensidad(Float): Void
+    	+setVolumen(Float): Void
+    	+calcularPeso(): Float
+    	+calcularPeso(Float): Float
+    }
+    
+    Insumo <|-- InsumoLiquido
+
+    enum UnidadDeMedida{
+        KILO
+        PIEZA
+        GRAMO
+        METRO
+        LITRO
+        M3
+        M2
+        CM2
+        CM
+        -desc: String
+        -UnidadDeMedida(String)
+        +gestDesc(): String
+        +toString(): String //<<Override>>//
     }
 
-    class Stock{
-        -id: Integer
-        -cantidad: Integer
-        -puntoPedido: Integer
+    class Stock {
+    	-cantidad: Integer
+    	-puntoPedido: Integer
+    	+setInsumo(Insumo): Void
+    	+getCantidad(): Integer
+    	+setCantidad(Integer): Void
+    	+getPuntoPedido(): Integer
+    	+setPuntoPedido(Integer): Void
+    	+getInsumo(): Insumo
     }
 
     class Planta{
-        -id: Integer
-        -nombre: String
+    	-Integer id: Integer
+    	-String nombre: String
+    	+Planta(Integer, String)
+    	+costoTotal(): Double
+    	+stockEntre(Integer, Integer): List<Insumo>
+    	+necesitaInsumo(Insumo): Boolean
+    	+getListaStock(): HashMap<Integer, Stock>
+    	+setListaStock(HashMap<Integer,Stock>): Void
+    	+getId(): Integer
+    	+getNombre(): String
+    	+setNombre(String): Void
+    	+getTipo(): TipoPlanta
+    	+setTipo(TipoPlanta): Void
+        +toString(): String //<<Override>>//
     }
-    note left: nodos del grafo
 
-    class Ruta{
-        -distancia: Float
-        -duracionViaje: Integer
-        -pesoMax: Float
+    enum TipoPlanta{
+        PLANTAPRODUCCION
+        PLANTAACOPIOINICIAL
+        PLANTAACOPIOFINAL
+        -desc: String
+        -TipoPlanta(String)
+        +getDesc(): String
+        +toString(): String //<<Override>>//
     }
-    note left: aristas del grafo
 
-    class Camion{
-        -marca: String
-        -modelo: String
-        -dominio: String
-        -anio: Integer
-        -costoKm: Float
-        -capacidad: Integer
-        -aptoTransportarLiquido: Boolean
+    class Ruta {
+    	-origen: Planta
+    	-destino: Planta
+    	-distancia: Float
+    	-duracion: Integer
+    	-pesoMaximo: Integer
+    	+Ruta(Planta, Planta)
+    	+getOrigen(): Planta
+    	+setOrigen(Planta): Void
+    	+getDestino(): Planta
+    	+setDestino(Planta): Void
+    	+getDistancia(): Float
+    	+setDistancia(Float): Void
+    	+getDuracion(): Integer
+    	+setDuracion(Integer): Void
+    	+getPesoMaximo(): Integer
+    	+setPesoMaximo(Integer): Void
+        +toString(): String //<<Override>>//
+    }
+    
+
+    class Camion {
+    	-id: Integer
+    	-marca: String
+    	-modelo: String
+    	-anio: Integer
+    	-dominio: String
+    	-costoKm: Float
+    	-transportaLiq: Boolean
+    	-capacidad: Float
+    	+Camion(Integer)
+    	+getId(): Integer
+    	+setId(Integer): Void
+    	+getMarca(): String
+    	+setMarca(String): Void
+    	+getModelo(): String
+    	+setModelo(String): Void
+    	+getAnio(): Integer
+    	+setAnio(Integer): Void
+    	+getDominio(): String
+    	+setDominio(String): Void
+    	+getCostoKm(): Float
+    	+setCostoKm(Float): Void
+    	+getTransportaLiq(): Boolean
+    	+setTransportaLiq(Boolean): Void
+    	+getCapacidad(): Float
+    	+setCapacidad(Float): Void
     }
 
     interface "Comparable<T>"{
             +compareTo(T): int
     }
 
+    Insumo --> UnidadDeMedida
     Insumo ..|> "Comparable<T>": "<<implements>>"
-    Insumo --> UnidadMedida
-    Stock "0..n" <-- "1" Insumo
+    Planta --> TipoPlanta
+    Stock "0..n" *-- "1" Insumo
     Planta "1" <-- "0..n" Stock: " ˗ listaStock"
-    Grafo "1" *-- "0..n" Planta
-    Grafo "1" *-- "0..n" Ruta
-    Camion --> Insumo: ˗ transporta
-    Planta -[hidden]|> Ruta
-    Insumo -[hidden]|> Camion
+    Camion "1..n"  --> "1..n" Insumo: ˗ transporta
+    Ruta "1" --> "2" Planta: ˗ conecta
+
 }
 
 package gestores{
-    class GestorInsumo <<(S, #FF7700) Singleton>> {
-        -{static} singleton: GestorInsumo
-        -GestorInsumo()
-        +{static} getInstance(): GestorInsumo
-        +buscar(String[]): Insumo //<<Override>>//
-        +modificar(Insumo, String[]): Void //<<Override>>//
-        +crear(String[]): Insumo //<<Override>>//
+    class GestorInsumo <<(S, #FF7700) Singleton>>{
+    	-{static}INSTANCE: GestorInsumo
+    	-listaInsumos: HashMap<Integer,Insumo>
+    	-GestorInsumo()
+    	+{static}getInstance(): GestorInsumo
+    	+getListaInsumos(): ArrayList<Insumo>
+    	+crear(String descripcion): Insumo
+    	+crearLiquido(String): InsumoLiquido
+    	+getInsumoById(Integer): Insumo
+    	+getInsumoByStr(String): Insumo
+    	+getInsumoByStock(Integer): Insumo
+    	+getInsumoByStock(Integer, ArrayList<Insumo>): Insumo
+    	+getInsumoByCosto(Float): Insumo
+    	+getCantidadStockById(Integer): Insumo
+    	+borrar(Integer): Void
+    	+buscar(String): Void
+    	+buscarPorStock(Integer, boolean): ArrayList<Insumo>
+    	+buscarPorCosto(Float, boolean): ArrayList<Insumo>
     }
 
     class GestorPlanta <<(S, #FF7700) Singleton>> {
-        -{static} singleton: GestorPlanta
+        -listaPlantas: HashMap<Integer, Planta>
+        -{static} lastPlantaId: Integer
+        -{static} INSTANCE: GestorPlanta
         -GestorPlanta()
         +{static} getInstance(): GestorPlanta
-        +buscar(String[]): Planta //<<Override>>//
-        +modificar(Planta, String[]): Void //<<Override>>//
-        +crear(String[]): Planta //<<Override>>//
-    }
-
-    class GestorStock <<(S, #FF7700) Singleton>> {
-        -{static} singleton: GestorStock
-        -GestorStock()
-        +{static} getInstance(): GestorStock
-        +buscar(String[]): Stock //<<Override>>// 
-        +modificar(Stock, String[]): Void //<<Override>>//
-        +crear(String[]): Stock //<<Override>>//
+        +crear(String[]): Planta
+        +borrar(Integer): Void
+        +buscar(String): Planta
+        +obtenerPlanta(Integer): Planta
+        +obtenerPlanta(String): Planta
+        +getFirstPlantaWithTipo(TipoPlanta): Planta
+        +getStockByPlantaId(Integer): HashMap<Integer, Stock>
     }
 
     class GestorRuta <<(S, #FF7700) Singleton>> {
-        -{static} singleton: GestorRuta
-        -GestorRuta()
-        +{static} getInstance(): GestorRuta
-        +buscar(String[]): Ruta //<<Override>>// 
-        +modificar(Ruta, String[]): Void //<<Override>>//
-        +crear(String[]): Ruta //<<Override>>//
+    	-{static}INSTANCE: GestorRuta
+    	-listaCaminos: ArrayList<Ruta>
+    	-GestorRuta()
+    	+{static}getInstance(): GestorRuta
+    	+getEndingPlantas(Planta): ArrayList<Planta>
+    	+getStartingPlantas(Planta): ArrayList<Planta>
+    	+deleteRuta(Planta, Planta): Void
+    	+getListaRutas(): ArrayList<Ruta>
+    	+createRuta(Planta, Planta): Ruta
+    	+crear(String): Ruta
+    	+borrar(Integer): Void
+    	+buscar(String): ArrayList<Ruta>
     }
 
-    class GestorCamion <<(S, #FF7700) Singleton>> {
-        -{static} singleton: GestorCamion
-        -GestorCamion()
-        +{static} getInstance(): GestorCamion
-        +buscar(String[]): Camion //<<Override>>//
-        +modificar(Camion, String[]): Void //<<Override>>//
-        +crear(String[]): Camion //<<Override>>//
+    class GestorCamion <<(S, #FF7700) Singleton>>{
+    	-{static}lastCamionId: Integer
+    	-{static}INSTANCE: GestorCamion
+    	-listaCamiones: ArrayList<Camion>
+    	-GestorCamion()
+    	+{static}getInstance(): GestorCamion
+    	+getListaCamiones(): ArrayList<Camion>
+    	+getCamionById(Integer): Camion
+    	+crear(String): Camion
+    	+crearCamion(): Camion
+    	+borrar(Integer): Void
+    	+buscar(String): ArrayList<Camion>
     }
 
-    interface "Gestor<T>"{
-        +buscar(String[]): T 
-        +modificar(T, String[]): Void
-        +crear(String[]): T
-    }
-
-    GestorRuta ..|> "Gestor<T>": "<<implements>>"
-    GestorCamion ..|> "Gestor<T>": "<<implements>>"
-    GestorPlanta ..|> "Gestor<T>": "<<implements>>"
-    GestorInsumo ..|> "Gestor<T>": "<<implements>>"
-    GestorStock ..|> "Gestor<T>": "<<implements>>"
+    together {
+        class GestorPlanta
+        class GestorRuta
+        class GestorInsumo
+        class GestorCamion
+    } 
 }
 
 GestorRuta "1" -- "0.. n" Ruta
 GestorCamion "1" -- "0.. n" Camion
 GestorPlanta "1" -- "0.. n" Planta
 GestorInsumo "1" -- "0.. n" Insumo
-GestorStock "1" -- "0.. n" Stock
+
+package layout{
+
+    class GrafoPanel <<(S, #FF7700) Singleton>>{
+    	-int xRepintado: int
+    	-int yRepintado: int
+    	-VerticeLayout verticeSeleccionado: VerticeLayout
+    	-{static}INSTANCE: GrafoPanel INSTANCE
+    	+{static}getInstance(): GrafoPanel
+    	~GrafoPanel()
+    	+getVertices(): List<VerticeLayout>
+    	+getAristas(): List<AristaLayout>
+    	+{static}refreshVertices(): Void
+    	+{static}refreshAristas(): Void
+    	-actualizarVertice(VerticeLayout, Point): Void
+    	-clicEnUnNodo(Point): VerticeLayout
+    	#paintComponent(Graphics): Void
+    	-dibujarVertices(Graphics2D): Void
+    	-dibujarAristas(Graphics2D): Void
+    	+getPreferredSize(): Dimension
+    	-dibujarFlecha(Graphics2D, Point, Point, Color): Void
+    }
+    
+    class VerticeLayout {
+    	-color: Paint
+    	-colorBase: Color
+    	-coordenadaX: Integer
+    	-coordenadaY: Integer
+    	-nodo: Shape
+    	-nombre: String
+    	-id: Integer
+    	+{static}DIAMETRO: Integer
+    	+VerticeLayout()
+    	+VerticeLayout(Integer, Integer, Color)
+    	+getColor()
+    	+setColor(Paint): Void
+    	+getColorBase(): Color
+    	+setColorBase(Color): Void
+    	+getCoordenadaX(): Integer
+    	+setCoordenadaX(Integer): Void
+    	+getCoordenadaY(): Integer
+    	+setCoordenadaY(Integer): Void
+    	+getNodo(): Shape
+    	+setNodo(Shape nodo): Void
+    	+getNombre(): String
+    	+setNombre(String): Void
+    	+getId(): Integer
+    	+setId(Integer id): Void
+    	+etiqueta(): String
+    	+update(): Void
+    }
+
+    
+    class AristaLayout{
+    	-origen: VerticeLayout
+    	-destino: VerticeLayout
+    	-linea: Shape
+    	-formatoLinea: Stroke
+    	-color: Paint
+    	-offset: int
+    	+AristaLayout()
+    	+AristaLayout(VerticeLayout, VerticeLayout, Color)
+    	+getColor(): Paint
+    	+getOrigen(): VerticeLayout
+    	+setOrigen(VerticeLayout): Void
+    	+getDestino(): VerticeLayout
+    	+setDestino(VerticeLayout): Void
+    	+getLinea(): Shape
+    	+setLinea(Shape): Void
+    	+getFormatoLinea(): Stroke
+    	+setFormatoLinea(Stroke): Void
+    	+setColor(Paint): Void
+    	+update(): Void
+    }
+    
+    class MainMenu {
+    	-frmTrabajoPractico: JFrame
+    	-cl: CardLayout
+    	-{static}tablePlantas: JTable
+    	-{static}tableStock: JTable
+    	-{static}tableInsumos: JTable
+    	-{static}tableCamiones: JTable
+    	-{static}listRuta: JList<Planta>
+    	~{static}gestorPlanta: GestorPlanta
+    	~{static}gestorInsumo: GestorInsumo
+    	~{static}gestorRuta: GestorRuta
+    	~{static}gestorCamion: GestorCamion
+    	+MainMenu()
+    	+{static}main(String[]): Void
+    	-initialize(): Void
+    	-loadMainMenu(): Void
+    	-loadInsumosMenu(): Void
+    	-loadPlantasMenu(): Void
+    	-loadCamionesMenu(): Void
+    	-loadRutasMenu(): Void
+    	-loadInfoMenu(): Void
+    	+{static}refreshCamionTable(): Void
+    	+{static}refreshRutaList(): Void
+    	+{static}refreshPlantaTable(ArrayList<Planta>): Void
+    	+{static}refreshStockTable(Integer): Void
+    	+{static}refreshInsumoTable(ArrayList<Insumo>): Void
+    	+createRutaDialog(): Void
+    	+createInsumoDialog(): Void
+    	+editInsumoDialog(Insumo): Void
+    	+createCamionDialog(): Void
+    	+editCamionDialog(Camion): Void
+    	+addInsumoDialog(Integer): Void
+    }
+    
+    GrafoPanel "1" *-- "0.. n" VerticeLayout
+    GrafoPanel "1" *-- "0.. n" AristaLayout
+    MainMenu "1" *-- "1" GrafoPanel
+}
+
+class JPanel {
+}
+    
+JPanel <|-- GrafoPanel
 
 @enduml
