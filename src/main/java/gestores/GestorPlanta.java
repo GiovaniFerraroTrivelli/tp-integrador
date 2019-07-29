@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import dominio.Insumo;
 import dominio.Planta;
 import dominio.Planta.TipoPlanta;
 import dominio.Stock;
@@ -84,6 +85,16 @@ public class GestorPlanta implements Gestor<Object> {
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
+	public ArrayList<Planta> necesitanInsumo(Insumo i) {
+		ArrayList<Planta> arrListaPlantas = new ArrayList<>(this.getListaPlantas().values());
+		for(Planta p : arrListaPlantas) {
+			if(p.necesitaInsumo(i)) {
+				arrListaPlantas.add(p);
+			}
+		}
+		return arrListaPlantas;
+	}
+	
 	public HashMap<Integer, Stock> getStockByPlantaId(Integer id) {
 		return listaPlantas.get(id).getListaStock();
 	}
