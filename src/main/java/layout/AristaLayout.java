@@ -15,18 +15,19 @@ public class AristaLayout {
     private Shape linea;
     private Stroke formatoLinea;
     private Paint color;
+    private int offset;
 
     public AristaLayout() {
     }
     
     public AristaLayout(VerticeLayout origen, VerticeLayout destino, Color color) {
-    	int offset = origen.DIAMETRO/2;
+    	this.offset = origen.DIAMETRO/2;
     	
     	this.formatoLinea = new BasicStroke();
     	this.color = color;
     	this.origen = origen;
     	this.destino = destino;
-    	this.linea = new Line2D.Double(origen.getCoordenadaX()+offset, origen.getCoordenadaY()+offset, destino.getCoordenadaX()+offset, destino.getCoordenadaY()+offset);
+    	this.linea = new Line2D.Double(origen.getCoordenadaX() + offset, origen.getCoordenadaY() + offset, destino.getCoordenadaX() + offset, destino.getCoordenadaY() + offset);
     }
     
     public Paint getColor() {
@@ -71,7 +72,7 @@ public class AristaLayout {
 	}
     
     public void update() {
-    	this.linea = new Line2D.Double(origen.getCoordenadaX(), origen.getCoordenadaY(), destino.getCoordenadaX(), destino.getCoordenadaY());
+    	this.linea = new Line2D.Double(origen.getCoordenadaX() + offset, origen.getCoordenadaY() + offset, destino.getCoordenadaX() + offset, destino.getCoordenadaY() + offset);
     }
     
 
