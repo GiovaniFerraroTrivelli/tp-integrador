@@ -1,9 +1,12 @@
 package layout;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.geom.Line2D;
 
 public class AristaLayout {
     
@@ -16,8 +19,16 @@ public class AristaLayout {
     public AristaLayout() {
     }
     
+    public AristaLayout(VerticeLayout origen, VerticeLayout destino, Color color) {
+    	this.formatoLinea = new BasicStroke();
+    	this.color = color;
+    	this.origen = origen;
+    	this.destino = destino;
+    	this.linea = new Line2D.Double(origen.getCoordenadaX(), origen.getCoordenadaY(), destino.getCoordenadaX(), destino.getCoordenadaY());
+    }
+    
     public Paint getColor() {
-        if(this.color==null) this.color = new GradientPaint(origen.getCoordenadaX() + 10,origen.getCoordenadaY() + 10,destino.getColorBase(),destino.getCoordenadaX() + 10, destino.getCoordenadaY() + 10,origen.getColorBase());
+        if(this.color == null) this.color = new GradientPaint(origen.getCoordenadaX() + 10,origen.getCoordenadaY() + 10,destino.getColorBase(),destino.getCoordenadaX() + 10, destino.getCoordenadaY() + 10,origen.getColorBase());
         return color;
     }
 
@@ -57,6 +68,9 @@ public class AristaLayout {
 		this.color = color;
 	}
     
+    public void update() {
+    	this.linea = new Line2D.Double(origen.getCoordenadaX(), origen.getCoordenadaY(), destino.getCoordenadaX(), destino.getCoordenadaY());
+    }
     
 
 }

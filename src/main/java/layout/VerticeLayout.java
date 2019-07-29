@@ -24,7 +24,7 @@ public class VerticeLayout {
         this.colorBase = color;
         this.coordenadaX = coordenadaX;
         this.coordenadaY = coordenadaY;
-        this.nodo= new Ellipse2D.Double(coordenadaX,coordenadaY,RADIO,RADIO);
+        this.nodo = new Ellipse2D.Double(coordenadaX,coordenadaY,RADIO,RADIO);
     }
 
 	public Paint getColor() {

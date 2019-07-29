@@ -12,11 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -51,6 +47,8 @@ public class GrafoPanel extends JPanel{
 
         refreshVertices();
         refreshAristas();
+        
+        System.out.println("aristas: " + this.getAristas().size());
         
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent event) {
@@ -105,6 +103,8 @@ public class GrafoPanel extends JPanel{
 			
 			ArrayList<Planta> listaPlantas = new ArrayList<Planta>(gestorPlanta.getListaPlantas().values());
 			
+			System.out.println("Cantidad de plantas: " + listaPlantas.size());
+			
 			int posicionY = 100;
 			int posicionX = 0;
 			int i = 0;
@@ -150,14 +150,14 @@ public class GrafoPanel extends JPanel{
 			
 			ArrayList<Ruta> listaRutas = new ArrayList<Ruta>(gestorRuta.getListaRutas());
 			
+			System.out.println("Cantidad de rutas: " + listaRutas.size());
+			
 			for(Ruta rut: listaRutas) {
 				
 				VerticeLayout verticeOrigen = vertices.stream().filter(v -> v.getNombre() == rut.getOrigen().getNombre()).findFirst().get(); 
 				VerticeLayout verticeDestino = vertices.stream().filter(v -> v.getNombre() == rut.getDestino().getNombre()).findFirst().get(); 
 				
-				AristaLayout a = new AristaLayout();
-				a.setOrigen(verticeOrigen);
-				a.setDestino(verticeDestino);
+				AristaLayout a = new AristaLayout(verticeOrigen, verticeDestino, Color.RED);
 				aristas.add(a);
 			}
 			
@@ -201,6 +201,15 @@ public class GrafoPanel extends JPanel{
         return null;
     }
     
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        dibujarVertices(g2d);
+        dibujarAristas(g2d);
+    }
+    
     private void dibujarVertices(Graphics2D g2d) {
     	System.out.println(this.getVertices());
         for (VerticeLayout v : this.getVertices()) {
@@ -214,28 +223,18 @@ public class GrafoPanel extends JPanel{
     private void dibujarAristas(Graphics2D g2d) {
         for (AristaLayout a : this.getAristas()) {
             g2d.setPaint(a.getColor());
-            g2d.setStroke ( a.getFormatoLinea());
+            g2d.setStroke (a.getFormatoLinea());
             g2d.draw(a.getLinea());
             //dibujo una flecha al final
             // con el color del origen para que se note
-            g2d.setPaint(Color.BLACK);
+            /*g2d.setPaint(Color.BLACK);
             Polygon flecha = new Polygon();  
             flecha.addPoint(a.getDestino().getCoordenadaX(), a.getDestino().getCoordenadaY()+7);
             flecha.addPoint(a.getDestino().getCoordenadaX()+20, a.getDestino().getCoordenadaY()+10);
             flecha.addPoint(a.getDestino().getCoordenadaX(), a.getDestino().getCoordenadaY()+18);
-            g2d.fillPolygon(flecha);
+            g2d.fillPolygon(flecha);*/
             //dibujarFlecha(g2d, ) ????????????????????
         }
-    }
-
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-        dibujarVertices(g2d);
-        dibujarAristas(g2d);
     }
 
     public Dimension getPreferredSize() {
