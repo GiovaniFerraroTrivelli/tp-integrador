@@ -26,7 +26,7 @@ public class GrafoPanel extends JPanel{
 	//private Queue<Color> colaColores;
     private int xRepintado = 0;
     private int yRepintado = 0;
-    private VerticeLayout aristaSeleccionada = null;
+    private VerticeLayout verticeSeleccionado = null;
     private Boolean arrastrando = false;
     
     private static List<VerticeLayout> vertices = new ArrayList<>();
@@ -47,25 +47,25 @@ public class GrafoPanel extends JPanel{
         
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent event) {
-                if (event.getClickCount() == 2 && !event.isConsumed()) {
-                    event.consume();
+
                     VerticeLayout v = clicEnUnNodo(event.getPoint());
                     if(v != null) {
-                    	aristaSeleccionada = v; 
-                    	aristaSeleccionada.setColor(Color.CYAN);
-                    	actualizarVertice(aristaSeleccionada, event.getPoint());
+                    	verticeSeleccionado = v; 
+                    	verticeSeleccionado.setColor(Color.CYAN);
+                    	//actualizarVertice(verticeSeleccionado, event.getPoint());
                     }
-                    System.out.println("DOBLE CLICK");
-                }
+                    
+                
             }
 
             public void mouseReleased(MouseEvent event) {
                System.out.println("mouseReleased: "+event.getPoint());
-               if(aristaSeleccionada != null) {
-            	   aristaSeleccionada.setColor(Color.BLUE);
-            	   actualizarVertice(aristaSeleccionada, event.getPoint());
+               if(verticeSeleccionado != null) {
+            	   verticeSeleccionado.setColor(Color.BLUE);
+            	   actualizarVertice(verticeSeleccionado, event.getPoint());
+            	   refreshAristas();
                }
-               aristaSeleccionada = null;
+               verticeSeleccionado = null;
                arrastrando = false;
             }
             
@@ -74,8 +74,9 @@ public class GrafoPanel extends JPanel{
 
         addMouseMotionListener(new MouseAdapter() {
             public void mouseDragged(MouseEvent event) {
-                if(aristaSeleccionada != null) {
-                	actualizarVertice(aristaSeleccionada ,event.getPoint());
+                if(verticeSeleccionado != null) {
+                	actualizarVertice(verticeSeleccionado ,event.getPoint());
+                	refreshAristas();
                 } 
             }
         });
@@ -171,7 +172,7 @@ public class GrafoPanel extends JPanel{
         int OFFSET_X = v.getNombre().length()*20;
         int OFFSET_Y = 31;
         
-        repaint(xRepintado-5,yRepintado-5,v.DIAMETRO+OFFSET_X, v.DIAMETRO + OFFSET_Y);
+        repaint(xRepintado,yRepintado,v.DIAMETRO+OFFSET_X, v.DIAMETRO + OFFSET_Y);
         
         xRepintado = puntoNuevo.x;
         yRepintado = puntoNuevo.y;
@@ -180,7 +181,7 @@ public class GrafoPanel extends JPanel{
         v.setCoordenadaY(yRepintado);
         v.update();
         
-        repaint(xRepintado-5,yRepintado-5,v.DIAMETRO+OFFSET_X, v.DIAMETRO + OFFSET_Y);
+        repaint(xRepintado,yRepintado,v.DIAMETRO+OFFSET_X, v.DIAMETRO + OFFSET_Y);
     }
     
     private VerticeLayout clicEnUnNodo(Point p) {
