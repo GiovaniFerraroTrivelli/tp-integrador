@@ -180,6 +180,7 @@ public class MainMenu {
 		infob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				GrafoPanel.refreshVertices();
+				GrafoPanel.refreshAristas();
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Info");
 			}
 		});

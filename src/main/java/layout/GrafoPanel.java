@@ -44,11 +44,6 @@ public class GrafoPanel extends JPanel{
         this.colaColores.add(Color.BLUE);
         this.colaColores.add(Color.ORANGE);
         this.colaColores.add(Color.CYAN);*/
-
-        refreshVertices();
-        refreshAristas();
-        
-        System.out.println("aristas: " + this.getAristas().size());
         
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent event) {
@@ -103,8 +98,6 @@ public class GrafoPanel extends JPanel{
 			
 			ArrayList<Planta> listaPlantas = new ArrayList<Planta>(gestorPlanta.getListaPlantas().values());
 			
-			System.out.println("Cantidad de plantas: " + listaPlantas.size());
-			
 			int posicionY = 100;
 			int posicionX = 0;
 			int i = 0;
@@ -149,8 +142,6 @@ public class GrafoPanel extends JPanel{
 			GestorRuta gestorRuta = GestorRuta.getInstance();
 			
 			ArrayList<Ruta> listaRutas = new ArrayList<Ruta>(gestorRuta.getListaRutas());
-			
-			System.out.println("Cantidad de rutas: " + listaRutas.size());
 			
 			for(Ruta rut: listaRutas) {
 				
