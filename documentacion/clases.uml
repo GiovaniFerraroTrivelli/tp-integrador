@@ -112,7 +112,6 @@ package dominio{
         +toString(): String //<<Override>>//
     }
     
-
     class Camion {
     	-id: Integer
     	-marca: String
@@ -149,9 +148,9 @@ package dominio{
     Insumo ..|> "Comparable<T>": "<<implements>>"
     Planta --> TipoPlanta
     Stock "0..n" *-- "1" Insumo
-    Planta "1" <-- "0..n" Stock: " ˗ listaStock"
+    Planta "1" <-- "0..n" Stock: ˗ listaStock
     Camion "1..n"  --> "1..n" Insumo: ˗ transporta
-    Ruta "1" --> "2" Planta: ˗ conecta
+    Ruta "1" <-- "2" Planta: ˗ conecta
 
 }
 
@@ -244,8 +243,8 @@ package layout{
     	~GrafoPanel()
     	+getVertices(): List<VerticeLayout>
     	+getAristas(): List<AristaLayout>
-    	+{static}refreshVertices(): Void
-    	+{static}refreshAristas(): Void
+    	+refreshVertices(): Void
+    	+refreshAristas(): Void
     	-actualizarVertice(VerticeLayout, Point): Void
     	-clicEnUnNodo(Point): VerticeLayout
     	#paintComponent(Graphics): Void
@@ -304,6 +303,8 @@ package layout{
     	+getFormatoLinea(): Stroke
     	+setFormatoLinea(Stroke): Void
     	+setColor(Paint): Void
+    	+getRutaAsociada(): Ruta
+    	+setRutaAsociada(Ruta): Void
     	+update(): Void
     }
     
@@ -345,6 +346,8 @@ package layout{
     GrafoPanel "1" *-- "0.. n" AristaLayout
     MainMenu "1" *-- "1" GrafoPanel
 }
+
+AristaLayout "1" <-- "1" Ruta: ˗ rutaAsociada
 
 class JPanel {
 }
