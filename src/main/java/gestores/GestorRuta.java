@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import dominio.Ruta;
 import dominio.Planta;
 
-public class GestorRuta implements Gestor<Object> {
+public class GestorRuta {
 	private static final GestorRuta INSTANCE = new GestorRuta();
 	private ArrayList<Ruta> listaCaminos = new ArrayList<Ruta>();
 
@@ -68,19 +68,16 @@ public class GestorRuta implements Gestor<Object> {
 		return camino;
 	}
 	
-	@Override
 	public Object crear(String nombre) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void borrar(Integer id) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public ArrayList<Object> buscar(String busqueda) {
 		// TODO Auto-generated method stub
 		return null;

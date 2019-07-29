@@ -54,6 +54,7 @@ import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JList;
 
@@ -65,6 +66,7 @@ public class MainMenu {
 	private static JTable tableInsumos;
 	private static JTable tableCamiones;
 	private static JList<Planta> listRuta;
+	private static JComboBox<Insumo> comboInsumos;
 	static GestorPlanta gestorPlanta = GestorPlanta.getInstance();
 	static GestorInsumo gestorInsumo = GestorInsumo.getInstance();
 	static GestorRuta gestorRuta = GestorRuta.getInstance();
@@ -181,6 +183,9 @@ public class MainMenu {
 			public void actionPerformed(ActionEvent arg0) {
 				GrafoPanel.refreshVertices();
 				GrafoPanel.refreshAristas();
+				comboInsumos.setModel(new DefaultComboBoxModel<Insumo>(gestorInsumo.getListaInsumos().toArray(new Insumo[0])));
+				comboInsumos.setSelectedIndex(-1);
+				
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Info");
 			}
 		});
@@ -817,13 +822,13 @@ public class MainMenu {
 					{
 						switch(tipoPlanta)
 						{
-							case plantaProduccion: // produccion
+							case PLANTA_PRODUCCION: // produccion
 							{
-								curPlanta.setTipo(Planta.TipoPlanta.plantaProduccion);
+								curPlanta.setTipo(Planta.TipoPlanta.PLANTA_PRODUCCION);
 								validInput = true;
 							}
-							case plantaAcopioInicial:
-							case plantaAcopioFinal:
+							case PLANTA_ACOPIO_INICIAL:
+							case PLANTA_ACOPIO_FINAL:
 							{
 								tempPlanta = gestorPlanta.getFirstPlantaWithTipo(tipoPlanta);
 								
@@ -1381,16 +1386,16 @@ public class MainMenu {
 
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 20, 150, 150, 150, 150, 150, 150, 150, 150, 150, 40 };
-		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
-		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 
 		// Título principal del panel
 		JLabel lblPanelDeAdministracin = new JLabel("Visualización de la información guardada"); // TODO: pensar un nombre mejor
 		lblPanelDeAdministracin.setFont(new Font("Segoe UI", Font.PLAIN, 24));
 		GridBagConstraints gbc_lblPanelDeAdministracin = new GridBagConstraints();
-		gbc_lblPanelDeAdministracin.gridwidth = 8;
+		gbc_lblPanelDeAdministracin.gridwidth = 7;
 		gbc_lblPanelDeAdministracin.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPanelDeAdministracin.gridx = 2;
 		gbc_lblPanelDeAdministracin.gridy = 2;
@@ -1438,11 +1443,11 @@ public class MainMenu {
 		gbc_panel_2.gridx = 6;
 		gbc_panel_2.gridy = 3;
 		panel.add(panel_2, gbc_panel_2);
-
+		
 		// Panel a la izquierda para separar
 		JPanel panel_5 = new JPanel();
 		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
-		gbc_panel_5.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_5.insets = new Insets(0, 0, 5, 5);
 		gbc_panel_5.fill = GridBagConstraints.BOTH;
 		gbc_panel_5.gridx = 0;
 		gbc_panel_5.gridy = 5;
@@ -1451,10 +1456,42 @@ public class MainMenu {
 		// Y aca a la derecha
 		JPanel panel_133 = new JPanel();
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_1.fill = GridBagConstraints.BOTH;
 		gbc_panel_1.gridx = 11;
 		gbc_panel_1.gridy = 5;
 		panel.add(panel_133, gbc_panel_1);
+
+		// Menú desplegable
+		JLabel lblSelectInsumo = new JLabel("Seleccionar insumo:");
+		GridBagConstraints gbc_lblSelectInsumo = new GridBagConstraints();
+		gbc_lblSelectInsumo.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSelectInsumo.anchor = GridBagConstraints.EAST;
+		gbc_lblSelectInsumo.gridx = 4;
+		gbc_lblSelectInsumo.gridy = 4;
+
+		panel.add(lblSelectInsumo, gbc_lblSelectInsumo);
+
+		comboInsumos = new JComboBox<Insumo>();
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton.gridx = 5;
+		gbc_btnNewButton.gridy = 4;
+		panel.add(comboInsumos, gbc_btnNewButton);
+		
+		comboInsumos.addActionListener (new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		        Insumo insumoSelect = (Insumo) comboInsumos.getSelectedItem();
+		        
+		        if(insumoSelect == null)
+		        	return;
+		        
+		        System.out.println("---------------------------------------------------");
+		        System.out.println("Insumo: " + insumoSelect);
+		        System.out.println(gestorPlanta.necesitanInsumo(insumoSelect));
+		        System.out.println("---------------------------------------------------");
+		    }
+		});
 		
 		// ------------------------------------------------------------------------------------------------
 		// Panel para visualización
@@ -1464,10 +1501,11 @@ public class MainMenu {
 		gbc_panel_91.insets = new Insets(0, 0, 0, 5);
 		gbc_panel_91.fill = GridBagConstraints.BOTH;
 		gbc_panel_91.gridx = 1;
-		gbc_panel_91.gridy = 5;
+		gbc_panel_91.gridy = 6;
 
 		JPanel panelGrafos = GrafoPanel.getInstance();
-		// TODO: Codigo del panel de grafos
+		panelGrafos.setBackground(Color.WHITE);
+		panelGrafos.setBorder(BorderFactory.createLineBorder(new Color(0x7A8A99)));
 		panel.add(panelGrafos, gbc_panel_91);
 	}
 	
@@ -1567,13 +1605,13 @@ public class MainMenu {
 		else
 			tempListaInsumos = search;
 
-		for (int i = 0; i < tempListaInsumos.size(); i++) {
-			Integer id = tempListaInsumos.get(i).getId();
-			String descripcion = tempListaInsumos.get(i).getDescripcion();
-			Float costo = tempListaInsumos.get(i).getCosto();
-			Float peso = tempListaInsumos.get(i).getPeso();
-			String refrigerado = tempListaInsumos.get(i) instanceof InsumoLiquido ? "Si" : "No";
-			Integer stock = tempListaInsumos.get(i).getStock();
+		for (Insumo insumo : tempListaInsumos) {
+			Integer id = insumo.getId();
+			String descripcion = insumo.getDescripcion();
+			Float costo = insumo.getCosto();
+			String peso = insumo.getPeso() + " " + insumo.getUnidadDeMedida();
+			String refrigerado = insumo instanceof InsumoLiquido ? "Si" : "No";
+			Integer stock = insumo.getStock();
 
 			Object[] data = { id, descripcion, costo, peso, refrigerado, stock };
 			tableModel.addRow(data);
@@ -1697,6 +1735,7 @@ public class MainMenu {
 		JTextField txtDescripcion = new JTextField();
 		JTextField txtCosto = new JTextField();
 		JTextField txtPeso = new JTextField();
+		JComboBox<UnidadDeMedida> comboUnidades = new JComboBox<UnidadDeMedida>();
 		JCheckBox chckbxS = new JCheckBox("Insumo refrigerado");
 		JButton btnGuardar = new JButton("Guardar");
 		
@@ -1740,7 +1779,7 @@ public class MainMenu {
 		ActionListener saveInsumo = new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				if(txtCosto.getText().length() == 0 || txtPeso.getText().length() == 0 || txtDescripcion.getText().length() == 0)
+				if(txtCosto.getText().length() == 0 || txtPeso.getText().length() == 0 || txtDescripcion.getText().length() == 0 || comboUnidades.getSelectedIndex() == -1)
 					return;
 				
 				Float costo;
@@ -1769,7 +1808,7 @@ public class MainMenu {
 
 				insumo.setCosto(costo);
 				insumo.setPeso(peso);
-				insumo.setUnidadDeMedida(UnidadDeMedida.KILO);
+				insumo.setUnidadDeMedida((UnidadDeMedida)comboUnidades.getSelectedItem());
 
 				MainMenu.refreshInsumoTable(null);
 
@@ -1832,11 +1871,29 @@ public class MainMenu {
 		txtPeso.addKeyListener(validForm);
 		txtPeso.addActionListener(saveInsumo);
 
+		JLabel lblUnidadMedida = new JLabel("Unidad:");
+		GridBagConstraints gbc_lblUnidadMedida = new GridBagConstraints();
+		gbc_lblUnidadMedida.anchor = GridBagConstraints.EAST;
+		gbc_lblUnidadMedida.insets = new Insets(0, 0, 5, 5);
+		gbc_lblUnidadMedida.gridx = 1;
+		gbc_lblUnidadMedida.gridy = 5;
+		panel.add(lblUnidadMedida, gbc_lblUnidadMedida);
+
+		comboUnidades.setModel(new DefaultComboBoxModel<UnidadDeMedida>(UnidadDeMedida.values()));
+		comboUnidades.setSelectedIndex(-1);
+		
+		GridBagConstraints gbc_comboUnidades = new GridBagConstraints();
+		gbc_comboUnidades.insets = new Insets(0, 0, 5, 5);
+		gbc_comboUnidades.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboUnidades.gridx = 2;
+		gbc_comboUnidades.gridy = 5;
+		panel.add(comboUnidades, gbc_comboUnidades);
+		
 		GridBagConstraints gbc_chckbxS = new GridBagConstraints();
 		gbc_chckbxS.anchor = GridBagConstraints.WEST;
 		gbc_chckbxS.insets = new Insets(0, 0, 0, 5);
 		gbc_chckbxS.gridx = 2;
-		gbc_chckbxS.gridy = 5;
+		gbc_chckbxS.gridy = 6;
 		panel.add(chckbxS, gbc_chckbxS);
 
 		JPanel panel_1 = new JPanel();
@@ -1863,6 +1920,7 @@ public class MainMenu {
 		JTextField txtDescripcion;
 		JTextField txtCosto;
 		JTextField txtPeso;
+		JComboBox<UnidadDeMedida> comboUnidades = new JComboBox<UnidadDeMedida>();
 
 		jdialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -1942,6 +2000,24 @@ public class MainMenu {
 		panel.add(txtPeso, gbc_textField);
 		txtPeso.setColumns(10);
 
+		JLabel lblUnidadMedida = new JLabel("Unidad:");
+		GridBagConstraints gbc_lblUnidadMedida = new GridBagConstraints();
+		gbc_lblUnidadMedida.anchor = GridBagConstraints.EAST;
+		gbc_lblUnidadMedida.insets = new Insets(0, 0, 5, 5);
+		gbc_lblUnidadMedida.gridx = 1;
+		gbc_lblUnidadMedida.gridy = 5;
+		panel.add(lblUnidadMedida, gbc_lblUnidadMedida);
+
+		comboUnidades.setModel(new DefaultComboBoxModel<UnidadDeMedida>(UnidadDeMedida.values()));
+		comboUnidades.setSelectedItem(insumo.getUnidadDeMedida());
+		
+		GridBagConstraints gbc_comboUnidades = new GridBagConstraints();
+		gbc_comboUnidades.insets = new Insets(0, 0, 5, 5);
+		gbc_comboUnidades.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboUnidades.gridx = 2;
+		gbc_comboUnidades.gridy = 5;
+		panel.add(comboUnidades, gbc_comboUnidades);
+		
 		JPanel panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
 
@@ -1951,7 +2027,7 @@ public class MainMenu {
 				insumo.setDescripcion(txtDescripcion.getText());
 				insumo.setCosto(Float.parseFloat(txtCosto.getText()));
 				insumo.setPeso(Float.parseFloat(txtPeso.getText()));
-				insumo.setUnidadDeMedida(UnidadDeMedida.KILO);
+				insumo.setUnidadDeMedida((UnidadDeMedida)comboUnidades.getSelectedItem());
 
 				MainMenu.refreshInsumoTable(null);
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import dominio.Camion;
 
-public class GestorCamion implements Gestor<Object> {
+public class GestorCamion {
 	private static Integer lastCamionId = 0;
 	private static final GestorCamion INSTANCE = new GestorCamion();
 	private ArrayList<Camion> listaCamiones = new ArrayList<Camion>();
@@ -31,7 +31,6 @@ public class GestorCamion implements Gestor<Object> {
 		return null;
 	}
 	
-	@Override
 	public Camion crear(String nombre) {
 		return new Camion(++lastCamionId);
 	}
@@ -43,7 +42,6 @@ public class GestorCamion implements Gestor<Object> {
 		return camion;
 	}
 
-	@Override
 	public void borrar(Integer id) {
 		for(Camion camion : listaCamiones)
 		{
@@ -55,7 +53,6 @@ public class GestorCamion implements Gestor<Object> {
 		}
 	}
 
-	@Override
 	public ArrayList<Object> buscar(String busqueda) {
 		// TODO Auto-generated method stub
 		return null;

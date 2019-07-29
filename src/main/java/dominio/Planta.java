@@ -10,9 +10,9 @@ public class Planta {
 	
 	public enum TipoPlanta
 	{
-		plantaProduccion("Planta de producción"),
-		plantaAcopioInicial("Planta de acopio inicial"),
-		plantaAcopioFinal("Planta de acopio final");
+		PLANTA_PRODUCCION("Planta de producción"),
+		PLANTA_ACOPIO_INICIAL("Planta de acopio inicial"),
+		PLANTA_ACOPIO_FINAL("Planta de acopio final");
 		
 		private String desc;
 		public String getDesc() { return this.desc; } 
@@ -31,7 +31,7 @@ public class Planta {
 	public Planta(Integer id, String nombre) {
 		this.id = id;
 		this.nombre = nombre;
-		this.tipo = TipoPlanta.plantaProduccion;
+		this.tipo = TipoPlanta.PLANTA_PRODUCCION;
 	}
 
 	public Double costoTotal() {

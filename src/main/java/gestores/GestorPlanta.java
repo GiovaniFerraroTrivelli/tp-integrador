@@ -10,7 +10,7 @@ import dominio.Planta.TipoPlanta;
 import dominio.Stock;
 import estructurasAuxiliares.ArbolBinarioBusqueda;
 
-public class GestorPlanta implements Gestor<Object> {
+public class GestorPlanta {
 	private static Integer lastPlantaId = 0;
 	private static final GestorPlanta INSTANCE = new GestorPlanta();
 
@@ -22,7 +22,6 @@ public class GestorPlanta implements Gestor<Object> {
 
 	private HashMap<Integer, Planta> listaPlantas = new HashMap<Integer, Planta>();
 
-	@Override
 	public Planta crear(String nombre) {
 		Planta planta = new Planta(++lastPlantaId, nombre);
 		listaPlantas.put(planta.getId(), planta);
@@ -34,7 +33,6 @@ public class GestorPlanta implements Gestor<Object> {
 		return listaPlantas;
 	}
 
-	@Override
 	public void borrar(Integer id) {
 		listaPlantas.remove(id);
 	}
@@ -43,7 +41,7 @@ public class GestorPlanta implements Gestor<Object> {
 		return listaPlantas.get(id);
 	}
 
-	public Planta obtenerPlantaStr(String nombre) {
+	public Planta obtenerPlanta(String nombre) {
 		for (Planta planta : listaPlantas.values()) {
 			if (planta.getNombre().equals(nombre)) {
 				return planta;
@@ -63,9 +61,7 @@ public class GestorPlanta implements Gestor<Object> {
 		return null;
 	}
 
-	@Override
-	// TODO: Consultar a martin
-	public ArrayList buscar(String busqueda) {
+	public ArrayList<Planta> buscar(String busqueda) {
 		if(listaPlantas.isEmpty())
 			return new ArrayList<Planta>();
 		
@@ -81,18 +77,21 @@ public class GestorPlanta implements Gestor<Object> {
 			arbol.agregar(arrListaPlantas.get(i).getNombre());
 		}
 		
-		return arbol.buscar(busqueda).stream().map(s -> this.obtenerPlantaStr(s))
+		return arbol.buscar(busqueda).stream().map(s -> this.obtenerPlanta(s))
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	public ArrayList<Planta> necesitanInsumo(Insumo i) {
 		ArrayList<Planta> arrListaPlantas = new ArrayList<>(this.getListaPlantas().values());
+		ArrayList<Planta> plantasNecesitadas = new ArrayList<Planta>();
+		
 		for(Planta p : arrListaPlantas) {
 			if(p.necesitaInsumo(i)) {
-				arrListaPlantas.add(p);
+				plantasNecesitadas.add(p);
 			}
 		}
-		return arrListaPlantas;
+		
+		return plantasNecesitadas;
 	}
 	
 	public HashMap<Integer, Stock> getStockByPlantaId(Integer id) {

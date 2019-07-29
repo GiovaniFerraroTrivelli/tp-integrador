@@ -12,7 +12,7 @@ import dominio.Planta;
 import dominio.Stock;
 import estructurasAuxiliares.ArbolBinarioBusqueda;
 
-public class GestorInsumo implements Gestor<Object> {
+public class GestorInsumo {
 	private static final GestorInsumo INSTANCE = new GestorInsumo();
 	private HashMap<Integer, Insumo> listaInsumos = new HashMap<Integer, Insumo>();
 
@@ -30,7 +30,6 @@ public class GestorInsumo implements Gestor<Object> {
 		return new ArrayList<Insumo>(listaInsumos.values());
 	}
 
-	@Override
 	public Insumo crear(String descripcion) {
 		Insumo insumo = new Insumo(descripcion);
 		listaInsumos.put(insumo.getId(), insumo);
@@ -119,7 +118,6 @@ public class GestorInsumo implements Gestor<Object> {
 		return cantidad;
 	}
 	
-	@Override
 	public void borrar(Integer id) {
 		listaInsumos.remove(id);
 		
@@ -134,7 +132,6 @@ public class GestorInsumo implements Gestor<Object> {
 			planta.getListaStock().remove(id);
 	}
 
-	@Override
 	public ArrayList buscar(String busqueda) {
 		String primElem = this.getListaInsumos().get(0).getDescripcion();
 		ArbolBinarioBusqueda<String> arbol = new ArbolBinarioBusqueda<String>(primElem);
