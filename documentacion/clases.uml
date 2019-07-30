@@ -188,6 +188,7 @@ package gestores{
         +obtenerPlanta(String): Planta
         +getFirstPlantaWithTipo(TipoPlanta): Planta
         +getStockByPlantaId(Integer): HashMap<Integer, Stock>
+		+pageRankSort(): ArrayList<Planta>
     }
 
     class GestorRuta <<(S, #FF7700) Singleton>> {
