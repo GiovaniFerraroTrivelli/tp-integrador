@@ -4,7 +4,7 @@ public class Ruta {
 	
 	private Planta origen;
 	private Planta destino;
-	private Float distancia;
+	private Integer distancia;
 	private Integer duracion;
 	private Integer pesoMaximo;
 	
@@ -32,11 +32,11 @@ public class Ruta {
 		this.destino = destino;
 	}
 
-	public Float getDistancia() {
+	public Integer getDistancia() {
 		return distancia;
 	}
 
-	public void setDistancia(Float distancia) {
+	public void setDistancia(Integer distancia) {
 		this.distancia = distancia;
 	}
 
@@ -57,8 +57,7 @@ public class Ruta {
 	}
 	
 	@Override
-	public String toString()
-	{
+	public String toString(){
 		return "Origen -> " + origen + " ; Destino -> " + destino;
 	}
 	

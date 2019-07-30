@@ -1526,7 +1526,7 @@ public class MainMenu {
 		for (Ruta ruta : listaRutas) {
 			String origen = ruta.getOrigen().toString();
 			String destino = ruta.getDestino().toString();
-			Float distancia = ruta.getDistancia();
+			Integer distancia = ruta.getDistancia();
 			Integer duracion = ruta.getDuracion();
 			Integer pesoMaximo = ruta.getPesoMaximo();
 
@@ -1761,7 +1761,7 @@ public class MainMenu {
 				
 				Ruta nuevaRuta = gestorRuta.crearRuta(origen, destino);
 				
-				nuevaRuta.setDistancia(Float.parseFloat(textDistancia.getText()));
+				nuevaRuta.setDistancia(Integer.parseInt(textDistancia.getText()));
 				nuevaRuta.setDuracion(Integer.parseInt(textDuracion.getText()));
 				nuevaRuta.setPesoMaximo(Integer.parseInt(textPesoMaximo.getText()));
 

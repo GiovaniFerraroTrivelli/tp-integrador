@@ -208,10 +208,14 @@ public class GrafoPanel extends JPanel {
 		for (AristaLayout a : this.getAristas()) {
 			int puntoMedioX = (int) (a.getOrigen().getCoordenadaX() + a.getDestino().getCoordenadaX())/2;
 			int puntoMedioY = (int) (a.getOrigen().getCoordenadaY() + a.getDestino().getCoordenadaY())/2;
+			Ruta ruta = a.getRutaAsociada();
+			
 			
 			g2d.setPaint(a.getColor());
 			g2d.setStroke(a.getFormatoLinea());
-			g2d.drawString(/*a.getRutaAsociada().getDistancia()+*/"[km]", puntoMedioX+20, puntoMedioY+20);
+			g2d.drawString(ruta.getDistancia() +" [km]", puntoMedioX+20, puntoMedioY+20);
+			g2d.drawString(ruta.getPesoMaximo() + " [Tn]", puntoMedioX+20, puntoMedioY+33);
+			g2d.drawString(ruta.getDuracion() + " [min]", puntoMedioX+20, puntoMedioY+46);
 			g2d.draw(a.getLinea());
 		}
 	}
