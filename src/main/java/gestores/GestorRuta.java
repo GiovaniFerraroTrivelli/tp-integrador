@@ -52,6 +52,7 @@ public class GestorRuta {
 			if(camino.getOrigen() == origen && camino.getDestino() == destino)
 			{
 				listaCaminos.remove(camino);
+				return;
 			}
 		}
 	}
@@ -61,18 +62,13 @@ public class GestorRuta {
 		return this.listaCaminos;
 	}
 	
-	public Ruta createRuta(Planta origen, Planta destino)
+	public Ruta crearRuta(Planta origen, Planta destino)
 	{
 		Ruta camino = new Ruta(origen, destino);
 		listaCaminos.add(camino);
 		return camino;
 	}
 	
-	public Object crear(String nombre) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public void borrar(Integer id) {
 		// TODO Auto-generated method stub
 		

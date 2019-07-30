@@ -132,7 +132,7 @@ public class GestorInsumo {
 			planta.getListaStock().remove(id);
 	}
 
-	public ArrayList buscar(String busqueda) {
+	public ArrayList<Insumo> buscar(String busqueda) {
 		String primElem = this.getListaInsumos().get(0).getDescripcion();
 		ArbolBinarioBusqueda<String> arbol = new ArbolBinarioBusqueda<String>(primElem);
 		for (int i = 1; i < this.getListaInsumos().size(); i++) {
@@ -141,7 +141,7 @@ public class GestorInsumo {
 		return arbol.buscar(busqueda).stream().map(s -> this.getInsumoByStr(s)).collect(Collectors.toCollection(ArrayList::new));
 	}
 	
-	public ArrayList buscarPorStock(Integer busqueda, boolean tipo) {
+	public ArrayList<Insumo> buscarPorStock(Integer busqueda, boolean tipo) {
 		ArrayList<Insumo> listInsumosCopy = new ArrayList<Insumo>(getListaInsumos());
 		Integer primElem = this.getListaInsumos().get(0).getStock();
 		List<Integer> resultado = new ArrayList<Integer>();
@@ -179,7 +179,7 @@ public class GestorInsumo {
 		return listaInsumosAux;		
 	}
 	
-	public ArrayList buscarPorCosto(Float busqueda, boolean tipo) {
+	public ArrayList<Insumo> buscarPorCosto(Float busqueda, boolean tipo) {
 		Float primElem = this.getListaInsumos().get(0).getCosto();
 		List<Float> resultado = new ArrayList<Float>();
 		ArbolBinarioBusqueda<Float> arbol = new ArbolBinarioBusqueda<Float>(primElem);

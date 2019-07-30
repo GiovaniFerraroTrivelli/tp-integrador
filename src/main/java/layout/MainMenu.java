@@ -39,9 +39,9 @@ import dominio.Camion;
 import dominio.Insumo;
 import dominio.InsumoLiquido;
 import dominio.Planta.TipoPlanta;
+import dominio.Ruta;
 import dominio.Stock;
 import dominio.UnidadDeMedida;
-import estructuras.Grafo;
 import dominio.Planta;
 import gestores.*;
 
@@ -56,7 +56,6 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.BorderFactory;
-import javax.swing.JList;
 
 public class MainMenu {
 	private JFrame frmTrabajoPrctico;
@@ -65,7 +64,7 @@ public class MainMenu {
 	private static JTable tableStock;
 	private static JTable tableInsumos;
 	private static JTable tableCamiones;
-	private static JList<Planta> listRuta;
+	private static JTable tableRutas;
 	private static JComboBox<Insumo> comboInsumos;
 	static GestorPlanta gestorPlanta = GestorPlanta.getInstance();
 	static GestorInsumo gestorInsumo = GestorInsumo.getInstance();
@@ -179,7 +178,7 @@ public class MainMenu {
 		JButton rutab = new JButton(rutaIcon);
 		rutab.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				refreshRutaList();
+				refreshRutaTable();
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Rutas");
 			}
 		});
@@ -465,7 +464,7 @@ public class MainMenu {
 		btnEditar_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Integer rowId = tableInsumos.getSelectedRow();
-
+				
 				if (rowId < 0) {
 					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado", "Información",
 							JOptionPane.INFORMATION_MESSAGE);
@@ -1299,70 +1298,52 @@ public class MainMenu {
 
 		panel.add(btnNuevoCamino, gbc_btnNuevoCamino);
 
-		// ------------------------------------------------------------------------------------------------
-		// Lista de plantas (izquierda), origen
-		// ------------------------------------------------------------------------------------------------
-		GridBagConstraints gbc_panel_91 = new GridBagConstraints();
-		gbc_panel_91.gridwidth = 3;
-		gbc_panel_91.insets = new Insets(0, 0, 0, 5);
-		gbc_panel_91.fill = GridBagConstraints.BOTH;
-		gbc_panel_91.gridx = 1;
-		gbc_panel_91.gridy = 5;
+		// Eliminar camino
+		JButton btnEliminarCamino = new JButton("Eliminar");
+		GridBagConstraints gbc_btnEliminarCamino = new GridBagConstraints();
+		gbc_btnEliminarCamino.anchor = GridBagConstraints.EAST;
+		gbc_btnEliminarCamino.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEliminarCamino.gridx = 3;
+		gbc_btnEliminarCamino.gridy = 4;
 
-		JList<Planta> caminoOrigin = new JList<Planta>();
-		caminoOrigin.setLayoutOrientation(JList.VERTICAL);
-		caminoOrigin.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		btnEliminarCamino.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Integer rowId = tableRutas.getSelectedRow();
+				
+				if(rowId == -1)
+				{
+					JOptionPane.showMessageDialog(frmTrabajoPrctico,
+							"No hay ninguna ruta seleccionada", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
 
-		panel.add(new JScrollPane(caminoOrigin), gbc_panel_91);
-
-		// ------------------------------------------------------------------------------------------------
-		// Lista de plantas (derecha), destino
-		// ------------------------------------------------------------------------------------------------
-		GridBagConstraints gbc_panel_222 = new GridBagConstraints();
-		gbc_panel_222.gridwidth = 3;
-		gbc_panel_222.insets = new Insets(0, 0, 0, 5);
-		gbc_panel_222.fill = GridBagConstraints.BOTH;
-		gbc_panel_222.gridx = 7;
-		gbc_panel_222.gridy = 5;
-
-		JList<Planta> caminoEnd = new JList<Planta>();
-		caminoEnd.setLayoutOrientation(JList.VERTICAL);
-		caminoEnd.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		panel.add(new JScrollPane(caminoEnd), gbc_panel_222);
-
-		// ------------------------------------------------------------------------------------------------
-		// Lista de plantas (centro)
-		// ------------------------------------------------------------------------------------------------
-		GridBagConstraints gbc_panel_9 = new GridBagConstraints();
-		gbc_panel_9.gridwidth = 3;
-		gbc_panel_9.insets = new Insets(0, 0, 0, 5);
-		gbc_panel_9.fill = GridBagConstraints.BOTH;
-		gbc_panel_9.gridx = 4;
-		gbc_panel_9.gridy = 5;
-
-		listRuta = new JList<Planta>();
-		listRuta.setListData(gestorPlanta.getListaPlantas().values().toArray(new Planta[0]));
-		listRuta.setLayoutOrientation(JList.VERTICAL);
-		listRuta.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		listRuta.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent event) {
-				if (!event.getValueIsAdjusting() && listRuta.getSelectedIndex() != -1) {
-					caminoOrigin.setListData(
-							gestorRuta.getStartingPlantas((Planta) listRuta.getSelectedValue()).toArray(new Planta[0]));
-					System.out.println("origen: " + gestorRuta.getStartingPlantas((Planta) listRuta.getSelectedValue())
-							.toArray(new Planta[0]).toString());
-					caminoEnd.setListData(
-							gestorRuta.getEndingPlantas((Planta) listRuta.getSelectedValue()).toArray(new Planta[0]));
-					System.out.println("destino: " + gestorRuta.getEndingPlantas((Planta) listRuta.getSelectedValue())
-							.toArray(new Planta[0]).toString());
+					return;
 				}
+				
+				Planta origen = gestorRuta.getListaRutas().get(tableRutas.convertRowIndexToModel(rowId)).getOrigen();
+				Planta destino = gestorRuta.getListaRutas().get(tableRutas.convertRowIndexToModel(rowId)).getDestino();
+				
+				gestorRuta.deleteRuta(origen, destino);
+				
+				refreshRutaTable();
 			}
 		});
 
-		panel.add(new JScrollPane(listRuta), gbc_panel_9);
+		panel.add(btnEliminarCamino, gbc_btnEliminarCamino);
+		
+		// Tabla de rutas
+		tableRutas = new JTable();
+		tableRutas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableRutas.setAutoCreateRowSorter(true);
+		tableRutas.setDefaultEditor(Object.class, null);
 
+		JScrollPane panel_scrlpn = new JScrollPane(tableRutas);
+		GridBagConstraints gbc_panel_12 = new GridBagConstraints();
+		gbc_panel_12.gridwidth = 9;
+		gbc_panel_12.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_12.fill = GridBagConstraints.BOTH;
+		gbc_panel_12.gridx = 1;
+		gbc_panel_12.gridy = 5;
+		panel.add(panel_scrlpn, gbc_panel_12);
 	}
 
 	private void loadInfoMenu() {
@@ -1531,8 +1512,29 @@ public class MainMenu {
 		tableCamiones.setModel(tableModel);
 	}
 
-	public static void refreshRutaList() {
-		listRuta.setListData(gestorPlanta.getListaPlantas().values().toArray(new Planta[0]));
+	public static void refreshRutaTable() {
+		String col[] = { "Origen", "Destino", "Distancia", "Duracion", "Peso máximo" };
+		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+
+		ArrayList<Ruta> listaRutas = gestorRuta.getListaRutas();
+		
+		if (listaRutas.isEmpty()) {
+			tableRutas.setModel(tableModel);
+			return;
+		}
+
+		for (Ruta ruta : listaRutas) {
+			String origen = ruta.getOrigen().toString();
+			String destino = ruta.getDestino().toString();
+			Float distancia = ruta.getDistancia();
+			Integer duracion = ruta.getDuracion();
+			Integer pesoMaximo = ruta.getPesoMaximo();
+
+			Object[] data = { origen, destino, distancia, duracion, pesoMaximo };
+			tableModel.addRow(data);
+		}
+
+		tableRutas.setModel(tableModel);
 	}
 
 	public static void refreshPlantaTable(ArrayList<Planta> search) {
@@ -1612,6 +1614,8 @@ public class MainMenu {
 		tableInsumos.setModel(tableModel);
 	}
 
+	
+	
 	public void CreateRutaDialog() {
 		JDialog jdialog = new JDialog(frmTrabajoPrctico, "Crear ruta", Dialog.ModalityType.DOCUMENT_MODAL);
 		JPanel contentPane;
@@ -1632,9 +1636,9 @@ public class MainMenu {
 		contentPane.add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 119, 58, 86, 32, 0 };
-		gbl_panel.rowHeights = new int[] { 55, 0, 20, 0, 0, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 55, 0, 20, 0, 0, 0, 0, 0 };
 		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 
 		JPanel panel_2 = new JPanel();
@@ -1656,6 +1660,7 @@ public class MainMenu {
 		comboStart = new JComboBox<Planta>();
 		comboStart.setModel(
 				new DefaultComboBoxModel<Planta>(gestorPlanta.getListaPlantas().values().toArray(new Planta[0])));
+		comboStart.setSelectedIndex(-1);
 
 		GridBagConstraints gbc_comboStart = new GridBagConstraints();
 		gbc_comboStart.fill = GridBagConstraints.HORIZONTAL;
@@ -1676,6 +1681,7 @@ public class MainMenu {
 		comboEnd = new JComboBox<Planta>();
 		comboEnd.setModel(
 				new DefaultComboBoxModel<Planta>(gestorPlanta.getListaPlantas().values().toArray(new Planta[0])));
+		comboEnd.setSelectedIndex(-1);
 
 		GridBagConstraints gbc_comboEnd = new GridBagConstraints();
 		gbc_comboEnd.fill = GridBagConstraints.HORIZONTAL;
@@ -1685,28 +1691,83 @@ public class MainMenu {
 		gbc_comboEnd.gridy = 3;
 		panel.add(comboEnd, gbc_comboEnd);
 
+		JLabel lblDistancia = new JLabel("Distancia:");
+		GridBagConstraints gbc_lblDistancia = new GridBagConstraints();
+		gbc_lblDistancia.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDistancia.anchor = GridBagConstraints.EAST;
+		gbc_lblDistancia.gridx = 1;
+		gbc_lblDistancia.gridy = 4;
+		panel.add(lblDistancia, gbc_lblDistancia);
+		
+		JTextField textDistancia = new JTextField();
+		GridBagConstraints gbc_textDistancia = new GridBagConstraints();
+		gbc_textDistancia.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textDistancia.anchor = GridBagConstraints.NORTH;
+		gbc_textDistancia.insets = new Insets(0, 0, 5, 5);
+		gbc_textDistancia.gridx = 2;
+		gbc_textDistancia.gridy = 4;
+		panel.add(textDistancia, gbc_textDistancia);
+
+		JLabel lblDuracion = new JLabel("Duración:");
+		GridBagConstraints gbc_lblDuracion = new GridBagConstraints();
+		gbc_lblDuracion.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDuracion.anchor = GridBagConstraints.EAST;
+		gbc_lblDuracion.gridx = 1;
+		gbc_lblDuracion.gridy = 5;
+		panel.add(lblDuracion, gbc_lblDuracion);
+
+		JTextField textDuracion = new JTextField();
+		GridBagConstraints gbc_textDuracion = new GridBagConstraints();
+		gbc_textDuracion.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textDuracion.anchor = GridBagConstraints.NORTH;
+		gbc_textDuracion.insets = new Insets(0, 0, 5, 5);
+		gbc_textDuracion.gridx = 2;
+		gbc_textDuracion.gridy = 5;
+		panel.add(textDuracion, gbc_textDuracion);
+
+		JLabel lblPesoMaximo = new JLabel("Peso máximo:");
+		GridBagConstraints gbc_lblPesoMaximo = new GridBagConstraints();
+		gbc_lblPesoMaximo.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPesoMaximo.anchor = GridBagConstraints.EAST;
+		gbc_lblPesoMaximo.gridx = 1;
+		gbc_lblPesoMaximo.gridy = 6;
+		panel.add(lblPesoMaximo, gbc_lblPesoMaximo);
+		
+		JTextField textPesoMaximo = new JTextField();
+		GridBagConstraints gbc_textPesoMaximo = new GridBagConstraints();
+		gbc_textPesoMaximo.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textPesoMaximo.anchor = GridBagConstraints.NORTH;
+		gbc_textPesoMaximo.insets = new Insets(0, 0, 5, 5);
+		gbc_textPesoMaximo.gridx = 2;
+		gbc_textPesoMaximo.gridy = 6;
+		panel.add(textPesoMaximo, gbc_textPesoMaximo);
+		
 		JPanel panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
 
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println(gestorRuta.createRuta((Planta) comboStart.getSelectedItem(),
-						(Planta) comboEnd.getSelectedItem()));
+				Planta origen = (Planta)comboStart.getSelectedItem();
+				Planta destino = (Planta)comboEnd.getSelectedItem();
+				
+				if(origen == destino)
+				{
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "La planta de origen y destino son iguales",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
 
-				/*
-				 * Insumo insumo;
-				 * 
-				 * if (chckbxS.isSelected()) { insumo =
-				 * gestorInsumo.crearLiquido(txtDescripcion.getText()); } else { insumo =
-				 * gestorInsumo.crear(txtDescripcion.getText()); }
-				 * 
-				 * insumo.setCosto(Float.parseFloat(txtCosto.getText()));
-				 * insumo.setPeso(Float.parseFloat(txtPeso.getText()));
-				 * insumo.setUnidadDeMedida(UnidadDeMedida.KILO);
-				 */
+					return;
+				}
+				
+				Ruta nuevaRuta = gestorRuta.crearRuta(origen, destino);
+				
+				nuevaRuta.setDistancia(Float.parseFloat(textDistancia.getText()));
+				nuevaRuta.setDuracion(Integer.parseInt(textDuracion.getText()));
+				nuevaRuta.setPesoMaximo(Integer.parseInt(textPesoMaximo.getText()));
 
-				refreshRutaList();
+				System.out.println("Nueva ruta: " + nuevaRuta);
+
+				refreshRutaTable();
 
 				jdialog.dispose();
 			}
