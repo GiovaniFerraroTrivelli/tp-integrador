@@ -1462,7 +1462,8 @@ public class MainMenu {
 				if (insumoSelect == null)
 					return;
 
-			
+				grafoPanel.repintarVertices();
+				
 				for(Planta planta : gestorPlanta.necesitanInsumo(insumoSelect)){
                     grafoPanel.nodoNecesitaInsumo(planta);
                 }

@@ -43,7 +43,13 @@ public class GrafoPanel extends JPanel {
 				VerticeLayout v = clicEnUnNodo(event.getPoint());
 				if (v != null) {
 					verticeSeleccionado = v;
-					verticeSeleccionado.setColor(Color.CYAN);
+
+					if (verticeSeleccionado.getColor() == Color.BLUE) {
+						verticeSeleccionado.setColor(Color.CYAN);
+					} else {
+						verticeSeleccionado.setColor(new Color(0XEBDE34));
+					}
+
 					actualizarPosicionVertice(verticeSeleccionado, event.getPoint());
 				}
 
@@ -83,81 +89,56 @@ public class GrafoPanel extends JPanel {
 	public void inicializarVertices() {
 		vertices.clear();
 
-		Runnable r = () -> {
+		GestorPlanta gestorPlanta = GestorPlanta.getInstance();
 
-			GestorPlanta gestorPlanta = GestorPlanta.getInstance();
+		ArrayList<Planta> listaPlantas = new ArrayList<Planta>(gestorPlanta.getListaPlantas().values());
 
-			ArrayList<Planta> listaPlantas = new ArrayList<Planta>(gestorPlanta.getListaPlantas().values());
+		int posicionY = 100;
+		int posicionX = 0;
+		int i = 0;
+		// Color c = null;
 
-			int posicionY = 100;
-			int posicionX = 0;
-			int i = 0;
-			// Color c = null;
+		for (Planta p : listaPlantas) {
+			i++;
+			posicionX += 60;
 
-			for (Planta p : listaPlantas) {
-				i++;
-				posicionX += 60;
-
-				/* SETEA LA POSICION EN Y */
-				if (i % 2 == 0) {
-					posicionY = 100;
-					// c = Color.BLUE;
-				} else {
-					posicionY = 200;
-					// c = Color.RED;
-				}
-
-				VerticeLayout v = new VerticeLayout(posicionX, posicionY, p);
-				v.setId(p.getId());
-				v.setNombre(p.getNombre());
-				vertices.add(v);
+			/* SETEA LA POSICION EN Y */
+			if (i % 2 == 0) {
+				posicionY = 100;
+				// c = Color.BLUE;
+			} else {
+				posicionY = 200;
+				// c = Color.RED;
 			}
-			try {
-				SwingUtilities.invokeAndWait(() -> {
-					getInstance().repaint();
-				});
-			} catch (InvocationTargetException | InterruptedException e) {
-				e.printStackTrace();
-			}
-		};
 
-		Thread hilo = new Thread(r);
+			VerticeLayout v = new VerticeLayout(posicionX, posicionY, p);
+			v.setId(p.getId());
+			v.setNombre(p.getNombre());
+			vertices.add(v);
+		}
 
-		hilo.start();
+		getInstance().repaint();
 	}
 
 	public void inicializarAristas() {
 		aristas.clear();
 
-		Runnable r = () -> {
-			GestorRuta gestorRuta = GestorRuta.getInstance();
+		GestorRuta gestorRuta = GestorRuta.getInstance();
 
-			ArrayList<Ruta> listaRutas = new ArrayList<Ruta>(gestorRuta.getListaRutas());
+		ArrayList<Ruta> listaRutas = new ArrayList<Ruta>(gestorRuta.getListaRutas());
 
-			for (Ruta rut : listaRutas) {
+		for (Ruta rut : listaRutas) {
 
-				VerticeLayout verticeOrigen = vertices.stream()
-						.filter(v -> v.getNombre() == rut.getOrigen().getNombre()).findFirst().get();
-				VerticeLayout verticeDestino = vertices.stream()
-						.filter(v -> v.getNombre() == rut.getDestino().getNombre()).findFirst().get();
+			VerticeLayout verticeOrigen = vertices.stream().filter(v -> v.getNombre() == rut.getOrigen().getNombre())
+					.findFirst().get();
+			VerticeLayout verticeDestino = vertices.stream().filter(v -> v.getNombre() == rut.getDestino().getNombre())
+					.findFirst().get();
 
-				AristaLayout a = new AristaLayout(verticeOrigen, verticeDestino, rut, Color.RED);
-				aristas.add(a);
-			}
+			AristaLayout a = new AristaLayout(verticeOrigen, verticeDestino, rut, Color.RED);
+			aristas.add(a);
+		}
 
-			/* sacado del codigo de martin, no se bien que hace aun */
-			try {
-				SwingUtilities.invokeAndWait(() -> {
-					getInstance().repaint();
-				});
-			} catch (InvocationTargetException | InterruptedException e) {
-				e.printStackTrace();
-			}
-
-		};
-
-		Thread hilo = new Thread(r);
-		hilo.start();
+		getInstance().repaint();
 	}
 
 	private void actualizarPosicionVertice(VerticeLayout v, Point puntoNuevo) {
@@ -232,9 +213,9 @@ public class GrafoPanel extends JPanel {
 			}
 		}
 	}
-	
+
 	public void repintarVertices() {
-		for(VerticeLayout v: vertices) {
+		for (VerticeLayout v : vertices) {
 			this.actualizarColorVertice(v, Color.BLUE);
 		}
 	}
