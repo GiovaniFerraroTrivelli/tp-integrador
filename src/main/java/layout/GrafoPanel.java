@@ -50,9 +50,8 @@ public class GrafoPanel extends JPanel {
 			}
 
 			public void mouseReleased(MouseEvent event) {
-				System.out.println("mouseReleased: " + event.getPoint());
 				if (verticeSeleccionado != null) {
-					
+
 					verticeSeleccionado.setColor(verticeSeleccionado.getColorBase());
 					actualizarPosicionVertice(verticeSeleccionado, event.getPoint());
 					inicializarAristas();
@@ -162,9 +161,6 @@ public class GrafoPanel extends JPanel {
 	}
 
 	private void actualizarPosicionVertice(VerticeLayout v, Point puntoNuevo) {
-		int OFFSET_X = v.getNombre().length() * 20;
-		int OFFSET_Y = 31;
-
 		repaint();
 
 		xRepintado = puntoNuevo.x;
@@ -176,9 +172,8 @@ public class GrafoPanel extends JPanel {
 
 		repaint();
 	}
-	
-	private void actualizarColorVertice(VerticeLayout v, Color c) {
 
+	private void actualizarColorVertice(VerticeLayout v, Color c) {
 		v.setColor(c);
 		v.setColorBase(c);
 		v.update();
@@ -213,16 +208,15 @@ public class GrafoPanel extends JPanel {
 
 	private void dibujarAristas(Graphics2D g2d) {
 		for (AristaLayout a : this.getAristas()) {
-			int puntoMedioX = (int) (a.getOrigen().getCoordenadaX() + a.getDestino().getCoordenadaX())/2;
-			int puntoMedioY = (int) (a.getOrigen().getCoordenadaY() + a.getDestino().getCoordenadaY())/2;
+			int puntoMedioX = (int) (a.getOrigen().getCoordenadaX() + a.getDestino().getCoordenadaX()) / 2;
+			int puntoMedioY = (int) (a.getOrigen().getCoordenadaY() + a.getDestino().getCoordenadaY()) / 2;
 			Ruta ruta = a.getRutaAsociada();
-			
-			
+
 			g2d.setPaint(a.getColor());
 			g2d.setStroke(a.getFormatoLinea());
-			g2d.drawString(ruta.getDistancia() +" [km]", puntoMedioX+20, puntoMedioY+20);
-			g2d.drawString(ruta.getPesoMaximo() + " [Tn]", puntoMedioX+20, puntoMedioY+33);
-			g2d.drawString(ruta.getDuracion() + " [min]", puntoMedioX+20, puntoMedioY+46);
+			g2d.drawString(ruta.getDistancia() + " [km]", puntoMedioX + 20, puntoMedioY + 20);
+			g2d.drawString(ruta.getPesoMaximo() + " [Tn]", puntoMedioX + 20, puntoMedioY + 33);
+			g2d.drawString(ruta.getDuracion() + " [min]", puntoMedioX + 20, puntoMedioY + 46);
 			g2d.draw(a.getLinea());
 		}
 	}
@@ -230,15 +224,18 @@ public class GrafoPanel extends JPanel {
 	public Dimension getPreferredSize() {
 		return new Dimension(900, 400);
 	}
-	
+
 	public void nodoNecesitaInsumo(Planta p) {
-		for(VerticeLayout v: vertices) {
-			if(v.getPlantaAsociada().getId() == p.getId()) {
+		for (VerticeLayout v : vertices) {
+			if (v.getPlantaAsociada().getId() == p.getId()) {
 				this.actualizarColorVertice(v, Color.ORANGE);
 			}
-			else {
-				this.actualizarColorVertice(v, Color.BLUE);
-			}
+		}
+	}
+	
+	public void repintarVertices() {
+		for(VerticeLayout v: vertices) {
+			this.actualizarColorVertice(v, Color.BLUE);
 		}
 	}
 }
