@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import dominio.Insumo;
 import dominio.Planta;
 import dominio.Planta.TipoPlanta;
-import dominio.Ruta;
 import dominio.Stock;
 import estructurasAuxiliares.ArbolBinarioBusqueda;
 

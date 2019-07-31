@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import layout.VerticeLayout;
+
 public class Planta {
 
 	public enum TipoPlanta {
@@ -53,12 +55,9 @@ public class Planta {
 				.collect(Collectors.toList());
 	}
 
-	public Boolean necesitaInsumo(Insumo i) {
-		Predicate<Stock> filtro = ((e) -> (e.getCantidad() < e.getPuntoPedido()));
-
-		List<Stock> stock = new ArrayList<>(listaStock.values()).stream().filter(filtro).collect(Collectors.toList());
-
-		return (stock.size() == 0) ? false : true;
+	public Boolean necesitaInsumo(Insumo insumo) {
+		Stock stockInsumo = listaStock.values().stream().filter(s -> s.getInsumo().getId() == insumo.getId()).findFirst().get();
+		return stockInsumo.getCantidad() <= stockInsumo.getPuntoPedido();
 	}
 
 	public HashMap<Integer, Stock> getListaStock() {
