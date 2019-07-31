@@ -177,15 +177,13 @@ public class GrafoPanel extends JPanel {
 		repaint(xRepintado, yRepintado, v.DIAMETRO + OFFSET_X, v.DIAMETRO + OFFSET_Y);
 	}
 	
-	private void actualizarColorVertice(VerticeLayout v) {
-		int OFFSET_X = v.getNombre().length() * 20;
-		int OFFSET_Y = 31;
+	private void actualizarColorVertice(VerticeLayout v, Color c) {
 
-		v.setColor(Color.ORANGE);
-		v.setColorBase(Color.ORANGE);
+		v.setColor(c);
+		v.setColorBase(c);
 		v.update();
 
-		repaint(xRepintado, yRepintado, v.DIAMETRO + OFFSET_X, v.DIAMETRO + OFFSET_Y);
+		repaint(xRepintado, yRepintado, v.DIAMETRO, v.DIAMETRO);
 	}
 
 	private VerticeLayout clicEnUnNodo(Point p) {
@@ -238,7 +236,10 @@ public class GrafoPanel extends JPanel {
 	public void nodoNecesitaInsumo(Planta p) {
 		for(VerticeLayout v: vertices) {
 			if(v.getPlantaAsociada().getId() == p.getId()) {
-				this.actualizarColorVertice(v);
+				this.actualizarColorVertice(v, Color.ORANGE);
+			}
+			else {
+				this.actualizarColorVertice(v, Color.BLUE);
 			}
 		}
 	}
