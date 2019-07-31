@@ -1,4 +1,5 @@
 package gestores;
+
 import java.util.ArrayList;
 
 import dominio.Ruta;
@@ -15,63 +16,64 @@ public class GestorRuta {
 		return INSTANCE;
 	}
 
-	public ArrayList<Planta> getEndingPlantas(Planta planta)
-	{
+	public ArrayList<Planta> getEndingPlantas(Planta planta) {
 		ArrayList<Planta> resultado = new ArrayList<Planta>();
-		
-		for(Ruta camino : listaCaminos)
-		{
-			if(camino.getOrigen() == planta)
-			{
+
+		for (Ruta camino : listaCaminos) {
+			if (camino.getOrigen() == planta) {
 				resultado.add(camino.getDestino());
 			}
 		}
-		
+
 		return resultado;
 	}
-	
-	public ArrayList<Planta> getStartingPlantas(Planta planta)
-	{
+
+	public ArrayList<Planta> getStartingPlantas(Planta planta) {
 		ArrayList<Planta> resultado = new ArrayList<Planta>();
-		
-		for(Ruta camino : listaCaminos)
-		{
-			if(camino.getDestino() == planta)
-			{
+
+		for (Ruta camino : listaCaminos) {
+			if (camino.getDestino() == planta) {
 				resultado.add(camino.getOrigen());
 			}
 		}
-		
+
 		return resultado;
 	}
-	
-	public void deleteRuta(Planta origen, Planta destino)
-	{
-		for(Ruta camino : listaCaminos)
-		{
-			if(camino.getOrigen() == origen && camino.getDestino() == destino)
-			{
+
+	public void deleteRuta(Planta origen, Planta destino) {
+		for (Ruta camino : listaCaminos) {
+			if (camino.getOrigen() == origen && camino.getDestino() == destino) {
 				listaCaminos.remove(camino);
 				return;
 			}
 		}
 	}
-	
-	public ArrayList<Ruta> getListaRutas()
-	{
+
+	public ArrayList<Ruta> getListaRutas() {
 		return this.listaCaminos;
 	}
-	
-	public Ruta crearRuta(Planta origen, Planta destino)
-	{
+
+	public Ruta crearRuta(Planta origen, Planta destino) {
 		Ruta camino = new Ruta(origen, destino);
 		listaCaminos.add(camino);
 		return camino;
 	}
-	
+
+	public int getPageRank(Planta p) {
+		int pageRank = 0;
+
+		for (Ruta r : listaCaminos) {
+			if (r.getDestino() == p /* || r.getOrigen() == p1 */) {
+				pageRank++;
+			}
+		}
+
+		return pageRank;
+	}
+
 	public void borrar(Integer id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public ArrayList<Object> buscar(String busqueda) {

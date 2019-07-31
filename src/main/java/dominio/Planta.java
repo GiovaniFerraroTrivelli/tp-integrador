@@ -7,26 +7,32 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Planta {
-	
-	public enum TipoPlanta
-	{
-		PLANTA_PRODUCCION("Planta de producción"),
-		PLANTA_ACOPIO_INICIAL("Planta de acopio inicial"),
+
+	public enum TipoPlanta {
+		PLANTA_PRODUCCION("Planta de producción"), PLANTA_ACOPIO_INICIAL("Planta de acopio inicial"),
 		PLANTA_ACOPIO_FINAL("Planta de acopio final");
-		
+
 		private String desc;
-		public String getDesc() { return this.desc; } 
-		private TipoPlanta(String desc) { this.desc = desc; }
-		
+
+		public String getDesc() {
+			return this.desc;
+		}
+
+		private TipoPlanta(String desc) {
+			this.desc = desc;
+		}
+
 		@Override
-		public String toString() { return this.desc; }
+		public String toString() {
+			return this.desc;
+		}
 	};
-	
+
 	private Integer id;
 	private String nombre;
 	private TipoPlanta tipo;
 
-	private HashMap<Integer, Stock> listaStock = new HashMap<Integer, Stock>(); 
+	private HashMap<Integer, Stock> listaStock = new HashMap<Integer, Stock>();
 
 	public Planta(Integer id, String nombre) {
 		this.id = id;
@@ -35,14 +41,16 @@ public class Planta {
 	}
 
 	public Double costoTotal() {
-		return new ArrayList<>(listaStock.values()).stream().mapToDouble((i) -> (i.getCantidad() * i.getInsumo().getCosto())).sum();
+		return new ArrayList<>(listaStock.values()).stream()
+				.mapToDouble((i) -> (i.getCantidad() * i.getInsumo().getCosto())).sum();
 	}
 
 	public List<Insumo> stockEntre(Integer s1, Integer s2) {
 		Predicate<Stock> filtro1 = ((i) -> (i.getCantidad() >= s1));
 		Predicate<Stock> filtro2 = ((i) -> (i.getCantidad() <= s2));
 
-		return new ArrayList<>(listaStock.values()).stream().filter(filtro1.and(filtro2)).map((s) -> s.getInsumo()).collect(Collectors.toList());
+		return new ArrayList<>(listaStock.values()).stream().filter(filtro1.and(filtro2)).map((s) -> s.getInsumo())
+				.collect(Collectors.toList());
 	}
 
 	public Boolean necesitaInsumo(Insumo i) {
@@ -73,16 +81,14 @@ public class Planta {
 		this.nombre = nombre;
 	}
 
-	public TipoPlanta getTipo()
-	{
+	public TipoPlanta getTipo() {
 		return this.tipo;
 	}
-	
-	public void setTipo(TipoPlanta tipo)
-	{
+
+	public void setTipo(TipoPlanta tipo) {
 		this.tipo = tipo;
 	}
-	
+
 	@Override
 	public String toString() {
 		return nombre;

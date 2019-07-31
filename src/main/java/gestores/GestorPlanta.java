@@ -102,30 +102,16 @@ public class GestorPlanta {
 
 	public ArrayList<Planta> pageRankSort() {
 		ArrayList<Planta> listaPlantas = new ArrayList<Planta>(this.getListaPlantas().values());
+		GestorRuta gestorRuta = GestorRuta.getInstance();
 
-		Comparator<Planta> pageRankCompare = new Comparator<Planta>() {
+		Comparator<Planta> pageRankComparator = new Comparator<Planta>() {
 			@Override
 			public int compare(Planta p1, Planta p2) {
-				return (this.getPageRank(p1) - this.getPageRank(p2));
+				return (gestorRuta.getPageRank(p1) - gestorRuta.getPageRank(p2));
 			}
-
-			private int getPageRank(Planta p1) {
-				int pageRank = 0;
-				GestorRuta gestorRuta = GestorRuta.getInstance();
-				ArrayList<Ruta> listaRutas = new ArrayList<Ruta>(gestorRuta.getListaRutas());
-
-				for (Ruta r : listaRutas) {
-					if (r.getDestino() == p1 /* || r.getOrigen() == p1 */) {
-						pageRank++;
-					}
-				}
-
-				return pageRank;
-			}
-
 		};
 
-		Collections.sort(listaPlantas, pageRankCompare);
+		Collections.sort(listaPlantas, pageRankComparator);
 		return listaPlantas;
 	}
 }
