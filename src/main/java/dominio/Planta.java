@@ -11,7 +11,8 @@ import layout.VerticeLayout;
 public class Planta {
 
 	public enum TipoPlanta {
-		PLANTA_PRODUCCION("Planta de producción"), PLANTA_ACOPIO_INICIAL("Planta de acopio inicial"),
+		PLANTA_PRODUCCION("Planta de producción"),
+		PLANTA_ACOPIO_INICIAL("Planta de acopio inicial"),
 		PLANTA_ACOPIO_FINAL("Planta de acopio final");
 
 		private String desc;

@@ -1538,7 +1538,7 @@ public class MainMenu {
 	}
 
 	public static void refreshPlantaTable(ArrayList<Planta> search) {
-		String col[] = { "ID", "Nombre", "Tipo" };
+		String col[] = { "ID", "Nombre", "Tipo", "PageRank" };
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 
 		if (gestorPlanta.getListaPlantas().isEmpty()) {
@@ -1555,11 +1555,12 @@ public class MainMenu {
 		}
 
 		for (Planta planta : tempListaPlantas) {
-			int id = planta.getId();
+			Integer id = planta.getId();
 			String nombre = planta.getNombre();
 			String tipo = planta.getTipo().toString();
-
-			Object[] data = { id, nombre, tipo };
+			Integer pagerank = gestorRuta.getPageRank(planta);
+			
+			Object[] data = { id, nombre, tipo, pagerank };
 			tableModel.addRow(data);
 		}
 

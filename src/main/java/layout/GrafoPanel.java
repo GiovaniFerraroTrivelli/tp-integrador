@@ -195,7 +195,6 @@ public class GrafoPanel extends JPanel {
 	}
 
 	private void dibujarVertices(Graphics2D g2d) {
-		System.out.println(this.getVertices());
 		for (VerticeLayout v : this.getVertices()) {
 			g2d.setPaint(Color.BLUE);
 			g2d.drawString(v.etiqueta(), v.getCoordenadaX() + 25, v.getCoordenadaY() + 25);

@@ -87,7 +87,7 @@ public class GestorPlanta {
 		ArrayList<Planta> plantasNecesitadas = new ArrayList<Planta>();
 
 		for (Planta p : arrListaPlantas) {
-			if (p.necesitaInsumo(i)) {
+			if (p.getListaStock().containsKey(i.getId()) && p.necesitaInsumo(i)) {
 				plantasNecesitadas.add(p);
 			}
 		}
