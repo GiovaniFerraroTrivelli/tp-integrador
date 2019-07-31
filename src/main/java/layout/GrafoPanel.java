@@ -165,7 +165,7 @@ public class GrafoPanel extends JPanel {
 		int OFFSET_X = v.getNombre().length() * 20;
 		int OFFSET_Y = 31;
 
-		repaint(xRepintado, yRepintado, v.DIAMETRO + OFFSET_X, v.DIAMETRO + OFFSET_Y);
+		repaint();
 
 		xRepintado = puntoNuevo.x;
 		yRepintado = puntoNuevo.y;
@@ -174,7 +174,7 @@ public class GrafoPanel extends JPanel {
 		v.setCoordenadaY(yRepintado);
 		v.update();
 
-		repaint(xRepintado, yRepintado, v.DIAMETRO + OFFSET_X, v.DIAMETRO + OFFSET_Y);
+		repaint();
 	}
 	
 	private void actualizarColorVertice(VerticeLayout v, Color c) {
@@ -182,8 +182,6 @@ public class GrafoPanel extends JPanel {
 		v.setColor(c);
 		v.setColorBase(c);
 		v.update();
-
-		repaint(xRepintado, yRepintado, v.DIAMETRO, v.DIAMETRO);
 	}
 
 	private VerticeLayout clicEnUnNodo(Point p) {

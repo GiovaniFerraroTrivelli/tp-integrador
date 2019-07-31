@@ -1462,9 +1462,12 @@ public class MainMenu {
 				if (insumoSelect == null)
 					return;
 
+			
 				for(Planta planta : gestorPlanta.necesitanInsumo(insumoSelect)){
                     grafoPanel.nodoNecesitaInsumo(planta);
                 }
+				
+				grafoPanel.repaint();
 			}
 		});
 
