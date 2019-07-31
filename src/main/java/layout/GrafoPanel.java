@@ -44,7 +44,7 @@ public class GrafoPanel extends JPanel {
 				if (v != null) {
 					verticeSeleccionado = v;
 					verticeSeleccionado.setColor(Color.CYAN);
-					actualizarVertice(verticeSeleccionado, event.getPoint());
+					actualizarPosicionVertice(verticeSeleccionado, event.getPoint());
 				}
 
 			}
@@ -52,8 +52,9 @@ public class GrafoPanel extends JPanel {
 			public void mouseReleased(MouseEvent event) {
 				System.out.println("mouseReleased: " + event.getPoint());
 				if (verticeSeleccionado != null) {
-					verticeSeleccionado.setColor(Color.BLUE);
-					actualizarVertice(verticeSeleccionado, event.getPoint());
+					
+					verticeSeleccionado.setColor(verticeSeleccionado.getColorBase());
+					actualizarPosicionVertice(verticeSeleccionado, event.getPoint());
 					inicializarAristas();
 				}
 				verticeSeleccionado = null;
@@ -65,7 +66,7 @@ public class GrafoPanel extends JPanel {
 		addMouseMotionListener(new MouseAdapter() {
 			public void mouseDragged(MouseEvent event) {
 				if (verticeSeleccionado != null) {
-					actualizarVertice(verticeSeleccionado, event.getPoint());
+					actualizarPosicionVertice(verticeSeleccionado, event.getPoint());
 					inicializarAristas();
 				}
 			}
@@ -107,7 +108,7 @@ public class GrafoPanel extends JPanel {
 					// c = Color.RED;
 				}
 
-				VerticeLayout v = new VerticeLayout(posicionX, posicionY, p, Color.BLUE);
+				VerticeLayout v = new VerticeLayout(posicionX, posicionY, p);
 				v.setId(p.getId());
 				v.setNombre(p.getNombre());
 				vertices.add(v);
@@ -160,7 +161,7 @@ public class GrafoPanel extends JPanel {
 		hilo.start();
 	}
 
-	private void actualizarVertice(VerticeLayout v, Point puntoNuevo) {
+	private void actualizarPosicionVertice(VerticeLayout v, Point puntoNuevo) {
 		int OFFSET_X = v.getNombre().length() * 20;
 		int OFFSET_Y = 31;
 
@@ -171,6 +172,17 @@ public class GrafoPanel extends JPanel {
 
 		v.setCoordenadaX(xRepintado);
 		v.setCoordenadaY(yRepintado);
+		v.update();
+
+		repaint(xRepintado, yRepintado, v.DIAMETRO + OFFSET_X, v.DIAMETRO + OFFSET_Y);
+	}
+	
+	private void actualizarColorVertice(VerticeLayout v) {
+		int OFFSET_X = v.getNombre().length() * 20;
+		int OFFSET_Y = 31;
+
+		v.setColor(Color.ORANGE);
+		v.setColorBase(Color.ORANGE);
 		v.update();
 
 		repaint(xRepintado, yRepintado, v.DIAMETRO + OFFSET_X, v.DIAMETRO + OFFSET_Y);
@@ -196,7 +208,7 @@ public class GrafoPanel extends JPanel {
 
 	private void dibujarVertices(Graphics2D g2d) {
 		for (VerticeLayout v : this.getVertices()) {
-			g2d.setPaint(Color.BLUE);
+			g2d.setPaint(v.getColor());
 			g2d.drawString(v.etiqueta(), v.getCoordenadaX() + 25, v.getCoordenadaY() + 25);
 			g2d.setPaint(v.getColor());
 			g2d.fill(v.getNodo());
@@ -225,8 +237,8 @@ public class GrafoPanel extends JPanel {
 	
 	public void nodoNecesitaInsumo(Planta p) {
 		for(VerticeLayout v: vertices) {
-			if(v.getPlantaAsociada() == p) {
-				v.setColor(Color.ORANGE);
+			if(v.getPlantaAsociada().getId() == p.getId()) {
+				this.actualizarColorVertice(v);
 			}
 		}
 	}

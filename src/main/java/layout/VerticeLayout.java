@@ -10,7 +10,9 @@ import dominio.Planta;
 public class VerticeLayout {
 
 	private Paint color;
-	private Color colorBase;
+
+
+	private Paint colorBase;
 
 	private Integer coordenadaX;
 	private Integer coordenadaY;
@@ -24,9 +26,10 @@ public class VerticeLayout {
 	public VerticeLayout() {
 	}
 
-	public VerticeLayout(Integer coordenadaX, Integer coordenadaY, Planta p, Color color) {
+	public VerticeLayout(Integer coordenadaX, Integer coordenadaY, Planta p) {
 		this.plantaAsociada = p;
-		this.colorBase = color;
+		this.color = Color.BLUE;
+		this.colorBase = Color.BLUE;
 		this.coordenadaX = coordenadaX;
 		this.coordenadaY = coordenadaY;
 		this.nodo = new Ellipse2D.Double(coordenadaX, coordenadaY, DIAMETRO, DIAMETRO);
@@ -40,11 +43,11 @@ public class VerticeLayout {
 		this.color = color;
 	}
 
-	public Color getColorBase() {
+	public Paint getColorBase() {
 		return colorBase;
 	}
 
-	public void setColorBase(Color colorBase) {
+	public void setColorBase(Paint colorBase) {
 		this.colorBase = colorBase;
 	}
 
@@ -99,5 +102,4 @@ public class VerticeLayout {
 	public Planta getPlantaAsociada() {
 		return plantaAsociada;
 	}
-
 }

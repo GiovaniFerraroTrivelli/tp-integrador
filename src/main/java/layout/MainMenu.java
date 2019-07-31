@@ -1462,10 +1462,9 @@ public class MainMenu {
 				if (insumoSelect == null)
 					return;
 
-				System.out.println("---------------------------------------------------");
-				System.out.println("Insumo: " + insumoSelect);
-				System.out.println(gestorPlanta.necesitanInsumo(insumoSelect));
-				System.out.println("---------------------------------------------------");
+				for(Planta planta : gestorPlanta.necesitanInsumo(insumoSelect)){
+                    grafoPanel.nodoNecesitaInsumo(planta);
+                }
 			}
 		});
 
