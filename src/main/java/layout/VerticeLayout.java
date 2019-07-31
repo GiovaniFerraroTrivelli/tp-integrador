@@ -5,6 +5,8 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
+import dominio.Planta;
+
 public class VerticeLayout {
 
 	private Paint color;
@@ -17,11 +19,13 @@ public class VerticeLayout {
 
 	private String nombre;
 	private Integer id;
+	private Planta plantaAsociada;
 
 	public VerticeLayout() {
 	}
 
-	public VerticeLayout(Integer coordenadaX, Integer coordenadaY, Color color) {
+	public VerticeLayout(Integer coordenadaX, Integer coordenadaY, Planta p, Color color) {
+		this.plantaAsociada = p;
 		this.colorBase = color;
 		this.coordenadaX = coordenadaX;
 		this.coordenadaY = coordenadaY;
@@ -90,6 +94,10 @@ public class VerticeLayout {
 
 	public void update() {
 		this.nodo = new Ellipse2D.Double(coordenadaX, coordenadaY, DIAMETRO, DIAMETRO);
+	}
+	
+	public Planta getPlantaAsociada() {
+		return plantaAsociada;
 	}
 
 }

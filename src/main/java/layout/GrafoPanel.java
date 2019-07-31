@@ -107,7 +107,7 @@ public class GrafoPanel extends JPanel {
 					// c = Color.RED;
 				}
 
-				VerticeLayout v = new VerticeLayout(posicionX, posicionY, Color.BLUE);
+				VerticeLayout v = new VerticeLayout(posicionX, posicionY, p, Color.BLUE);
 				v.setId(p.getId());
 				v.setNombre(p.getNombre());
 				vertices.add(v);
@@ -221,5 +221,13 @@ public class GrafoPanel extends JPanel {
 
 	public Dimension getPreferredSize() {
 		return new Dimension(900, 400);
+	}
+	
+	public void nodoNecesitaInsumo(Planta p) {
+		for(VerticeLayout v: vertices) {
+			if(v.getPlantaAsociada() == p) {
+				v.setColor(Color.ORANGE);
+			}
+		}
 	}
 }
