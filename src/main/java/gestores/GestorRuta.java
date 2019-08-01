@@ -1,6 +1,7 @@
 package gestores;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dominio.Ruta;
 import dominio.Planta;
@@ -80,6 +81,39 @@ public class GestorRuta {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 
+	public Ruta getRuta(Planta origen, Planta destino) {
+		for (Ruta r : this.getListaRutas()) {
+			if (r.getOrigen() == origen && r.getDestino() == destino) {
+				return r;
+			}
+		}
+		return null;
+	}
+
+	public ArrayList<Integer> getInfoRuta(List<Planta> listaPlantas) {
+		ArrayList<Integer> infoRuta = new ArrayList<Integer>();
+
+		Integer distanciaTotal = 0;
+		Integer tiempoTotal = 0;
+		Integer pesoMax = 0;
+
+		for (int i = 0; i < listaPlantas.size() - 1; i++) {
+			Ruta r = this.getRuta(listaPlantas.get(i), listaPlantas.get(i + 1));
+			distanciaTotal += r.getDistancia();
+			tiempoTotal += r.getDuracion();
+
+			if (r.getPesoMaximo() > pesoMax)
+				pesoMax = r.getPesoMaximo();
+		}
+
+		infoRuta.add(distanciaTotal);
+		infoRuta.add(tiempoTotal);
+		infoRuta.add(pesoMax);
+
+		// infoRuta[0]: distancia total del camino
+		// infoRuta[1]: duracion total del viaje
+		// infoRuta[2]: peso maximo admitido
+		return infoRuta;
+	}
 }

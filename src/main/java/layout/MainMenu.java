@@ -1567,7 +1567,7 @@ public class MainMenu {
 				Planta pInicial = (Planta)comboPlantasInicial.getSelectedItem();
 				Planta pFinal = (Planta)comboPlantasFinal.getSelectedItem();
 				
-				Grafo<Planta> g = new Grafo();
+				Grafo g = new Grafo();
 				List lista = g.caminos(pInicial, pFinal);
 				
 				System.out.println(lista);			

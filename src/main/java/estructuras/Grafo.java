@@ -19,22 +19,22 @@ import dominio.Ruta;
 import gestores.GestorPlanta;
 import gestores.GestorRuta;
 
-public class Grafo<T> {
+public class Grafo {
 	private List<Arista> aristas;
 	private List<Vertice> vertices;
 
 	public Grafo() {
 		this.aristas = new ArrayList<Arista>();
 		this.vertices = new ArrayList<Vertice>();
-		
+
 		GestorPlanta gp = GestorPlanta.getInstance();
-		for(Planta p : gp.getListaPlantas().values()) {
+		for (Planta p : gp.getListaPlantas().values()) {
 			Vertice v = new Vertice(p);
 			this.addNodo(v);
 		}
-		
+
 		GestorRuta gr = GestorRuta.getInstance();
-		for(Ruta r : gr.getListaRutas()) {
+		for (Ruta r : gr.getListaRutas()) {
 			this.conectar(r.getOrigen(), r.getDestino(), r.getDistancia());
 		}
 	}
@@ -187,8 +187,7 @@ public class Grafo<T> {
 		return false;
 	}
 
-	private void buscarCaminosAux(Vertice v1, Vertice v2, List<Vertice> marcados,
-			List<List<Vertice>> todos) {
+	private void buscarCaminosAux(Vertice v1, Vertice v2, List<Vertice> marcados, List<List<Vertice>> todos) {
 		List<Vertice> adyacentes = this.getAdyacentes(v1);
 		// Vector copiaMarcados;
 		List<Vertice> copiaMarcados = null;
