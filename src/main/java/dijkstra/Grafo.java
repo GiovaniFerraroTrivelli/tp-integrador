@@ -1,6 +1,7 @@
 package dijkstra;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import dominio.Planta;
@@ -39,13 +40,13 @@ public class Grafo{
 		this.aristas = listaAristas;
 	}
 	
-	public void dijkstra(Planta origen, Planta destino) {
+	public LinkedList<Vertice> dijkstra(Planta origen, Planta destino) {
 		Vertice verticeOrigen = vertices.stream().filter(v -> v.getId() == origen.getId()).findFirst().get();
 		Vertice verticeDestino = vertices.stream().filter(v -> v.getId() == destino.getId()).findFirst().get();
 		
 		Dijkstra d = new Dijkstra(this);
 		d.execute(verticeOrigen);
-		d.getCamino(verticeDestino);	
+		return d.getCamino(verticeDestino);	
 	}
 	
 	public List<Vertice> getVertices() {
