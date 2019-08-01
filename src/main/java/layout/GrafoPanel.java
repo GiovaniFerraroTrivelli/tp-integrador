@@ -258,6 +258,7 @@ public class GrafoPanel extends JPanel {
 			Ruta r = gr.getRuta(listaVertices.get(i).getValor(), listaVertices.get(i+1).getValor());
 			this.actualizarColorArista(this.getArista(r), Color.GREEN);
 			System.out.println("Pintar ruta i = " + i);
+			
 		}
 	}
 }
