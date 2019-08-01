@@ -8,15 +8,9 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import dijkstra.Grafo;
-import dijkstra.Vertice;
 import dominio.Planta;
 import dominio.Ruta;
 import gestores.GestorPlanta;
@@ -24,7 +18,6 @@ import gestores.GestorRuta;
 
 public class GrafoPanel extends JPanel {
 
-	// private Queue<Color> colaColores;
 	private int xRepintado = 0;
 	private int yRepintado = 0;
 	private VerticeLayout verticeSeleccionado = null;
@@ -162,7 +155,7 @@ public class GrafoPanel extends JPanel {
 		v.setColorBase(c);
 		v.update();
 	}
-	
+
 	private void actualizarColorArista(AristaLayout a, Color c) {
 		a.setColor(c);
 		a.update();
@@ -225,20 +218,6 @@ public class GrafoPanel extends JPanel {
 	public void repintarVertices() {
 		for (VerticeLayout v : vertices) {
 			this.actualizarColorVertice(v, Color.BLUE);
-		}
-	}
-	
-	public void dijkstra(Planta origen, Planta destino) {
-		int distanciaTotal = 0;
-		Grafo g = new Grafo();
-		LinkedList<Vertice> listaVertices = g.dijkstra(origen, destino);
-		
-		for(int i = 0; i < listaVertices.size()-1; i++) {
-			int n = i;
-			
-			AristaLayout arista = aristas.stream().filter(a -> a.getOrigen().getId() == listaVertices.get(n).getId() && a.getDestino().getId() == listaVertices.get(n+1).getId()).findFirst().get();
-			this.actualizarColorArista(arista, Color.GREEN);
-			distanciaTotal += arista.getRutaAsociada().getDistancia();
 		}
 	}
 }
