@@ -42,13 +42,17 @@ import dominio.Planta.TipoPlanta;
 import dominio.Ruta;
 import dominio.Stock;
 import dominio.UnidadDeMedida;
+import estructuras.Grafo;
 import dominio.Planta;
 import gestores.*;
 
 import java.awt.Insets;
+import java.util.List;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JList;
+
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -66,6 +70,9 @@ public class MainMenu {
 	private static JTable tableCamiones;
 	private static JTable tableRutas;
 	private static JComboBox<Insumo> comboInsumos;
+	private static JComboBox<Planta> comboPlantasInicial = new JComboBox<Planta>();
+	private static JComboBox<Planta> comboPlantasFinal = new JComboBox<Planta>();
+	
 	static GestorPlanta gestorPlanta = GestorPlanta.getInstance();
 	static GestorInsumo gestorInsumo = GestorInsumo.getInstance();
 	static GestorRuta gestorRuta = GestorRuta.getInstance();
@@ -192,6 +199,13 @@ public class MainMenu {
 						new DefaultComboBoxModel<Insumo>(gestorInsumo.getListaInsumos().toArray(new Insumo[0])));
 				comboInsumos.setSelectedIndex(-1);
 
+				comboPlantasInicial.setModel(
+						new DefaultComboBoxModel<Planta>(gestorPlanta.getListaPlantas().values().toArray(new Planta[0])));
+				comboPlantasFinal.setModel(
+						new DefaultComboBoxModel<Planta>(gestorPlanta.getListaPlantas().values().toArray(new Planta[0])));				
+				comboPlantasInicial.setSelectedIndex(-1);
+				comboPlantasFinal.setSelectedIndex(-1);
+				
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Info");
 			}
 		});
@@ -1454,7 +1468,7 @@ public class MainMenu {
 		gbc_btnNewButton.gridx = 5;
 		gbc_btnNewButton.gridy = 4;
 		panel.add(comboInsumos, gbc_btnNewButton);
-
+	
 		comboInsumos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Insumo insumoSelect = (Insumo) comboInsumos.getSelectedItem();
@@ -1476,7 +1490,7 @@ public class MainMenu {
 		// Panel para visualización
 		// ------------------------------------------------------------------------------------------------
 		GridBagConstraints gbc_panel_91 = new GridBagConstraints();
-		gbc_panel_91.gridwidth = 9;
+		gbc_panel_91.gridwidth = 7;
 		gbc_panel_91.insets = new Insets(0, 0, 0, 5);
 		gbc_panel_91.fill = GridBagConstraints.BOTH;
 		gbc_panel_91.gridx = 1;
@@ -1485,6 +1499,97 @@ public class MainMenu {
 		grafoPanel.setBackground(Color.WHITE);
 		grafoPanel.setBorder(BorderFactory.createLineBorder(new Color(0x7A8A99)));
 		panel.add(grafoPanel, gbc_panel_91);
+		
+		// ------------------------------------------------------------------------------------------------
+		// Panel de la derecha
+		// ------------------------------------------------------------------------------------------------
+		JPanel panel_1331 = new JPanel();
+		GridBagConstraints gbc_panel_1331 = new GridBagConstraints();
+		gbc_panel_1331.insets = new Insets(0, 15, 0, 5);
+		gbc_panel_1331.fill = GridBagConstraints.BOTH;
+		gbc_panel_1331.gridx = 8;
+		gbc_panel_1331.gridy = 6;
+		gbc_panel_1331.gridwidth = 3;
+		panel.add(panel_1331, gbc_panel_1331);
+
+		GridBagLayout gbl_panel_1 = new GridBagLayout();
+		gbl_panel_1.columnWidths = new int[] { 30, 0, 0 };
+		gbl_panel_1.rowHeights = new int[] { 0, 0, 0, 0 };
+		gbl_panel_1.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		panel_1331.setLayout(gbl_panel_1);
+
+		// Planta inicial
+		JLabel lblInicial = new JLabel("Planta inicial:");
+		GridBagConstraints gbc_lblInicial = new GridBagConstraints();
+		gbc_lblInicial.insets = new Insets(0, 0, 5, 5);
+		gbc_lblInicial.anchor = GridBagConstraints.EAST;
+		gbc_lblInicial.gridx = 0;
+		gbc_lblInicial.gridy = 0;
+
+		panel_1331.add(lblInicial, gbc_lblInicial);
+		
+		GridBagConstraints gbc_btnComboPlantasInicial = new GridBagConstraints();
+		gbc_btnComboPlantasInicial.gridwidth = 1;
+		gbc_btnComboPlantasInicial.insets = new Insets(0, 0, 5, 0);
+		gbc_btnComboPlantasInicial.gridx = 1;
+		gbc_btnComboPlantasInicial.gridy = 0;
+		panel_1331.add(comboPlantasInicial, gbc_btnComboPlantasInicial);
+		
+		// Planta inicial
+		JLabel lblFinal = new JLabel("Planta final:");
+		GridBagConstraints gbc_lblFinal = new GridBagConstraints();
+		gbc_lblFinal.insets = new Insets(0, 0, 5, 5);
+		gbc_lblFinal.anchor = GridBagConstraints.EAST;
+		gbc_lblFinal.gridx = 0;
+		gbc_lblFinal.gridy = 1;
+
+		panel_1331.add(lblFinal, gbc_lblFinal);
+		
+		GridBagConstraints gbc_btnComboPlantasFinal = new GridBagConstraints();
+		gbc_btnComboPlantasFinal.gridwidth = 2;
+		gbc_btnComboPlantasFinal.insets = new Insets(0, 0, 5, 0);
+		gbc_btnComboPlantasFinal.gridx = 1;
+		gbc_btnComboPlantasFinal.gridy = 1;
+		panel_1331.add(comboPlantasFinal, gbc_btnComboPlantasFinal);
+		
+		// Botón de buscar
+		JButton btnBuscar = new JButton("Mostrar caminos entre plantas");
+		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
+		gbc_btnBuscar.anchor = GridBagConstraints.CENTER;
+		gbc_btnBuscar.gridwidth = 5;
+		gbc_btnBuscar.insets = new Insets(0, 0, 10, 0);
+		gbc_btnBuscar.gridx = 0;
+		gbc_btnBuscar.gridy = 2;
+		panel_1331.add(btnBuscar, gbc_btnBuscar);
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Planta pInicial = (Planta)comboPlantasInicial.getSelectedItem();
+				Planta pFinal = (Planta)comboPlantasFinal.getSelectedItem();
+				
+				Grafo<Planta> g = new Grafo();
+				List lista = g.caminos(pInicial, pFinal);
+				
+				System.out.println(lista);			
+
+			}
+		});
+		
+		JList<List<Planta>> list = new JList<List<Planta>>(); //data has type Object[]
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setLayoutOrientation(JList.VERTICAL);
+		list.setVisibleRowCount(-1);
+		JScrollPane listScroller = new JScrollPane(list);
+		
+		GridBagConstraints gbc_listScroller = new GridBagConstraints();
+		gbc_listScroller.anchor = GridBagConstraints.CENTER;
+		gbc_listScroller.gridwidth = 3;
+		gbc_listScroller.insets = new Insets(0, 0, 10, 0);
+		gbc_listScroller.gridx = 0;
+		gbc_listScroller.gridy = 3;
+		panel_1331.add(list, gbc_listScroller);
+		
+		listScroller.setPreferredSize(new Dimension(250, 80));
 	}
 
 	public static void refreshCamionTable() {
