@@ -63,6 +63,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.ListSelectionModel;
 import javax.swing.BorderFactory;
+import javax.swing.JToolBar;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 public class MainMenu {
 	private JFrame frmTrabajoPrctico;
@@ -130,6 +133,20 @@ public class MainMenu {
 		frmTrabajoPrctico.setBounds(100, 100, 450, 300);
 		frmTrabajoPrctico.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmTrabajoPrctico.getContentPane().setLayout(cl);
+		
+		JMenuBar menuBar = new JMenuBar();
+		frmTrabajoPrctico.setJMenuBar(menuBar);
+		
+		JMenuItem mntmTrabajoPrctico = new JMenuItem("<html><span style='font-size:8px'>"
+				+ "<strong>Integrantes</strong>:"
+				+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+				+ "Busso, Francisco Ignacio"
+				+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+				+ "Bode, Matías"
+				+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+				+ "Ferraro Trivelli, Giovani"
+				+ "</span></html>");
+		menuBar.add(mntmTrabajoPrctico);
 
 		// Loading content of first panel (Main Menu)
 		loadMainMenu();
@@ -1197,6 +1214,54 @@ public class MainMenu {
 				}
 			}
 		});
+		
+		// Eliminar insumo
+		JButton btnCalcular = new JButton("Calcular");
+		GridBagConstraints gbc_btnCalcular = new GridBagConstraints();
+		gbc_btnCalcular.anchor = GridBagConstraints.WEST;
+		gbc_btnCalcular.insets = new Insets(0, 0, 5, 5);
+		gbc_btnCalcular.gridx = 4;
+		gbc_btnCalcular.gridy = 3;
+		panel.add(btnCalcular, gbc_btnCalcular);
+
+		btnCalcular.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Integer rowId = tableCamiones.getSelectedRow();
+
+				if (rowId < 0) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún camión seleccionado", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+
+				Camion camionSelect = gestorCamion.getListaCamiones().get(tableCamiones.convertRowIndexToModel(rowId));
+				
+				ArrayList<Float> peso = new ArrayList<Float>(); 
+				ArrayList<Float> valor = new ArrayList<Float>();
+				ArrayList<Integer> ids = new ArrayList<Integer>();
+				
+				for(Insumo i : gestorInsumo.getListaInsumos())
+				{
+					peso.add(i.getPeso());
+					valor.add(i.getCosto());
+					ids.add(i.getId());
+				}
+				
+				Boolean[] resultado = camionSelect.resolver(peso.toArray(new Float[0]), valor.toArray(new Float[0]));
+
+				System.out.println(peso.toString());
+				System.out.println(valor.toString());
+				
+				for(int i = 0; i < resultado.length; i++)
+				{
+					System.out.println("(" + ids.get(i) + ") valor = " + resultado[i]);
+				}
+				
+				// array peso de todos insumos
+				// array costo de todos insumos
+
+			}
+		});
 
 		// ------------------------------------------------------------------------------------------------
 		// Tabla de insumos
@@ -1577,7 +1642,7 @@ public class MainMenu {
 		gbc_btnComboPlantasFinal.gridy = 4;
 		panel_1331.add(comboPlantasFinal, gbc_btnComboPlantasFinal);
 		
-		// Botón de buscar
+		// Mostrar caminos entre plantas
 		JButton btnBuscar = new JButton("Mostrar caminos entre plantas");
 		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
 		gbc_btnBuscar.anchor = GridBagConstraints.CENTER;
@@ -2320,7 +2385,7 @@ public class MainMenu {
 
 		jdialog.setResizable(false);
 		jdialog.setMinimumSize(new Dimension(100, 100));
-		jdialog.setBounds(100, 100, 450, 300);
+		jdialog.setBounds(100, 100, 350, 275);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		jdialog.setContentPane(contentPane);
@@ -2330,7 +2395,7 @@ public class MainMenu {
 		contentPane.add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 86, 58, 205, 32, 0 };
-		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 10, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel.columnWeights = new double[] { 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);

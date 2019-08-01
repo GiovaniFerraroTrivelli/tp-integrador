@@ -76,7 +76,7 @@ public class Camion {
 		this.capacidad = capacidad;
 	}
 	
-	public boolean[] resolver(Float[] peso, Float[] valor) {  // valor = costo insumo
+	public Boolean[] resolver(Float[] peso, Float[] valor) {  // valor = costo insumo
 		Integer N = peso.length; // items
 		Integer W = this.capacidad + 1; // max peso
 		  
@@ -98,7 +98,7 @@ public class Camion {
 		            sol[n][w] = (option2 > option1);
 		     }
 		}
-		boolean[] esSolucion= new boolean[N];
+		Boolean[] esSolucion= new Boolean[N];
 		for (int n = N-1, w = N-1; n >= 0; n--) {
 			if (sol[n][w]) {
 		    	esSolucion [n] = true;
