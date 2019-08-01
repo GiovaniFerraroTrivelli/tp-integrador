@@ -13,6 +13,7 @@ import java.util.List;
 import javax.swing.JPanel;
 import dominio.Planta;
 import dominio.Ruta;
+import estructuras.Arista;
 import estructuras.Vertice;
 import gestores.GestorPlanta;
 import gestores.GestorRuta;
@@ -57,7 +58,8 @@ public class GrafoPanel extends JPanel {
 
 					verticeSeleccionado.setColor(verticeSeleccionado.getColorBase());
 					actualizarPosicionVertice(verticeSeleccionado, event.getPoint());
-					inicializarAristas();
+					actualizarAristas();
+					//inicializarAristas();
 				}
 				verticeSeleccionado = null;
 				arrastrando = false;
@@ -69,7 +71,8 @@ public class GrafoPanel extends JPanel {
 			public void mouseDragged(MouseEvent event) {
 				if (verticeSeleccionado != null) {
 					actualizarPosicionVertice(verticeSeleccionado, event.getPoint());
-					inicializarAristas();
+					actualizarAristas();
+					//inicializarAristas();
 				}
 			}
 		});
@@ -135,6 +138,14 @@ public class GrafoPanel extends JPanel {
 			aristas.add(a);
 		}
 
+		getInstance().repaint();
+	}
+	
+	public void actualizarAristas() {
+		for(AristaLayout a: aristas) {
+			a.update();
+		}
+		
 		getInstance().repaint();
 	}
 
@@ -238,6 +249,7 @@ public class GrafoPanel extends JPanel {
 	}
 	
 	public void pintarRuta(List<Vertice> listaVertices) {
+		this.repintarAristas();
 		GestorRuta gr = GestorRuta.getInstance();
 		
 		System.out.println("Listavertices size:" + listaVertices.size());

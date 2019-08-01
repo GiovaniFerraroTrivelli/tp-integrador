@@ -86,7 +86,7 @@ public class AristaLayout {
 	public void setColor(Paint color) {
 		this.color = color;
 	}
-
+	
 	public void update() {
 		this.linea = new Line2D.Double(origen.getCoordenadaX() + offset, origen.getCoordenadaY() + offset,
 				destino.getCoordenadaX() + offset, destino.getCoordenadaY() + offset);
