@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dominio.Ruta;
+import estructuras.Vertice;
 import dominio.Planta;
 
 public class GestorRuta {
@@ -91,15 +92,15 @@ public class GestorRuta {
 		return null;
 	}
 
-	public ArrayList<Integer> getInfoRuta(List<Planta> listaPlantas) {
+	public ArrayList<Integer> getInfoRuta(List<Vertice> listaVertices) {
 		ArrayList<Integer> infoRuta = new ArrayList<Integer>();
 
 		Integer distanciaTotal = 0;
 		Integer tiempoTotal = 0;
 		Integer pesoMax = 0;
 
-		for (int i = 0; i < listaPlantas.size() - 1; i++) {
-			Ruta r = this.getRuta(listaPlantas.get(i), listaPlantas.get(i + 1));
+		for (int i = 0; i < listaVertices.size() - 1; i++) {
+			Ruta r = this.getRuta(listaVertices.get(i).getValor(), listaVertices.get(i + 1).getValor());
 			distanciaTotal += r.getDistancia();
 			tiempoTotal += r.getDuracion();
 

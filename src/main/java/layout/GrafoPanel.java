@@ -13,6 +13,7 @@ import java.util.List;
 import javax.swing.JPanel;
 import dominio.Planta;
 import dominio.Ruta;
+import estructuras.Vertice;
 import gestores.GestorPlanta;
 import gestores.GestorRuta;
 
@@ -236,11 +237,11 @@ public class GrafoPanel extends JPanel {
 		return null;
 	}
 	
-	public void pintarRuta(List<Planta> listaPlantas) {
+	public void pintarRuta(List<Vertice> llistaVertices) {
 		GestorRuta gr = GestorRuta.getInstance();
 		
-		for(int i = 0; i< listaPlantas.size()-1 ; i++) {
-			Ruta r = gr.getRuta(listaPlantas.get(i), listaPlantas.get(i+1));
+		for(int i = 0; i< llistaVertices.size()-1 ; i++) {
+			Ruta r = gr.getRuta(llistaVertices.get(i).getValor(), llistaVertices.get(i+1).getValor());
 			this.actualizarColorArista(this.getArista(r), Color.GREEN);
 		}
 	}
