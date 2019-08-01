@@ -237,11 +237,11 @@ public class GrafoPanel extends JPanel {
 		return null;
 	}
 	
-	public void pintarRuta(List<Vertice> llistaVertices) {
+	public void pintarRuta(List<Vertice> listaVertices) {
 		GestorRuta gr = GestorRuta.getInstance();
 		
-		for(int i = 0; i< llistaVertices.size()-1 ; i++) {
-			Ruta r = gr.getRuta(llistaVertices.get(i).getValor(), llistaVertices.get(i+1).getValor());
+		for(int i = 0; i< listaVertices.size()-1 ; i++) {
+			Ruta r = gr.getRuta(listaVertices.get(i).getValor(), listaVertices.get(i+1).getValor());
 			this.actualizarColorArista(this.getArista(r), Color.GREEN);
 		}
 	}
