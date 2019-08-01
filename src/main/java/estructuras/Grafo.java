@@ -1,6 +1,8 @@
 package estructuras;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -14,6 +16,7 @@ import java.util.Stack;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import dominio.Insumo;
 import dominio.Planta;
 import dominio.Ruta;
 import gestores.GestorPlanta;
@@ -376,6 +379,65 @@ public class Grafo {
 
 		}
 		return false;
+	}
+
+	public List<Vertice> mejorCaminoConInsumoDistancia(Planta origen, Planta destino,
+			ArrayList<Planta> necesitanInsumo) {
+		List<List<Vertice>> listaCaminos = this.caminos(origen, destino);
+
+		ArrayList<Vertice> verticesInsumo = new ArrayList<Vertice>();
+
+		for (Planta p : necesitanInsumo) {
+			verticesInsumo.add(new Vertice(p));
+		}
+
+		for (List<Vertice> lista : listaCaminos) {
+			if (!lista.containsAll(verticesInsumo)) {
+				listaCaminos.remove(lista);
+			}
+		}
+
+		Comparator<List<Vertice>> distanciaComparator = new Comparator<List<Vertice>>() {
+
+			@Override
+			public int compare(List<Vertice> camino1, List<Vertice> camino2) {
+				GestorRuta g = GestorRuta.getInstance();
+				return (g.getInfoRuta(camino1).get(0) - g.getInfoRuta(camino2).get(0));
+			}
+
+		};
+
+		Collections.sort(listaCaminos, distanciaComparator);
+		return listaCaminos.get(listaCaminos.size()-1);
+	}
+
+	public List<Vertice> mejorCaminoConInsumoTiempo(Planta origen, Planta destino, ArrayList<Planta> necesitanInsumo) {
+		List<List<Vertice>> listaCaminos = this.caminos(origen, destino);
+
+		ArrayList<Vertice> verticesInsumo = new ArrayList<Vertice>();
+
+		for (Planta p : necesitanInsumo) {
+			verticesInsumo.add(new Vertice(p));
+		}
+
+		for (List<Vertice> lista : listaCaminos) {
+			if (!lista.containsAll(verticesInsumo)) {
+				listaCaminos.remove(lista);
+			}
+		}
+
+		Comparator<List<Vertice>> tiempoComparator = new Comparator<List<Vertice>>() {
+
+			@Override
+			public int compare(List<Vertice> camino1, List<Vertice> camino2) {
+				GestorRuta g = GestorRuta.getInstance();
+				return (g.getInfoRuta(camino1).get(1) - g.getInfoRuta(camino2).get(1));
+			}
+
+		};
+
+		Collections.sort(listaCaminos, tiempoComparator);
+		return listaCaminos.get(listaCaminos.size()-1);
 	}
 
 }
