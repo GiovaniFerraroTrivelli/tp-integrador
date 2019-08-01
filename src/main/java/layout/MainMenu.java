@@ -23,6 +23,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -43,6 +44,7 @@ import dominio.Ruta;
 import dominio.Stock;
 import dominio.UnidadDeMedida;
 import estructuras.Grafo;
+import estructuras.Vertice;
 import dominio.Planta;
 import gestores.*;
 
@@ -72,6 +74,8 @@ public class MainMenu {
 	private static JComboBox<Insumo> comboInsumos;
 	private static JComboBox<Planta> comboPlantasInicial = new JComboBox<Planta>();
 	private static JComboBox<Planta> comboPlantasFinal = new JComboBox<Planta>();
+	private static JComboBox<List<List<Vertice>>> listaListaCaminos = new JComboBox<List<List<Vertice>>>();
+	private static JLabel lblResultados = new JLabel("");
 	
 	static GestorPlanta gestorPlanta = GestorPlanta.getInstance();
 	static GestorInsumo gestorInsumo = GestorInsumo.getInstance();
@@ -205,6 +209,9 @@ public class MainMenu {
 						new DefaultComboBoxModel<Planta>(gestorPlanta.getListaPlantas().values().toArray(new Planta[0])));				
 				comboPlantasInicial.setSelectedIndex(-1);
 				comboPlantasFinal.setSelectedIndex(-1);
+				listaListaCaminos.removeAllItems();
+				listaListaCaminos.setVisible(false);
+				lblResultados.setText("");
 				
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Info");
 			}
@@ -1514,9 +1521,9 @@ public class MainMenu {
 
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[] { 30, 0, 0 };
-		gbl_panel_1.rowHeights = new int[] { 0, 0, 0, 0 };
+		gbl_panel_1.rowHeights = new int[] { 0, 0, 0, 0, 0 };
 		gbl_panel_1.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel_1331.setLayout(gbl_panel_1);
 
 		// Planta inicial
@@ -1562,34 +1569,70 @@ public class MainMenu {
 		gbc_btnBuscar.gridx = 0;
 		gbc_btnBuscar.gridy = 2;
 		panel_1331.add(btnBuscar, gbc_btnBuscar);
+
+		// Planta inicial
+		GridBagConstraints gbc_lblResultados = new GridBagConstraints();
+		gbc_lblResultados.insets = new Insets(0, 0, 0, 0);
+		gbc_lblResultados.anchor = GridBagConstraints.NORTH;
+		gbc_lblResultados.gridx = 0;
+		gbc_lblResultados.gridy = 3;
+		gbc_lblResultados.gridwidth = 3;
+
+		panel_1331.add(lblResultados, gbc_lblResultados);
+		
+		GridBagConstraints gbc_listScroller = new GridBagConstraints();
+		gbc_listScroller.anchor = GridBagConstraints.NORTH;
+		gbc_listScroller.gridwidth = 3;
+		gbc_listScroller.insets = new Insets(0, 0, 0, 0);
+		gbc_listScroller.gridx = 0;
+		gbc_listScroller.gridy = 4;
+		panel_1331.add(listaListaCaminos, gbc_listScroller);
+		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Planta pInicial = (Planta)comboPlantasInicial.getSelectedItem();
 				Planta pFinal = (Planta)comboPlantasFinal.getSelectedItem();
 				
-				Grafo g = new Grafo();
-				List lista = g.caminos(pInicial, pFinal);
-				
-				System.out.println(lista);			
+				if(pInicial == null || pFinal == null)
+				{
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "Debe seleccionar una planta inicial y una planta final", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
 
+					return;
+				}
+				
+				Grafo g = new Grafo();
+				List<List<Vertice>> lista = g.caminos(pInicial, pFinal);
+				
+				System.out.println(lista);
+
+				if(lista.size() > 0)
+				{
+					listaListaCaminos.setVisible(true);
+					lblResultados.setText(lista.size() + " resultado(s):");
+					listaListaCaminos.setModel(new DefaultComboBoxModel(lista.toArray()));
+					listaListaCaminos.setSelectedIndex(-1);
+				}
+				else
+				{
+					listaListaCaminos.setVisible(false);
+					lblResultados.setText("Sin caminos");
+				}
 			}
 		});
 		
-		JList<List<Planta>> list = new JList<List<Planta>>(); //data has type Object[]
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setLayoutOrientation(JList.VERTICAL);
-		list.setVisibleRowCount(-1);
-		JScrollPane listScroller = new JScrollPane(list);
-		
-		GridBagConstraints gbc_listScroller = new GridBagConstraints();
-		gbc_listScroller.anchor = GridBagConstraints.CENTER;
-		gbc_listScroller.gridwidth = 3;
-		gbc_listScroller.insets = new Insets(0, 0, 10, 0);
-		gbc_listScroller.gridx = 0;
-		gbc_listScroller.gridy = 3;
-		panel_1331.add(list, gbc_listScroller);
-		
-		listScroller.setPreferredSize(new Dimension(250, 80));
+		listaListaCaminos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Vertice> listaSelect = (List<Vertice>) listaListaCaminos.getSelectedItem();
+
+				if (listaSelect == null)
+					return;
+
+				grafoPanel.pintarRuta(listaSelect);
+				grafoPanel.repaint();
+			}
+		});
+
 	}
 
 	public static void refreshCamionTable() {
