@@ -60,6 +60,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.ListSelectionModel;
 import javax.swing.BorderFactory;
 
@@ -72,10 +73,11 @@ public class MainMenu {
 	private static JTable tableCamiones;
 	private static JTable tableRutas;
 	private static JComboBox<Insumo> comboInsumos;
-	private static JComboBox<Planta> comboPlantasInicial = new JComboBox<Planta>();
-	private static JComboBox<Planta> comboPlantasFinal = new JComboBox<Planta>();
+	private static JComboBox<Planta> comboPlantasInicial;
+	private static JComboBox<Planta> comboPlantasFinal;
 	private static JComboBox<List<List<Vertice>>> listaListaCaminos = new JComboBox<List<List<Vertice>>>();
 	private static JLabel lblResultados = new JLabel("");
+	private static JLabel lblDatos = new JLabel("");
 	
 	static GestorPlanta gestorPlanta = GestorPlanta.getInstance();
 	static GestorInsumo gestorInsumo = GestorInsumo.getInstance();
@@ -212,6 +214,7 @@ public class MainMenu {
 				listaListaCaminos.removeAllItems();
 				listaListaCaminos.setVisible(false);
 				lblResultados.setText("");
+				lblDatos.setText("");
 				
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Info");
 			}
@@ -245,7 +248,7 @@ public class MainMenu {
 			b.setHorizontalTextPosition(SwingConstants.CENTER);
 			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			b.setFocusPainted(false);
-			b.setFont(new Font("Segoe UI", Font.PLAIN, 32));
+			b.setFont(new Font("Segoe UI", Font.PLAIN, 24));
 			pnlMainMenu.add(b);
 		}
 	}
@@ -1459,40 +1462,6 @@ public class MainMenu {
 		gbc_panel_1.gridy = 5;
 		panel.add(panel_133, gbc_panel_1);
 
-		// Menú desplegable
-		JLabel lblSelectInsumo = new JLabel("Seleccionar insumo:");
-		GridBagConstraints gbc_lblSelectInsumo = new GridBagConstraints();
-		gbc_lblSelectInsumo.insets = new Insets(0, 0, 5, 5);
-		gbc_lblSelectInsumo.anchor = GridBagConstraints.EAST;
-		gbc_lblSelectInsumo.gridx = 4;
-		gbc_lblSelectInsumo.gridy = 4;
-
-		panel.add(lblSelectInsumo, gbc_lblSelectInsumo);
-
-		comboInsumos = new JComboBox<Insumo>();
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton.gridx = 5;
-		gbc_btnNewButton.gridy = 4;
-		panel.add(comboInsumos, gbc_btnNewButton);
-	
-		comboInsumos.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Insumo insumoSelect = (Insumo) comboInsumos.getSelectedItem();
-
-				if (insumoSelect == null)
-					return;
-
-				grafoPanel.repintarVertices();
-				
-				for(Planta planta : gestorPlanta.necesitanInsumo(insumoSelect)){
-                    grafoPanel.nodoNecesitaInsumo(planta);
-                }
-				
-				grafoPanel.repaint();
-			}
-		});
-
 		// ------------------------------------------------------------------------------------------------
 		// Panel para visualización
 		// ------------------------------------------------------------------------------------------------
@@ -1521,43 +1490,91 @@ public class MainMenu {
 
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[] { 30, 0, 0 };
-		gbl_panel_1.rowHeights = new int[] { 0, 0, 0, 0, 0 };
+		gbl_panel_1.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel_1.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel_1331.setLayout(gbl_panel_1);
 
+		// Insumos faltantes
+		JLabel lblInsumo = new JLabel("Insumo:");
+		GridBagConstraints gbc_lblInsumo = new GridBagConstraints();
+		gbc_lblInsumo.insets = new Insets(0, 0, 5, 5);
+		gbc_lblInsumo.anchor = GridBagConstraints.EAST;
+		gbc_lblInsumo.gridx = 0;
+		gbc_lblInsumo.gridy = 1;
+
+		panel_1331.add(lblInsumo, gbc_lblInsumo);
+		
+		comboInsumos = new JComboBox<Insumo>();
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton.gridx = 1;
+		gbc_btnNewButton.gridy = 1;
+		panel_1331.add(comboInsumos, gbc_btnNewButton);
+	
+		comboInsumos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Insumo insumoSelect = (Insumo) comboInsumos.getSelectedItem();
+
+				if (insumoSelect == null)
+					return;
+
+				grafoPanel.repintarVertices();
+				
+				for(Planta planta : gestorPlanta.necesitanInsumo(insumoSelect)){
+                    grafoPanel.nodoNecesitaInsumo(planta);
+                }
+				
+				grafoPanel.repaint();
+			}
+		});		
+
+		// Separador
+		GridBagConstraints gbc_lblSep = new GridBagConstraints();
+		gbc_lblSep.insets = new Insets(15, 0, 15, 0);
+		gbc_lblSep.anchor = GridBagConstraints.NORTH;
+		gbc_lblSep.gridx = 0;
+		gbc_lblSep.gridy = 2;
+		gbc_lblSep.gridwidth = 2;
+		gbc_lblSep.weighty = 0;
+		JSeparator jsep = new JSeparator(SwingConstants.HORIZONTAL);
+		jsep.setPreferredSize(new Dimension(150,5));
+		panel_1331.add(jsep, gbc_lblSep);
+		
 		// Planta inicial
 		JLabel lblInicial = new JLabel("Planta inicial:");
 		GridBagConstraints gbc_lblInicial = new GridBagConstraints();
 		gbc_lblInicial.insets = new Insets(0, 0, 5, 5);
 		gbc_lblInicial.anchor = GridBagConstraints.EAST;
 		gbc_lblInicial.gridx = 0;
-		gbc_lblInicial.gridy = 0;
+		gbc_lblInicial.gridy = 3;
 
 		panel_1331.add(lblInicial, gbc_lblInicial);
 		
+		comboPlantasInicial = new JComboBox<Planta>();
 		GridBagConstraints gbc_btnComboPlantasInicial = new GridBagConstraints();
 		gbc_btnComboPlantasInicial.gridwidth = 1;
 		gbc_btnComboPlantasInicial.insets = new Insets(0, 0, 5, 0);
 		gbc_btnComboPlantasInicial.gridx = 1;
-		gbc_btnComboPlantasInicial.gridy = 0;
+		gbc_btnComboPlantasInicial.gridy = 3;
 		panel_1331.add(comboPlantasInicial, gbc_btnComboPlantasInicial);
 		
-		// Planta inicial
+		// Planta final
 		JLabel lblFinal = new JLabel("Planta final:");
 		GridBagConstraints gbc_lblFinal = new GridBagConstraints();
 		gbc_lblFinal.insets = new Insets(0, 0, 5, 5);
 		gbc_lblFinal.anchor = GridBagConstraints.EAST;
 		gbc_lblFinal.gridx = 0;
-		gbc_lblFinal.gridy = 1;
+		gbc_lblFinal.gridy = 4;
 
 		panel_1331.add(lblFinal, gbc_lblFinal);
 		
+		comboPlantasFinal = new JComboBox<Planta>();
 		GridBagConstraints gbc_btnComboPlantasFinal = new GridBagConstraints();
 		gbc_btnComboPlantasFinal.gridwidth = 2;
 		gbc_btnComboPlantasFinal.insets = new Insets(0, 0, 5, 0);
 		gbc_btnComboPlantasFinal.gridx = 1;
-		gbc_btnComboPlantasFinal.gridy = 1;
+		gbc_btnComboPlantasFinal.gridy = 4;
 		panel_1331.add(comboPlantasFinal, gbc_btnComboPlantasFinal);
 		
 		// Botón de buscar
@@ -1565,9 +1582,9 @@ public class MainMenu {
 		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
 		gbc_btnBuscar.anchor = GridBagConstraints.CENTER;
 		gbc_btnBuscar.gridwidth = 5;
-		gbc_btnBuscar.insets = new Insets(0, 0, 10, 0);
+		gbc_btnBuscar.insets = new Insets(10, 0, 10, 0);
 		gbc_btnBuscar.gridx = 0;
-		gbc_btnBuscar.gridy = 2;
+		gbc_btnBuscar.gridy = 5;
 		panel_1331.add(btnBuscar, gbc_btnBuscar);
 
 		// Planta inicial
@@ -1575,7 +1592,7 @@ public class MainMenu {
 		gbc_lblResultados.insets = new Insets(0, 0, 0, 0);
 		gbc_lblResultados.anchor = GridBagConstraints.NORTH;
 		gbc_lblResultados.gridx = 0;
-		gbc_lblResultados.gridy = 3;
+		gbc_lblResultados.gridy = 6;
 		gbc_lblResultados.gridwidth = 3;
 
 		panel_1331.add(lblResultados, gbc_lblResultados);
@@ -1585,9 +1602,18 @@ public class MainMenu {
 		gbc_listScroller.gridwidth = 3;
 		gbc_listScroller.insets = new Insets(0, 0, 0, 0);
 		gbc_listScroller.gridx = 0;
-		gbc_listScroller.gridy = 4;
+		gbc_listScroller.gridy = 7;
 		panel_1331.add(listaListaCaminos, gbc_listScroller);
-		
+
+		GridBagConstraints gbc_lblDatos = new GridBagConstraints();
+		gbc_lblDatos.insets = new Insets(0, 0, 0, 0);
+		gbc_lblDatos.anchor = GridBagConstraints.NORTH;
+		gbc_lblDatos.gridx = 0;
+		gbc_lblDatos.gridy = 8;
+		gbc_lblDatos.gridwidth = 5;
+
+		panel_1331.add(lblDatos, gbc_lblDatos);
+
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Planta pInicial = (Planta)comboPlantasInicial.getSelectedItem();
@@ -1618,6 +1644,8 @@ public class MainMenu {
 					listaListaCaminos.setVisible(false);
 					lblResultados.setText("Sin caminos");
 				}
+				
+				lblDatos.setText("");
 			}
 		});
 		
@@ -1630,6 +1658,11 @@ public class MainMenu {
 
 				grafoPanel.pintarRuta(listaSelect);
 				grafoPanel.repaint();
+				
+				ArrayList<Integer> infoRuta = gestorRuta.getInfoRuta(listaSelect);
+				lblDatos.setText("<html><center style='padding-top:15px'>Distancia total del viaje: " + infoRuta.get(0)
+				+ " km<br>Duración del viaje: " + infoRuta.get(1)
+				+ " min.<br>Peso máximo admitido: " + infoRuta.get(2) + " Tn.</center></html>");
 			}
 		});
 
@@ -1654,7 +1687,7 @@ public class MainMenu {
 			String dominio = camion.getDominio();
 			Float costoKm = camion.getCostoKm();
 			String transpLiq = camion.getTransportaLiq() ? "Sí" : "No";
-			Float capacidad = camion.getCapacidad();
+			Integer capacidad = camion.getCapacidad();
 
 			Object[] data = { id, marca, modelo, anio, dominio, costoKm, transpLiq, capacidad };
 			tableModel.addRow(data);
@@ -2424,7 +2457,7 @@ public class MainMenu {
 				camion.setDominio(txtDominio.getText());
 				camion.setCostoKm(Float.parseFloat(txtCostoKm.getText()));
 				camion.setTransportaLiq(chckbxS.isSelected());
-				camion.setCapacidad(Float.parseFloat(txtCapacidad.getText()));
+				camion.setCapacidad(Integer.parseInt(txtCapacidad.getText()));
 
 				refreshCamionTable();
 				jdialog.dispose();
@@ -2565,7 +2598,7 @@ public class MainMenu {
 		gbc_lblCapacidad.gridy = 6;
 		panel.add(lblCapacidad, gbc_lblCapacidad);
 
-		txtCapacidad = new JTextField(camion.getCapacidad().toString());
+		txtCapacidad = new JTextField(camion.getCapacidad());
 		GridBagConstraints gbc_txtCapacidad = new GridBagConstraints();
 		gbc_txtCapacidad.insets = new Insets(0, 0, 5, 5);
 		gbc_txtCapacidad.fill = GridBagConstraints.HORIZONTAL;
@@ -2594,7 +2627,7 @@ public class MainMenu {
 				camion.setDominio(txtDominio.getText());
 				camion.setCostoKm(Float.parseFloat(txtCostoKm.getText()));
 				camion.setTransportaLiq(chckbxS.isSelected());
-				camion.setCapacidad(Float.parseFloat(txtCapacidad.getText()));
+				camion.setCapacidad(Integer.parseInt(txtCapacidad.getText()));
 
 				refreshCamionTable();
 				jdialog.dispose();
