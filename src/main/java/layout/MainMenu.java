@@ -216,8 +216,8 @@ public class MainMenu {
 		JButton infob = new JButton(infoIcon);
 		infob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				grafoPanel.inicializarVertices();
-				grafoPanel.inicializarAristas();
+				grafoPanel.inicializarVertices(gestorPlanta.getListaPlantas());
+				grafoPanel.inicializarAristas(gestorRuta.getListaRutas());
 				comboInsumos.setModel(
 						new DefaultComboBoxModel<Insumo>(gestorInsumo.getListaInsumos().toArray(new Insumo[0])));
 				comboInsumos.setSelectedIndex(-1);
