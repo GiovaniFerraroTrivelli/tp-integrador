@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import dominio.Insumo;
 import dominio.Planta;
 import dominio.Planta.TipoPlanta;
+import estructuras.Arista;
+import estructuras.Vertice;
 import dominio.Stock;
 import estructurasAuxiliares.ArbolBinarioBusqueda;
 
@@ -114,18 +117,22 @@ public class GestorPlanta {
 		Collections.sort(listaPlantas, pageRankComparator);
 		return listaPlantas;
 	}
-	
-    public Planta getAcopioInicial() {
-    	try
-    	{
-    		return this.listaPlantas.values().stream().filter(p -> p.getTipo() == TipoPlanta.PLANTA_ACOPIO_INICIAL).findFirst().get();
-    	} catch(NoSuchElementException e) { return null; }
-    }
-    
-    public Planta getAcopioFinal() {
-    	try
-    	{
-    		return this.listaPlantas.values().stream().filter(p -> p.getTipo() == TipoPlanta.PLANTA_ACOPIO_FINAL).findFirst().get();
-    	} catch(NoSuchElementException e) { return null; }
-    }
+
+	public Planta getAcopioInicial() {
+		try {
+			return this.listaPlantas.values().stream().filter(p -> p.getTipo() == TipoPlanta.PLANTA_ACOPIO_INICIAL)
+					.findFirst().get();
+		} catch (NoSuchElementException e) {
+			return null;
+		}
+	}
+
+	public Planta getAcopioFinal() {
+		try {
+			return this.listaPlantas.values().stream().filter(p -> p.getTipo() == TipoPlanta.PLANTA_ACOPIO_FINAL)
+					.findFirst().get();
+		} catch (NoSuchElementException e) {
+			return null;
+		}
+	}
 }
