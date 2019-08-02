@@ -127,6 +127,7 @@ public class GrafoPanel extends JPanel {
 			aristas.add(a);
 		}
 
+	
 		getInstance().repaint();
 	}
 
