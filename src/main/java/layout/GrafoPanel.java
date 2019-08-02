@@ -9,6 +9,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.JPanel;
 import dominio.Planta;
@@ -86,29 +87,21 @@ public class GrafoPanel extends JPanel {
 		return aristas;
 	}
 
-	public void inicializarVertices() {
+	public void inicializarVertices(HashMap<Integer, Planta> listaPlantas) {
 		vertices.clear();
-
-		GestorPlanta gestorPlanta = GestorPlanta.getInstance();
-
-		ArrayList<Planta> listaPlantas = new ArrayList<Planta>(gestorPlanta.getListaPlantas().values());
 
 		int posicionY = 100;
 		int posicionX = 0;
 		int i = 0;
-		// Color c = null;
 
-		for (Planta p : listaPlantas) {
+		for (Planta p : listaPlantas.values()) {
 			i++;
 			posicionX += 60;
 
-			/* SETEA LA POSICION EN Y */
 			if (i % 2 == 0) {
 				posicionY = 100;
-				// c = Color.BLUE;
 			} else {
 				posicionY = 200;
-				// c = Color.RED;
 			}
 
 			VerticeLayout v = new VerticeLayout(posicionX, posicionY, p);
@@ -120,12 +113,8 @@ public class GrafoPanel extends JPanel {
 		getInstance().repaint();
 	}
 
-	public void inicializarAristas() {
+	public void inicializarAristas(ArrayList<Ruta> listaRutas) {
 		aristas.clear();
-
-		GestorRuta gestorRuta = GestorRuta.getInstance();
-
-		ArrayList<Ruta> listaRutas = new ArrayList<Ruta>(gestorRuta.getListaRutas());
 
 		for (Ruta rut : listaRutas) {
 
