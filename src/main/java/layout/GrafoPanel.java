@@ -59,7 +59,7 @@ public class GrafoPanel extends JPanel {
 					verticeSeleccionado.setColor(verticeSeleccionado.getColorBase());
 					actualizarPosicionVertice(verticeSeleccionado, event.getPoint());
 					actualizarAristas();
-					//inicializarAristas();
+					// inicializarAristas();
 				}
 				verticeSeleccionado = null;
 				arrastrando = false;
@@ -72,7 +72,7 @@ public class GrafoPanel extends JPanel {
 				if (verticeSeleccionado != null) {
 					actualizarPosicionVertice(verticeSeleccionado, event.getPoint());
 					actualizarAristas();
-					//inicializarAristas();
+					// inicializarAristas();
 				}
 			}
 		});
@@ -140,12 +140,12 @@ public class GrafoPanel extends JPanel {
 
 		getInstance().repaint();
 	}
-	
+
 	public void actualizarAristas() {
-		for(AristaLayout a: aristas) {
+		for (AristaLayout a : aristas) {
 			a.update();
 		}
-		
+
 		getInstance().repaint();
 	}
 
@@ -232,33 +232,42 @@ public class GrafoPanel extends JPanel {
 			this.actualizarColorVertice(v, Color.BLUE);
 		}
 	}
-	
+
 	public void repintarAristas() {
 		for (AristaLayout a : aristas) {
 			this.actualizarColorArista(a, Color.RED);
 		}
 	}
-	
+
 	public AristaLayout getArista(Ruta r) {
-		for(AristaLayout a: this.aristas) {
-			if(a.getRutaAsociada() == r) {
+		for (AristaLayout a : this.aristas) {
+			if (a.getRutaAsociada() == r) {
 				return a;
 			}
 		}
 		return null;
 	}
-	
+
 	public void pintarRuta(List<Vertice> listaVertices) {
 		this.repintarAristas();
 		GestorRuta gr = GestorRuta.getInstance();
-		
+
 		System.out.println("Listavertices size:" + listaVertices.size());
-		
-		for(int i = 0; i< listaVertices.size()-1 ; i++) {
-			Ruta r = gr.getRuta(listaVertices.get(i).getValor(), listaVertices.get(i+1).getValor());
+
+		for (int i = 0; i < listaVertices.size() - 1; i++) {
+			Ruta r = gr.getRuta(listaVertices.get(i).getValor(), listaVertices.get(i + 1).getValor());
 			this.actualizarColorArista(this.getArista(r), Color.GREEN);
 			System.out.println("Pintar ruta i = " + i);
-			
+
+		}
+	}
+
+	public void pintarRutaNuevo(List<Planta> listaPlantas) {
+		this.repintarAristas();
+		GestorRuta gestorRuta = GestorRuta.getInstance();
+		for (int i = 0; i < listaPlantas.size() - 1; i++) {
+			Ruta r = gestorRuta.getRuta(listaPlantas.get(i), listaPlantas.get(i + 1));
+			this.actualizarColorArista(this.getArista(r), Color.GREEN);
 		}
 	}
 }
