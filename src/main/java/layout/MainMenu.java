@@ -592,7 +592,7 @@ public class MainMenu {
 		pnlPlantas.add(panel, BorderLayout.CENTER);
 
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 0, 103, 0, 0, 99, 111, 101, 193, 0, 179, 84 };
+		gbl_panel.columnWidths = new int[] { 0, 103, 0, 0, 99, 200, 101, 250, 10, 10, 84 };
 		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
@@ -672,35 +672,26 @@ public class MainMenu {
 		// Caja de búsqueda
 		// ------------------------------------------------------------------------------------------------
 
-		// Label de buscar planta
-		JLabel lblBuscarPlantas = new JLabel("Buscar plantas:");
-		GridBagConstraints gbc_lblBuscarPlantas = new GridBagConstraints();
-		gbc_lblBuscarPlantas.insets = new Insets(0, 0, 5, 5);
-		gbc_lblBuscarPlantas.anchor = GridBagConstraints.EAST;
-		gbc_lblBuscarPlantas.gridx = 7;
-		gbc_lblBuscarPlantas.gridy = 4;
-		panel.add(lblBuscarPlantas, gbc_lblBuscarPlantas);
-
 		// Input de búsqueda
 		JTextField txtSearch = new JTextField();
 		txtSearch.setToolTipText("Escriba aquí lo que desea buscar...");
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.gridwidth = 2;
+		gbc_textField_1.gridwidth = 1;
 		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_1.fill = GridBagConstraints.BOTH;
-		gbc_textField_1.gridx = 8;
+		gbc_textField_1.gridx = 5;
 		gbc_textField_1.gridy = 4;
 		panel.add(txtSearch, gbc_textField_1);
 		txtSearch.setColumns(10);
 
 		// Botón de buscar
-		JButton btnBuscar = new JButton("Buscar");
+		JButton btnBuscar = new JButton("Buscar planta");
 		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
 		gbc_btnBuscar.anchor = GridBagConstraints.WEST;
 		gbc_btnBuscar.gridwidth = 2;
 		gbc_btnBuscar.fill = GridBagConstraints.VERTICAL;
 		gbc_btnBuscar.insets = new Insets(0, 0, 5, 0);
-		gbc_btnBuscar.gridx = 10;
+		gbc_btnBuscar.gridx = 6;
 		gbc_btnBuscar.gridy = 4;
 		panel.add(btnBuscar, gbc_btnBuscar);
 
@@ -717,20 +708,12 @@ public class MainMenu {
 		// Botones de administración de Planta
 		// ------------------------------------------------------------------------------------------------
 
-		JLabel lblPlantas = new JLabel("Plantas:");
-		GridBagConstraints gbc_lblPlantas = new GridBagConstraints();
-		gbc_lblPlantas.anchor = GridBagConstraints.EAST;
-		gbc_lblPlantas.insets = new Insets(0, 0, 5, 5);
-		gbc_lblPlantas.gridx = 1;
-		gbc_lblPlantas.gridy = 4;
-		panel.add(lblPlantas, gbc_lblPlantas);
-
 		// Añadir planta
 		JButton btnNuevoInsumo = new JButton("Añadir");
 		GridBagConstraints gbc_btnNuevoInsumo = new GridBagConstraints();
 		gbc_btnNuevoInsumo.anchor = GridBagConstraints.EAST;
 		gbc_btnNuevoInsumo.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNuevoInsumo.gridx = 2;
+		gbc_btnNuevoInsumo.gridx = 1;
 		gbc_btnNuevoInsumo.gridy = 4;
 
 		btnNuevoInsumo.addActionListener(new ActionListener() {
@@ -768,7 +751,7 @@ public class MainMenu {
 		JButton btnEditar_1 = new JButton("Editar");
 		GridBagConstraints gbc_btnEditar_1 = new GridBagConstraints();
 		gbc_btnEditar_1.insets = new Insets(0, 0, 5, 5);
-		gbc_btnEditar_1.gridx = 3;
+		gbc_btnEditar_1.gridx = 2;
 		gbc_btnEditar_1.gridy = 4;
 
 		btnEditar_1.addActionListener(new ActionListener() {
@@ -798,7 +781,7 @@ public class MainMenu {
 		GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
 		gbc_btnEliminar.anchor = GridBagConstraints.WEST;
 		gbc_btnEliminar.insets = new Insets(0, 0, 5, 5);
-		gbc_btnEliminar.gridx = 4;
+		gbc_btnEliminar.gridx = 3;
 		gbc_btnEliminar.gridy = 4;
 
 		btnEliminar.addActionListener(new ActionListener() {
@@ -833,7 +816,7 @@ public class MainMenu {
 		GridBagConstraints gbc_btnType = new GridBagConstraints();
 		gbc_btnType.anchor = GridBagConstraints.WEST;
 		gbc_btnType.insets = new Insets(0, 0, 5, 5);
-		gbc_btnType.gridx = 5;
+		gbc_btnType.gridx = 4;
 		gbc_btnType.gridy = 4;
 
 		btnType.addActionListener(new ActionListener() {
@@ -893,7 +876,7 @@ public class MainMenu {
 		// Tabla de Plantas
 		// ------------------------------------------------------------------------------------------------
 		GridBagConstraints gbc_panel_9 = new GridBagConstraints();
-		gbc_panel_9.gridwidth = 5;
+		gbc_panel_9.gridwidth = 6;
 		gbc_panel_9.insets = new Insets(0, 0, 0, 5);
 		gbc_panel_9.fill = GridBagConstraints.BOTH;
 		gbc_panel_9.gridx = 1;
@@ -933,29 +916,15 @@ public class MainMenu {
 		// ------------------------------------------------------------------------------------------------
 		// Botones de Insumo -> Stock a Planta
 		// ------------------------------------------------------------------------------------------------
-		JPanel panel_1 = new JPanel();
-		GridBagConstraints gbc_panel_11 = new GridBagConstraints();
-		gbc_panel_11.insets = new Insets(0, 0, 0, 5);
-		gbc_panel_11.fill = GridBagConstraints.HORIZONTAL;
-		gbc_panel_11.gridx = 6;
-		gbc_panel_11.gridy = 5;
-		panel.add(panel_1, gbc_panel_11);
-
-		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[] { 30, 0, 0 };
-		gbl_panel_1.rowHeights = new int[] { 0, 0, 0, 0 };
-		gbl_panel_1.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		panel_1.setLayout(gbl_panel_1);
-
+		
 		// Añadir insumo
 		JButton btnAadirInsumo = new JButton("Añadir insumo");
 		GridBagConstraints gbc_btnAadirInsumo = new GridBagConstraints();
-		gbc_btnAadirInsumo.gridwidth = 2;
+		gbc_btnAadirInsumo.gridwidth = 1;
 		gbc_btnAadirInsumo.insets = new Insets(0, 0, 5, 0);
-		gbc_btnAadirInsumo.gridx = 0;
-		gbc_btnAadirInsumo.gridy = 0;
-		panel_1.add(btnAadirInsumo, gbc_btnAadirInsumo);
+		gbc_btnAadirInsumo.gridx = 8;
+		gbc_btnAadirInsumo.gridy = 4;
+		panel.add(btnAadirInsumo, gbc_btnAadirInsumo);
 
 		btnAadirInsumo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -981,10 +950,11 @@ public class MainMenu {
 		// Eliminar insumo
 		JButton btnEliminarInsumo = new JButton("Eliminar insumo");
 		GridBagConstraints gbc_btnEliminarInsumo = new GridBagConstraints();
-		gbc_btnEliminarInsumo.gridwidth = 2;
-		gbc_btnEliminarInsumo.gridx = 0;
-		gbc_btnEliminarInsumo.gridy = 2;
-		panel_1.add(btnEliminarInsumo, gbc_btnEliminarInsumo);
+		gbc_btnEliminarInsumo.insets = new Insets(0, 0, 5, 0);
+		gbc_btnEliminarInsumo.gridwidth = 1;
+		gbc_btnEliminarInsumo.gridx = 9;
+		gbc_btnEliminarInsumo.gridy = 4;
+		panel.add(btnEliminarInsumo, gbc_btnEliminarInsumo);
 
 		btnEliminarInsumo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1381,6 +1351,14 @@ public class MainMenu {
 
 		btnNuevoCamino.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(gestorPlanta.getListaPlantas().size() < 2)
+				{
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay suficientes plantas cargadas",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+
+					return;
+				}
+				
 				CreateRutaDialog();
 			}
 		});
@@ -1555,9 +1533,9 @@ public class MainMenu {
 
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[] { 30, 0, 0 };
-		gbl_panel_1.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panel_1.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel_1.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel_1331.setLayout(gbl_panel_1);
 
 		// Insumos faltantes
@@ -1594,12 +1572,32 @@ public class MainMenu {
 			}
 		});		
 
+		// Mostrar camino optimo por tiempo
+		JButton btnCaminoOptimoTiempo = new JButton("Mostrar camino óptimo por tiempo");
+		GridBagConstraints gbc_btnCaminoOptimoTiempo = new GridBagConstraints();
+		gbc_btnCaminoOptimoTiempo.anchor = GridBagConstraints.CENTER;
+		gbc_btnCaminoOptimoTiempo.gridwidth = 5;
+		gbc_btnCaminoOptimoTiempo.insets = new Insets(10, 0, 10, 0);
+		gbc_btnCaminoOptimoTiempo.gridx = 0;
+		gbc_btnCaminoOptimoTiempo.gridy = 2;
+		panel_1331.add(btnCaminoOptimoTiempo, gbc_btnCaminoOptimoTiempo);
+		
+		// Mostrar camino optimo por distancia
+		JButton btnCaminoOptimoDistancia = new JButton("Mostrar camino óptimo por distancia");
+		GridBagConstraints gbc_btnCaminoOptimoDistancia = new GridBagConstraints();
+		gbc_btnCaminoOptimoDistancia.anchor = GridBagConstraints.CENTER;
+		gbc_btnCaminoOptimoDistancia.gridwidth = 5;
+		gbc_btnCaminoOptimoDistancia.insets = new Insets(0, 0, 5, 0);
+		gbc_btnCaminoOptimoDistancia.gridx = 0;
+		gbc_btnCaminoOptimoDistancia.gridy = 3;
+		panel_1331.add(btnCaminoOptimoDistancia, gbc_btnCaminoOptimoDistancia);
+		
 		// Separador
 		GridBagConstraints gbc_lblSep = new GridBagConstraints();
 		gbc_lblSep.insets = new Insets(15, 0, 15, 0);
 		gbc_lblSep.anchor = GridBagConstraints.NORTH;
 		gbc_lblSep.gridx = 0;
-		gbc_lblSep.gridy = 2;
+		gbc_lblSep.gridy = 4;
 		gbc_lblSep.gridwidth = 2;
 		gbc_lblSep.weighty = 0;
 		JSeparator jsep = new JSeparator(SwingConstants.HORIZONTAL);
@@ -1612,7 +1610,7 @@ public class MainMenu {
 		gbc_lblInicial.insets = new Insets(0, 0, 5, 5);
 		gbc_lblInicial.anchor = GridBagConstraints.EAST;
 		gbc_lblInicial.gridx = 0;
-		gbc_lblInicial.gridy = 3;
+		gbc_lblInicial.gridy = 5;
 
 		panel_1331.add(lblInicial, gbc_lblInicial);
 		
@@ -1621,7 +1619,7 @@ public class MainMenu {
 		gbc_btnComboPlantasInicial.gridwidth = 1;
 		gbc_btnComboPlantasInicial.insets = new Insets(0, 0, 5, 0);
 		gbc_btnComboPlantasInicial.gridx = 1;
-		gbc_btnComboPlantasInicial.gridy = 3;
+		gbc_btnComboPlantasInicial.gridy = 5;
 		panel_1331.add(comboPlantasInicial, gbc_btnComboPlantasInicial);
 		
 		// Planta final
@@ -1630,7 +1628,7 @@ public class MainMenu {
 		gbc_lblFinal.insets = new Insets(0, 0, 5, 5);
 		gbc_lblFinal.anchor = GridBagConstraints.EAST;
 		gbc_lblFinal.gridx = 0;
-		gbc_lblFinal.gridy = 4;
+		gbc_lblFinal.gridy = 6;
 
 		panel_1331.add(lblFinal, gbc_lblFinal);
 		
@@ -1639,7 +1637,7 @@ public class MainMenu {
 		gbc_btnComboPlantasFinal.gridwidth = 2;
 		gbc_btnComboPlantasFinal.insets = new Insets(0, 0, 5, 0);
 		gbc_btnComboPlantasFinal.gridx = 1;
-		gbc_btnComboPlantasFinal.gridy = 4;
+		gbc_btnComboPlantasFinal.gridy = 6;
 		panel_1331.add(comboPlantasFinal, gbc_btnComboPlantasFinal);
 		
 		// Mostrar caminos entre plantas
@@ -1649,7 +1647,7 @@ public class MainMenu {
 		gbc_btnBuscar.gridwidth = 5;
 		gbc_btnBuscar.insets = new Insets(10, 0, 10, 0);
 		gbc_btnBuscar.gridx = 0;
-		gbc_btnBuscar.gridy = 5;
+		gbc_btnBuscar.gridy = 7;
 		panel_1331.add(btnBuscar, gbc_btnBuscar);
 
 		// Planta inicial
@@ -1657,7 +1655,7 @@ public class MainMenu {
 		gbc_lblResultados.insets = new Insets(0, 0, 0, 0);
 		gbc_lblResultados.anchor = GridBagConstraints.NORTH;
 		gbc_lblResultados.gridx = 0;
-		gbc_lblResultados.gridy = 6;
+		gbc_lblResultados.gridy = 8;
 		gbc_lblResultados.gridwidth = 3;
 
 		panel_1331.add(lblResultados, gbc_lblResultados);
@@ -1667,18 +1665,104 @@ public class MainMenu {
 		gbc_listScroller.gridwidth = 3;
 		gbc_listScroller.insets = new Insets(0, 0, 0, 0);
 		gbc_listScroller.gridx = 0;
-		gbc_listScroller.gridy = 7;
+		gbc_listScroller.gridy = 9;
 		panel_1331.add(listaListaCaminos, gbc_listScroller);
 
 		GridBagConstraints gbc_lblDatos = new GridBagConstraints();
 		gbc_lblDatos.insets = new Insets(0, 0, 0, 0);
 		gbc_lblDatos.anchor = GridBagConstraints.NORTH;
 		gbc_lblDatos.gridx = 0;
-		gbc_lblDatos.gridy = 8;
+		gbc_lblDatos.gridy = 10;
 		gbc_lblDatos.gridwidth = 5;
 
 		panel_1331.add(lblDatos, gbc_lblDatos);
 
+		btnCaminoOptimoTiempo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Insumo insumoSelect = (Insumo) comboInsumos.getSelectedItem();
+
+				if (insumoSelect == null)
+				{
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
+					
+					return;
+				}
+				
+				Grafo g = new Grafo();
+				Planta acopioInicial = gestorPlanta.getAcopioInicial();
+				Planta acopioFinal = gestorPlanta.getAcopioFinal();
+				
+				if(acopioInicial == null || acopioFinal == null)
+				{
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay definida ninguna planta de acopio inicial o final", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
+					
+					return;
+				}
+				
+				List<Vertice> mejorCaminoConInsumoTiempo = g.mejorCaminoConInsumoTiempo(acopioInicial, acopioFinal,
+						gestorPlanta.necesitanInsumo(insumoSelect));
+				
+				if(mejorCaminoConInsumoTiempo == null)
+				{
+					lblDatos.setText("<html><center style='padding-top:15px'>No hay camino óptimo por tiempo</center></html>");
+					return;
+				}
+				
+				System.out.println(mejorCaminoConInsumoTiempo);
+				grafoPanel.pintarRuta(mejorCaminoConInsumoTiempo);
+				
+				grafoPanel.repaint();
+				
+				ArrayList<Integer> infoRuta = gestorRuta.getInfoRuta(mejorCaminoConInsumoTiempo);
+				lblDatos.setText("<html><center style='padding-top:15px'><strong>Camino óptimo por tiempo:</strong><br />"
+						+ "Distancia total del viaje: " + infoRuta.get(0) + " km"
+								+ "<br>Duración del viaje: " + infoRuta.get(1) + " min.<br>"
+										+ "Peso máximo admitido: " + infoRuta.get(2) + " Tn.</center></html>");
+			}
+		});
+
+		btnCaminoOptimoDistancia.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Insumo insumoSelect = (Insumo) comboInsumos.getSelectedItem();
+
+				if (insumoSelect == null)
+				{
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
+					
+					return;
+				}
+				
+				Grafo g = new Grafo();
+				Planta acopioInicial = gestorPlanta.getAcopioInicial();
+				Planta acopioFinal = gestorPlanta.getAcopioFinal();
+				
+				if(acopioInicial == null || acopioFinal == null)
+				{
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay definida ninguna planta de acopio inicial o final", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
+					
+					return;
+				}
+				
+				List<Vertice> mejorCaminoConInsumoDistancia = g.mejorCaminoConInsumoDistancia(acopioInicial, acopioFinal,
+						gestorPlanta.necesitanInsumo(insumoSelect));
+				
+				System.out.println(mejorCaminoConInsumoDistancia);
+				grafoPanel.pintarRuta(mejorCaminoConInsumoDistancia);
+				
+				grafoPanel.repaint();
+				
+				ArrayList<Integer> infoRuta = gestorRuta.getInfoRuta(mejorCaminoConInsumoDistancia);
+				lblDatos.setText("<html><center style='padding-top:15px'><strong>Camino óptimo por distancia:</strong><br />"
+						+ "Distancia total del viaje: " + infoRuta.get(0) + " km"
+								+ "<br>Duración del viaje: " + infoRuta.get(1) + " min.<br>"
+										+ "Peso máximo admitido: " + infoRuta.get(2) + " Tn.</center></html>");
+			}
+		});
+		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Planta pInicial = (Planta)comboPlantasInicial.getSelectedItem();
@@ -1725,9 +1809,10 @@ public class MainMenu {
 				grafoPanel.repaint();
 				
 				ArrayList<Integer> infoRuta = gestorRuta.getInfoRuta(listaSelect);
-				lblDatos.setText("<html><center style='padding-top:15px'>Distancia total del viaje: " + infoRuta.get(0)
-				+ " km<br>Duración del viaje: " + infoRuta.get(1)
-				+ " min.<br>Peso máximo admitido: " + infoRuta.get(2) + " Tn.</center></html>");
+				lblDatos.setText("<html><center style='padding-top:15px'><strong>- Camino entre plantas -</strong><br />"
+						+ "Distancia total del viaje: " + infoRuta.get(0) + " km"
+								+ "<br>Duración del viaje: " + infoRuta.get(1) + " min.<br>"
+										+ "Peso máximo admitido: " + infoRuta.get(2) + " Tn.</center></html>");
 			}
 		});
 
@@ -1876,7 +1961,7 @@ public class MainMenu {
 		jdialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		jdialog.setResizable(false);
-		jdialog.setBounds(100, 100, 450, 300);
+		jdialog.setBounds(100, 100, 330, 220);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		jdialog.setContentPane(contentPane);
@@ -1885,19 +1970,11 @@ public class MainMenu {
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 119, 58, 86, 32, 0 };
-		gbl_panel.rowHeights = new int[] { 55, 0, 20, 0, 0, 0, 0, 0 };
+		gbl_panel.columnWidths = new int[] { 40, 58, 86, 32, 0 };
+		gbl_panel.rowHeights = new int[] { 10, 0, 20, 0, 0, 0, 0, 0 };
 		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
-
-		JPanel panel_2 = new JPanel();
-		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
-		gbc_panel_2.insets = new Insets(0, 0, 5, 5);
-		gbc_panel_2.fill = GridBagConstraints.BOTH;
-		gbc_panel_2.gridx = 1;
-		gbc_panel_2.gridy = 0;
-		panel.add(panel_2, gbc_panel_2);
 
 		JLabel lblDescripcin = new JLabel("Planta de origen:");
 		GridBagConstraints gbc_lblDescripcin = new GridBagConstraints();

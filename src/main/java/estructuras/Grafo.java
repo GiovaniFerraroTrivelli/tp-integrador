@@ -383,6 +383,11 @@ public class Grafo {
 
 	public List<Vertice> mejorCaminoConInsumoDistancia(Planta origen, Planta destino,
 			ArrayList<Planta> necesitanInsumo) {
+		GestorRuta g = GestorRuta.getInstance();
+		
+		if(g.getListaRutas().size() == 0)
+			return null;
+		
 		List<List<Vertice>> listaCaminos = this.caminos(origen, destino);
 
 		ArrayList<Vertice> verticesInsumo = new ArrayList<Vertice>();
@@ -401,7 +406,6 @@ public class Grafo {
 
 			@Override
 			public int compare(List<Vertice> camino1, List<Vertice> camino2) {
-				GestorRuta g = GestorRuta.getInstance();
 				return (g.getInfoRuta(camino1).get(0) - g.getInfoRuta(camino2).get(0));
 			}
 
@@ -412,8 +416,12 @@ public class Grafo {
 	}
 
 	public List<Vertice> mejorCaminoConInsumoTiempo(Planta origen, Planta destino, ArrayList<Planta> necesitanInsumo) {
+		GestorRuta g = GestorRuta.getInstance();
+		
+		if(g.getListaRutas().size() == 0)
+			return null;
+		
 		List<List<Vertice>> listaCaminos = this.caminos(origen, destino);
-
 		ArrayList<Vertice> verticesInsumo = new ArrayList<Vertice>();
 
 		for (Planta p : necesitanInsumo) {
