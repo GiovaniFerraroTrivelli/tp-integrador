@@ -29,4 +29,9 @@ public class InsumoLiquido extends Insumo {
 	public Float calcularPeso(Float volumen) {
 		return (this.densidad * volumen / 1000);
 	}
+	
+	@Override
+	public Boolean getEsRefrigerado() {
+		return true;
+	}
 }

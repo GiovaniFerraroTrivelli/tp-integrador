@@ -23,6 +23,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -50,6 +51,8 @@ import java.util.List;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JList;
+
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -1233,14 +1236,17 @@ public class MainMenu {
 				Camion camionSelect = gestorCamion.getListaCamiones().get(tableCamiones.convertRowIndexToModel(rowId));
 				
 				ArrayList<Float> peso = new ArrayList<Float>(); 
-				ArrayList<Float> valor = new ArrayList<Float>();
-				ArrayList<Integer> ids = new ArrayList<Integer>();
+				ArrayList<Float> valor = new ArrayList<Float>();				
+				ArrayList<Insumo> listaInsumos = gestorInsumo.getListaInsumos();
 				
-				ArrayList<Insumo> listaInsumos;
+				if(listaInsumos.size() == 0)
+				{
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay insumos cargados", "Información",
+							JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
 				
-				if(camionSelect.getTransportaLiq())
-					listaInsumos = gestorInsumo.getListaInsumos();
-				else
+				if(!camionSelect.getTransportaLiq())
 				{
 					listaInsumos = new ArrayList<Insumo>();
 					
@@ -1258,15 +1264,7 @@ public class MainMenu {
 				}
 	
 				Boolean[] resultado = camionSelect.resolver(peso.toArray(new Float[0]), valor.toArray(new Float[0]));
-				System.out.println(peso.toString());
-				System.out.println(valor.toString());
-				
-				for(int i = 0; i < resultado.length; i++)
-				{
-					System.out.println("(" + ids.get(i) + ") valor = " + resultado[i]);
-				}
-				
-				//showBestCaseCamion(listaInsumos, resultado);
+				showBestCaseCamion(listaInsumos, resultado);
 			}
 		});
 
@@ -1957,7 +1955,7 @@ public class MainMenu {
 	}
 
 	public static void refreshInsumoTable(ArrayList<Insumo> search) {
-		String col[] = { "ID", "Descripción", "Costo", "Peso", "Refrigerado", "Stock" };
+		String col[] = { "ID", "Descripción", "Costo", "Peso", "Unidad de medida", "Refrigerado", "Stock" };
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 
 		ArrayList<Insumo> tempListaInsumos;
@@ -1971,11 +1969,12 @@ public class MainMenu {
 			Integer id = insumo.getId();
 			String descripcion = insumo.getDescripcion();
 			Float costo = insumo.getCosto();
-			String peso = insumo.getPeso() + " " + insumo.getUnidadDeMedida();
+			String peso = insumo.getPeso() + " kg";
+			String unidadDeMedida = insumo.getUnidadDeMedida().toString();
 			String refrigerado = insumo instanceof InsumoLiquido ? "Si" : "No";
 			Integer stock = insumo.getStock();
 
-			Object[] data = { id, descripcion, costo, peso, refrigerado, stock };
+			Object[] data = { id, descripcion, costo, peso, unidadDeMedida, refrigerado, stock };
 			tableModel.addRow(data);
 		}
 
@@ -2474,6 +2473,69 @@ public class MainMenu {
 			}
 		});
 		panel_1.add(btnCancelar);
+		jdialog.setVisible(true);
+	}
+
+	public void showBestCaseCamion(ArrayList<Insumo> listaInsumos, Boolean[] resultado) {
+		JDialog jdialog = new JDialog(frmTrabajoPrctico, "Mostrando la solución generada", Dialog.ModalityType.DOCUMENT_MODAL);
+		JPanel contentPane;
+		jdialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		jdialog.setResizable(false);
+		jdialog.setMinimumSize(new Dimension(100, 100));
+		jdialog.setBounds(100, 100, 350, 275);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		jdialog.setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
+
+		JPanel panel = new JPanel();
+		contentPane.add(panel, BorderLayout.CENTER);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[] { 200 };
+		gbl_panel.rowHeights = new int[] { 10, 10, 10 };
+		gbl_panel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		panel.setLayout(gbl_panel);
+
+		JLabel lblInsumos = new JLabel("<html><center>Insumos que deben transportarse<br>para que la entrega sea óptima:</center></html>");
+		GridBagConstraints gbc_lblInsumos = new GridBagConstraints();
+		gbc_lblInsumos.anchor = GridBagConstraints.CENTER;
+		gbc_lblInsumos.insets = new Insets(10, 10, 10, 10);
+		gbc_lblInsumos.gridx = 0;
+		gbc_lblInsumos.gridy = 0;
+		panel.add(lblInsumos, gbc_lblInsumos);
+		
+        DefaultListModel<String> dataList = new DefaultListModel<String>(); 
+        
+        for(int i = 0; i < resultado.length; i++)
+		{
+        	if(resultado[i])
+        		dataList.addElement(listaInsumos.get(i).getDescripcion());
+		}
+		
+        JList<String> insumoList = new JList<String>(dataList);
+		GridBagConstraints gbc_InsumoList = new GridBagConstraints();
+		gbc_InsumoList.anchor = GridBagConstraints.CENTER;
+		gbc_InsumoList.insets = new Insets(0, 0, 0, 0);
+		gbc_InsumoList.gridx = 0;
+		gbc_InsumoList.gridy = 1;
+		insumoList.setFixedCellWidth(200);
+		panel.add(new JScrollPane(insumoList), gbc_InsumoList);
+
+		JButton btnCancelar = new JButton("Cerrar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				jdialog.dispose();
+			}
+		});
+		
+		GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
+		gbc_btnCancelar.anchor = GridBagConstraints.CENTER;
+		gbc_btnCancelar.insets = new Insets(10, 0, 10, 0);
+		gbc_btnCancelar.gridx = 0;
+		gbc_btnCancelar.gridy = 2;
+		panel.add(btnCancelar, gbc_btnCancelar);
+		
 		jdialog.setVisible(true);
 	}
 

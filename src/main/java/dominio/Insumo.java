@@ -10,7 +10,6 @@ public class Insumo implements Comparable<Insumo> {
 	protected UnidadDeMedida unidadDeMedida;
 	protected Float costo;
 	protected Float peso; /* peso en kg */
-	protected Boolean esRefrigerado;
 
 	public Insumo(String descripcion) {
 		this.descripcion = descripcion;
@@ -33,6 +32,10 @@ public class Insumo implements Comparable<Insumo> {
 
 	public void setUnidadDeMedida(UnidadDeMedida unidadDeMedida) {
 		this.unidadDeMedida = unidadDeMedida;
+	}
+	
+	public Boolean getEsRefrigerado() {
+		return false;
 	}
 
 	@Override
