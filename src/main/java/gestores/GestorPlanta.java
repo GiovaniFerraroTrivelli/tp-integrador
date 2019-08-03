@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import dominio.Insumo;
 import dominio.Planta;
 import dominio.Planta.TipoPlanta;
-import estructuras.Arista;
-import estructuras.Vertice;
 import dominio.Stock;
 import estructurasAuxiliares.ArbolBinarioBusqueda;
 

@@ -14,9 +14,6 @@ import java.util.List;
 import javax.swing.JPanel;
 import dominio.Planta;
 import dominio.Ruta;
-import estructuras.Arista;
-import estructuras.Vertice;
-import gestores.GestorPlanta;
 import gestores.GestorRuta;
 
 public class GrafoPanel extends JPanel {
@@ -24,8 +21,6 @@ public class GrafoPanel extends JPanel {
 	private int xRepintado = 0;
 	private int yRepintado = 0;
 	private VerticeLayout verticeSeleccionado = null;
-	private Boolean arrastrando = false;
-
 	private List<VerticeLayout> vertices = new ArrayList<>();
 	private List<AristaLayout> aristas = new ArrayList<>();
 
@@ -63,7 +58,6 @@ public class GrafoPanel extends JPanel {
 					// inicializarAristas();
 				}
 				verticeSeleccionado = null;
-				arrastrando = false;
 			}
 
 		});
@@ -73,7 +67,6 @@ public class GrafoPanel extends JPanel {
 				if (verticeSeleccionado != null) {
 					actualizarPosicionVertice(verticeSeleccionado, event.getPoint());
 					actualizarAristas();
-					// inicializarAristas();
 				}
 			}
 		});
@@ -127,7 +120,6 @@ public class GrafoPanel extends JPanel {
 			aristas.add(a);
 		}
 
-	
 		getInstance().repaint();
 	}
 
@@ -238,21 +230,7 @@ public class GrafoPanel extends JPanel {
 		return null;
 	}
 
-	public void pintarRuta(List<Vertice> listaVertices) {
-		this.repintarAristas();
-		GestorRuta gr = GestorRuta.getInstance();
-
-		System.out.println("Listavertices size:" + listaVertices.size());
-
-		for (int i = 0; i < listaVertices.size() - 1; i++) {
-			Ruta r = gr.getRuta(listaVertices.get(i).getValor(), listaVertices.get(i + 1).getValor());
-			this.actualizarColorArista(this.getArista(r), Color.GREEN);
-			System.out.println("Pintar ruta i = " + i);
-
-		}
-	}
-
-	public void pintarRutaNuevo(List<Planta> listaPlantas) {
+	public void pintarRuta(List<Planta> listaPlantas) {
 		this.repintarAristas();
 		GestorRuta gestorRuta = GestorRuta.getInstance();
 		for (int i = 0; i < listaPlantas.size() - 1; i++) {

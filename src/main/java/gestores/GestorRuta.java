@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dominio.Ruta;
-import estructuras.Vertice;
 import dominio.Planta;
 
 public class GestorRuta {
@@ -95,32 +94,6 @@ public class GestorRuta {
 		return null;
 	}
 
-	public ArrayList<Integer> getInfoRuta(List<Vertice> listaVertices) {
-		ArrayList<Integer> infoRuta = new ArrayList<Integer>();
-
-		Integer distanciaTotal = 0;
-		Integer tiempoTotal = 0;
-		Integer pesoMax = 0;
-
-		for (int i = 0; i < listaVertices.size() - 1; i++) {
-			Ruta r = this.getRuta(listaVertices.get(i).getValor(), listaVertices.get(i + 1).getValor());
-			distanciaTotal += r.getDistancia();
-			tiempoTotal += r.getDuracion();
-
-			if (r.getPesoMaximo() > pesoMax)
-				pesoMax = r.getPesoMaximo();
-		}
-
-		infoRuta.add(distanciaTotal);
-		infoRuta.add(tiempoTotal);
-		infoRuta.add(pesoMax);
-
-		// infoRuta[0]: distancia total del camino
-		// infoRuta[1]: duracion total del viaje
-		// infoRuta[2]: peso maximo admitido
-		return infoRuta;
-	}
-
 	public List<List<Planta>> caminos(Planta origen, Planta destino) {
 		List<List<Planta>> listaCaminos = new ArrayList<List<Planta>>();
 		List<Planta> marcados = new ArrayList<Planta>();
@@ -129,7 +102,7 @@ public class GestorRuta {
 		return listaCaminos;
 	}
 	
-	public ArrayList<Integer> getInfoRutaNuevo(List<Planta> listaPlantas) {
+	public ArrayList<Integer> getInfoRuta(List<Planta> listaPlantas) {
 		ArrayList<Integer> infoRuta = new ArrayList<Integer>();
 
 		Integer distanciaTotal = 0;
@@ -180,7 +153,7 @@ public class GestorRuta {
 
 			@Override
 			public int compare(List<Planta> camino1, List<Planta> camino2) {
-				return (g.getInfoRutaNuevo(camino1).get(0) - g.getInfoRutaNuevo(camino2).get(0));
+				return (g.getInfoRuta(camino1).get(0) - g.getInfoRuta(camino2).get(0));
 			}
 
 		};
@@ -214,7 +187,7 @@ public class GestorRuta {
 
 			@Override
 			public int compare(List<Planta> camino1, List<Planta> camino2) {
-				return (g.getInfoRutaNuevo(camino1).get(1) - g.getInfoRutaNuevo(camino2).get(1));
+				return (g.getInfoRuta(camino1).get(1) - g.getInfoRuta(camino2).get(1));
 			}
 
 		};

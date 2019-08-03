@@ -23,7 +23,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -43,8 +42,6 @@ import dominio.Planta.TipoPlanta;
 import dominio.Ruta;
 import dominio.Stock;
 import dominio.UnidadDeMedida;
-import estructuras.Grafo;
-import estructuras.Vertice;
 import dominio.Planta;
 import gestores.*;
 
@@ -53,8 +50,6 @@ import java.util.List;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
-import javax.swing.JList;
-
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -63,7 +58,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.ListSelectionModel;
 import javax.swing.BorderFactory;
-import javax.swing.JToolBar;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
@@ -78,10 +72,10 @@ public class MainMenu {
 	private static JComboBox<Insumo> comboInsumos;
 	private static JComboBox<Planta> comboPlantasInicial;
 	private static JComboBox<Planta> comboPlantasFinal;
-	private static JComboBox<List<List<Vertice>>> listaListaCaminos = new JComboBox<List<List<Vertice>>>();
+	private static JComboBox<List<List<Planta>>> listaListaCaminos = new JComboBox<List<List<Planta>>>();
 	private static JLabel lblResultados = new JLabel("");
 	private static JLabel lblDatos = new JLabel("");
-	
+
 	static GestorPlanta gestorPlanta = GestorPlanta.getInstance();
 	static GestorInsumo gestorInsumo = GestorInsumo.getInstance();
 	static GestorRuta gestorRuta = GestorRuta.getInstance();
@@ -133,19 +127,14 @@ public class MainMenu {
 		frmTrabajoPrctico.setBounds(100, 100, 450, 300);
 		frmTrabajoPrctico.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmTrabajoPrctico.getContentPane().setLayout(cl);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		frmTrabajoPrctico.setJMenuBar(menuBar);
-		
+
 		JMenuItem mntmTrabajoPrctico = new JMenuItem("<html><span style='font-size:8px'>"
-				+ "<strong>Integrantes</strong>:"
-				+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-				+ "Busso, Francisco Ignacio"
-				+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-				+ "Bode, Matías"
-				+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-				+ "Ferraro Trivelli, Giovani"
-				+ "</span></html>");
+				+ "<strong>Integrantes</strong>:" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "Busso, Francisco Ignacio"
+				+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "Bode, Matías" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+				+ "Ferraro Trivelli, Giovani" + "</span></html>");
 		menuBar.add(mntmTrabajoPrctico);
 
 		// Loading content of first panel (Main Menu)
@@ -222,17 +211,17 @@ public class MainMenu {
 						new DefaultComboBoxModel<Insumo>(gestorInsumo.getListaInsumos().toArray(new Insumo[0])));
 				comboInsumos.setSelectedIndex(-1);
 
-				comboPlantasInicial.setModel(
-						new DefaultComboBoxModel<Planta>(gestorPlanta.getListaPlantas().values().toArray(new Planta[0])));
-				comboPlantasFinal.setModel(
-						new DefaultComboBoxModel<Planta>(gestorPlanta.getListaPlantas().values().toArray(new Planta[0])));				
+				comboPlantasInicial.setModel(new DefaultComboBoxModel<Planta>(
+						gestorPlanta.getListaPlantas().values().toArray(new Planta[0])));
+				comboPlantasFinal.setModel(new DefaultComboBoxModel<Planta>(
+						gestorPlanta.getListaPlantas().values().toArray(new Planta[0])));
 				comboPlantasInicial.setSelectedIndex(-1);
 				comboPlantasFinal.setSelectedIndex(-1);
 				listaListaCaminos.removeAllItems();
 				listaListaCaminos.setVisible(false);
 				lblResultados.setText("");
 				lblDatos.setText("");
-				
+
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Info");
 			}
 		});
@@ -505,7 +494,7 @@ public class MainMenu {
 		btnEditar_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Integer rowId = tableInsumos.getSelectedRow();
-				
+
 				if (rowId < 0) {
 					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado", "Información",
 							JOptionPane.INFORMATION_MESSAGE);
@@ -916,7 +905,7 @@ public class MainMenu {
 		// ------------------------------------------------------------------------------------------------
 		// Botones de Insumo -> Stock a Planta
 		// ------------------------------------------------------------------------------------------------
-		
+
 		// Añadir insumo
 		JButton btnAadirInsumo = new JButton("Añadir insumo");
 		GridBagConstraints gbc_btnAadirInsumo = new GridBagConstraints();
@@ -1184,7 +1173,7 @@ public class MainMenu {
 				}
 			}
 		});
-		
+
 		// Eliminar insumo
 		JButton btnCalcular = new JButton("Calcular");
 		GridBagConstraints gbc_btnCalcular = new GridBagConstraints();
@@ -1195,28 +1184,28 @@ public class MainMenu {
 		panel.add(btnCalcular, gbc_btnCalcular);
 
 		btnCalcular.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) {
 				Integer rowId = tableCamiones.getSelectedRow();
 
 				if (rowId < 0) {
 					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún camión seleccionado", "Información",
-					JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 
 				Camion camionSelect = gestorCamion.getListaCamiones().get(tableCamiones.convertRowIndexToModel(rowId));
-			
+
 				int[] pesos = new int[gestorInsumo.getListaInsumos().size()];
 				int[] valor = new int[gestorInsumo.getListaInsumos().size()];
-					
-				for(int i = 0; i < gestorInsumo.getListaInsumos().size(); i++){
-					pesos[i] = (int)(Math.floor(gestorInsumo.getListaInsumos().get(i).getPeso()));
-					valor[i] = (int)(Math.floor(gestorInsumo.getListaInsumos().get(i).getCosto()));
+
+				for (int i = 0; i < gestorInsumo.getListaInsumos().size(); i++) {
+					pesos[i] = (int) (Math.floor(gestorInsumo.getListaInsumos().get(i).getPeso()));
+					valor[i] = (int) (Math.floor(gestorInsumo.getListaInsumos().get(i).getCosto()));
 				}
 
 				boolean[] result = camionSelect.resolver(pesos, valor);
-				for(int i = 0; i < result.length; i++) {
-				System.out.println(result[i]);
+				for (int i = 0; i < result.length; i++) {
+					System.out.println(result[i]);
 				}
 			}
 		});
@@ -1339,14 +1328,13 @@ public class MainMenu {
 
 		btnNuevoCamino.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(gestorPlanta.getListaPlantas().size() < 2)
-				{
+				if (gestorPlanta.getListaPlantas().size() < 2) {
 					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay suficientes plantas cargadas",
 							"Información", JOptionPane.INFORMATION_MESSAGE);
 
 					return;
 				}
-				
+
 				CreateRutaDialog();
 			}
 		});
@@ -1364,27 +1352,25 @@ public class MainMenu {
 		btnEliminarCamino.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Integer rowId = tableRutas.getSelectedRow();
-				
-				if(rowId == -1)
-				{
-					JOptionPane.showMessageDialog(frmTrabajoPrctico,
-							"No hay ninguna ruta seleccionada", "Información",
+
+				if (rowId == -1) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ninguna ruta seleccionada", "Información",
 							JOptionPane.INFORMATION_MESSAGE);
 
 					return;
 				}
-				
+
 				Planta origen = gestorRuta.getListaRutas().get(tableRutas.convertRowIndexToModel(rowId)).getOrigen();
 				Planta destino = gestorRuta.getListaRutas().get(tableRutas.convertRowIndexToModel(rowId)).getDestino();
-				
+
 				gestorRuta.deleteRuta(origen, destino);
-				
+
 				refreshRutaTable();
 			}
 		});
 
 		panel.add(btnEliminarCamino, gbc_btnEliminarCamino);
-		
+
 		// Tabla de rutas
 		tableRutas = new JTable();
 		tableRutas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -1506,7 +1492,7 @@ public class MainMenu {
 		grafoPanel.setBackground(Color.WHITE);
 		grafoPanel.setBorder(BorderFactory.createLineBorder(new Color(0x7A8A99)));
 		panel.add(grafoPanel, gbc_panel_91);
-		
+
 		// ------------------------------------------------------------------------------------------------
 		// Panel de la derecha
 		// ------------------------------------------------------------------------------------------------
@@ -1535,14 +1521,14 @@ public class MainMenu {
 		gbc_lblInsumo.gridy = 1;
 
 		panel_1331.add(lblInsumo, gbc_lblInsumo);
-		
+
 		comboInsumos = new JComboBox<Insumo>();
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNewButton.gridx = 1;
 		gbc_btnNewButton.gridy = 1;
 		panel_1331.add(comboInsumos, gbc_btnNewButton);
-	
+
 		comboInsumos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Insumo insumoSelect = (Insumo) comboInsumos.getSelectedItem();
@@ -1551,14 +1537,14 @@ public class MainMenu {
 					return;
 
 				grafoPanel.repintarVertices();
-				
-				for(Planta planta : gestorPlanta.necesitanInsumo(insumoSelect)){
-                    grafoPanel.nodoNecesitaInsumo(planta);
-                }
-				
+
+				for (Planta planta : gestorPlanta.necesitanInsumo(insumoSelect)) {
+					grafoPanel.nodoNecesitaInsumo(planta);
+				}
+
 				grafoPanel.repaint();
 			}
-		});		
+		});
 
 		// Mostrar camino optimo por tiempo
 		JButton btnCaminoOptimoTiempo = new JButton("Mostrar camino óptimo por tiempo");
@@ -1569,7 +1555,7 @@ public class MainMenu {
 		gbc_btnCaminoOptimoTiempo.gridx = 0;
 		gbc_btnCaminoOptimoTiempo.gridy = 2;
 		panel_1331.add(btnCaminoOptimoTiempo, gbc_btnCaminoOptimoTiempo);
-		
+
 		// Mostrar camino optimo por distancia
 		JButton btnCaminoOptimoDistancia = new JButton("Mostrar camino óptimo por distancia");
 		GridBagConstraints gbc_btnCaminoOptimoDistancia = new GridBagConstraints();
@@ -1579,7 +1565,7 @@ public class MainMenu {
 		gbc_btnCaminoOptimoDistancia.gridx = 0;
 		gbc_btnCaminoOptimoDistancia.gridy = 3;
 		panel_1331.add(btnCaminoOptimoDistancia, gbc_btnCaminoOptimoDistancia);
-		
+
 		// Separador
 		GridBagConstraints gbc_lblSep = new GridBagConstraints();
 		gbc_lblSep.insets = new Insets(15, 0, 15, 0);
@@ -1589,9 +1575,9 @@ public class MainMenu {
 		gbc_lblSep.gridwidth = 2;
 		gbc_lblSep.weighty = 0;
 		JSeparator jsep = new JSeparator(SwingConstants.HORIZONTAL);
-		jsep.setPreferredSize(new Dimension(150,5));
+		jsep.setPreferredSize(new Dimension(150, 5));
 		panel_1331.add(jsep, gbc_lblSep);
-		
+
 		// Planta inicial
 		JLabel lblInicial = new JLabel("Planta inicial:");
 		GridBagConstraints gbc_lblInicial = new GridBagConstraints();
@@ -1601,7 +1587,7 @@ public class MainMenu {
 		gbc_lblInicial.gridy = 5;
 
 		panel_1331.add(lblInicial, gbc_lblInicial);
-		
+
 		comboPlantasInicial = new JComboBox<Planta>();
 		GridBagConstraints gbc_btnComboPlantasInicial = new GridBagConstraints();
 		gbc_btnComboPlantasInicial.gridwidth = 1;
@@ -1609,7 +1595,7 @@ public class MainMenu {
 		gbc_btnComboPlantasInicial.gridx = 1;
 		gbc_btnComboPlantasInicial.gridy = 5;
 		panel_1331.add(comboPlantasInicial, gbc_btnComboPlantasInicial);
-		
+
 		// Planta final
 		JLabel lblFinal = new JLabel("Planta final:");
 		GridBagConstraints gbc_lblFinal = new GridBagConstraints();
@@ -1619,7 +1605,7 @@ public class MainMenu {
 		gbc_lblFinal.gridy = 6;
 
 		panel_1331.add(lblFinal, gbc_lblFinal);
-		
+
 		comboPlantasFinal = new JComboBox<Planta>();
 		GridBagConstraints gbc_btnComboPlantasFinal = new GridBagConstraints();
 		gbc_btnComboPlantasFinal.gridwidth = 2;
@@ -1627,7 +1613,7 @@ public class MainMenu {
 		gbc_btnComboPlantasFinal.gridx = 1;
 		gbc_btnComboPlantasFinal.gridy = 6;
 		panel_1331.add(comboPlantasFinal, gbc_btnComboPlantasFinal);
-		
+
 		// Mostrar caminos entre plantas
 		JButton btnBuscar = new JButton("Mostrar caminos entre plantas");
 		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
@@ -1647,7 +1633,7 @@ public class MainMenu {
 		gbc_lblResultados.gridwidth = 3;
 
 		panel_1331.add(lblResultados, gbc_lblResultados);
-		
+
 		GridBagConstraints gbc_listScroller = new GridBagConstraints();
 		gbc_listScroller.anchor = GridBagConstraints.NORTH;
 		gbc_listScroller.gridwidth = 3;
@@ -1669,45 +1655,44 @@ public class MainMenu {
 			public void actionPerformed(ActionEvent arg0) {
 				Insumo insumoSelect = (Insumo) comboInsumos.getSelectedItem();
 
-				if (insumoSelect == null)
-				{
+				if (insumoSelect == null) {
 					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado", "Información",
 							JOptionPane.INFORMATION_MESSAGE);
-					
+
 					return;
 				}
-				
-				Grafo g = new Grafo();
+
 				Planta acopioInicial = gestorPlanta.getAcopioInicial();
 				Planta acopioFinal = gestorPlanta.getAcopioFinal();
-				
-				if(acopioInicial == null || acopioFinal == null)
-				{
-					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay definida ninguna planta de acopio inicial o final", "Información",
+
+				if (acopioInicial == null || acopioFinal == null) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico,
+							"No hay definida ninguna planta de acopio inicial o final", "Información",
 							JOptionPane.INFORMATION_MESSAGE);
-					
+
 					return;
 				}
-				
-				List<Vertice> mejorCaminoConInsumoTiempo = g.mejorCaminoConInsumoTiempo(acopioInicial, acopioFinal,
-						gestorPlanta.necesitanInsumo(insumoSelect));
-				
-				if(mejorCaminoConInsumoTiempo == null)
-				{
-					lblDatos.setText("<html><center style='padding-top:15px'>No hay camino óptimo por tiempo</center></html>");
+
+				List<Planta> mejorCaminoConInsumoTiempo = gestorRuta.mejorCaminoConInsumoTiempo(acopioInicial,
+						acopioFinal, gestorPlanta.necesitanInsumo(insumoSelect));
+
+				if (mejorCaminoConInsumoTiempo == null) {
+					lblDatos.setText(
+							"<html><center style='padding-top:15px'>No hay camino óptimo por tiempo</center></html>");
 					return;
 				}
-				
+
 				System.out.println(mejorCaminoConInsumoTiempo);
 				grafoPanel.pintarRuta(mejorCaminoConInsumoTiempo);
-				
+
 				grafoPanel.repaint();
-				
+
 				ArrayList<Integer> infoRuta = gestorRuta.getInfoRuta(mejorCaminoConInsumoTiempo);
-				lblDatos.setText("<html><center style='padding-top:15px'><strong>Camino óptimo por tiempo:</strong><br />"
-						+ "Distancia total del viaje: " + infoRuta.get(0) + " km"
-								+ "<br>Duración del viaje: " + infoRuta.get(1) + " min.<br>"
-										+ "Peso máximo admitido: " + infoRuta.get(2) + " Tn.</center></html>");
+				lblDatos.setText(
+						"<html><center style='padding-top:15px'><strong>Camino óptimo por tiempo:</strong><br />"
+								+ "Distancia total del viaje: " + infoRuta.get(0) + " km" + "<br>Duración del viaje: "
+								+ infoRuta.get(1) + " min.<br>" + "Peso máximo admitido: " + infoRuta.get(2)
+								+ " Tn.</center></html>");
 			}
 		});
 
@@ -1715,92 +1700,92 @@ public class MainMenu {
 			public void actionPerformed(ActionEvent arg0) {
 				Insumo insumoSelect = (Insumo) comboInsumos.getSelectedItem();
 
-				if (insumoSelect == null)
-				{
+				if (insumoSelect == null) {
 					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún insumo seleccionado", "Información",
 							JOptionPane.INFORMATION_MESSAGE);
-					
+
 					return;
 				}
-				
-				Grafo g = new Grafo();
+
 				Planta acopioInicial = gestorPlanta.getAcopioInicial();
 				Planta acopioFinal = gestorPlanta.getAcopioFinal();
-				
-				if(acopioInicial == null || acopioFinal == null)
-				{
-					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay definida ninguna planta de acopio inicial o final", "Información",
+
+				if (acopioInicial == null || acopioFinal == null) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico,
+							"No hay definida ninguna planta de acopio inicial o final", "Información",
 							JOptionPane.INFORMATION_MESSAGE);
-					
+
 					return;
 				}
-				
-				List<Vertice> mejorCaminoConInsumoDistancia = g.mejorCaminoConInsumoDistancia(acopioInicial, acopioFinal,
-						gestorPlanta.necesitanInsumo(insumoSelect));
-				
+
+				List<Planta> mejorCaminoConInsumoDistancia = gestorRuta.mejorCaminoConInsumoDistancia(acopioInicial,
+						acopioFinal, gestorPlanta.necesitanInsumo(insumoSelect));
+
 				System.out.println(mejorCaminoConInsumoDistancia);
 				grafoPanel.pintarRuta(mejorCaminoConInsumoDistancia);
-				
+
 				grafoPanel.repaint();
-				
+
 				ArrayList<Integer> infoRuta = gestorRuta.getInfoRuta(mejorCaminoConInsumoDistancia);
-				lblDatos.setText("<html><center style='padding-top:15px'><strong>Camino óptimo por distancia:</strong><br />"
-						+ "Distancia total del viaje: " + infoRuta.get(0) + " km"
-								+ "<br>Duración del viaje: " + infoRuta.get(1) + " min.<br>"
-										+ "Peso máximo admitido: " + infoRuta.get(2) + " Tn.</center></html>");
+				lblDatos.setText(
+						"<html><center style='padding-top:15px'><strong>Camino óptimo por distancia:</strong><br />"
+								+ "Distancia total del viaje: " + infoRuta.get(0) + " km" + "<br>Duración del viaje: "
+								+ infoRuta.get(1) + " min.<br>" + "Peso máximo admitido: " + infoRuta.get(2)
+								+ " Tn.</center></html>");
 			}
 		});
-		
+
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Planta pInicial = (Planta)comboPlantasInicial.getSelectedItem();
-				Planta pFinal = (Planta)comboPlantasFinal.getSelectedItem();
-				
-				if(pInicial == null || pFinal == null)
-				{
-					JOptionPane.showMessageDialog(frmTrabajoPrctico, "Debe seleccionar una planta inicial y una planta final", "Información",
+				Planta pInicial = (Planta) comboPlantasInicial.getSelectedItem();
+				Planta pFinal = (Planta) comboPlantasFinal.getSelectedItem();
+
+				if (pInicial == null || pFinal == null) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico,
+							"Debe seleccionar una planta inicial y una planta final", "Información",
 							JOptionPane.INFORMATION_MESSAGE);
 
 					return;
 				}
-				
-				Grafo g = new Grafo();
-				List<List<Vertice>> lista = g.caminos(pInicial, pFinal);
-				
+
+				// Grafo g = new Grafo();
+				// List<List<Vertice>> lista = g.caminos(pInicial, pFinal);
+				List<List<Planta>> lista = gestorRuta.caminos(pInicial, pFinal);
+
 				System.out.println(lista);
 
-				if(lista.size() > 0)
-				{
+				if (lista.size() > 0) {
 					listaListaCaminos.setVisible(true);
 					lblResultados.setText(lista.size() + " resultado(s):");
 					listaListaCaminos.setModel(new DefaultComboBoxModel(lista.toArray()));
 					listaListaCaminos.setSelectedIndex(-1);
-				}
-				else
-				{
+				} else {
 					listaListaCaminos.setVisible(false);
 					lblResultados.setText("Sin caminos");
 				}
-				
+
 				lblDatos.setText("");
 			}
 		});
-		
+
 		listaListaCaminos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<Vertice> listaSelect = (List<Vertice>) listaListaCaminos.getSelectedItem();
+				// List<Vertice> listaSelect = (List<Vertice>)
+				// listaListaCaminos.getSelectedItem();
+				List<Planta> listaSelect = (List<Planta>) listaListaCaminos.getSelectedItem();
 
 				if (listaSelect == null)
 					return;
 
 				grafoPanel.pintarRuta(listaSelect);
 				grafoPanel.repaint();
-				
+
 				ArrayList<Integer> infoRuta = gestorRuta.getInfoRuta(listaSelect);
-				lblDatos.setText("<html><center style='padding-top:15px'><strong>- Camino entre plantas -</strong><br />"
-						+ "Distancia total del viaje: " + infoRuta.get(0) + " km"
-								+ "<br>Duración del viaje: " + infoRuta.get(1) + " min.<br>"
-										+ "Peso máximo admitido: " + infoRuta.get(2) + " Tn.</center></html>");
+				lblDatos.setText(
+						"<html><center style='padding-top:15px'><strong>- Camino entre plantas -</strong><br />"
+								+ "Distancia total del viaje: " + infoRuta.get(0) + " km" + "<br>Duración del viaje: "
+								+ infoRuta.get(1) + " min.<br>" + "Peso máximo admitido: " + infoRuta.get(2)
+								+ " Tn.</center></html>");
 			}
 		});
 
@@ -1839,7 +1824,7 @@ public class MainMenu {
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 
 		ArrayList<Ruta> listaRutas = gestorRuta.getListaRutas();
-		
+
 		if (listaRutas.isEmpty()) {
 			tableRutas.setModel(tableModel);
 			return;
@@ -1881,7 +1866,7 @@ public class MainMenu {
 			String nombre = planta.getNombre();
 			String tipo = planta.getTipo().toString();
 			Integer pagerank = gestorRuta.getPageRank(planta);
-			
+
 			Object[] data = { id, nombre, tipo, pagerank };
 			tableModel.addRow(data);
 		}
@@ -1937,8 +1922,6 @@ public class MainMenu {
 		tableInsumos.setModel(tableModel);
 	}
 
-	
-	
 	public void CreateRutaDialog() {
 		JDialog jdialog = new JDialog(frmTrabajoPrctico, "Crear ruta", Dialog.ModalityType.DOCUMENT_MODAL);
 		JPanel contentPane;
@@ -2013,7 +1996,7 @@ public class MainMenu {
 		gbc_lblDistancia.gridx = 1;
 		gbc_lblDistancia.gridy = 4;
 		panel.add(lblDistancia, gbc_lblDistancia);
-		
+
 		JTextField textDistancia = new JTextField();
 		GridBagConstraints gbc_textDistancia = new GridBagConstraints();
 		gbc_textDistancia.fill = GridBagConstraints.HORIZONTAL;
@@ -2047,7 +2030,7 @@ public class MainMenu {
 		gbc_lblPesoMaximo.gridx = 1;
 		gbc_lblPesoMaximo.gridy = 6;
 		panel.add(lblPesoMaximo, gbc_lblPesoMaximo);
-		
+
 		JTextField textPesoMaximo = new JTextField();
 		GridBagConstraints gbc_textPesoMaximo = new GridBagConstraints();
 		gbc_textPesoMaximo.fill = GridBagConstraints.HORIZONTAL;
@@ -2056,26 +2039,25 @@ public class MainMenu {
 		gbc_textPesoMaximo.gridx = 2;
 		gbc_textPesoMaximo.gridy = 6;
 		panel.add(textPesoMaximo, gbc_textPesoMaximo);
-		
+
 		JPanel panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
 
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Planta origen = (Planta)comboStart.getSelectedItem();
-				Planta destino = (Planta)comboEnd.getSelectedItem();
-				
-				if(origen == destino)
-				{
+				Planta origen = (Planta) comboStart.getSelectedItem();
+				Planta destino = (Planta) comboEnd.getSelectedItem();
+
+				if (origen == destino) {
 					JOptionPane.showMessageDialog(frmTrabajoPrctico, "La planta de origen y destino son iguales",
 							"Información", JOptionPane.INFORMATION_MESSAGE);
 
 					return;
 				}
-				
+
 				Ruta nuevaRuta = gestorRuta.crearRuta(origen, destino);
-				
+
 				nuevaRuta.setDistancia(Integer.parseInt(textDistancia.getText()));
 				nuevaRuta.setDuracion(Integer.parseInt(textDuracion.getText()));
 				nuevaRuta.setPesoMaximo(Integer.parseInt(textPesoMaximo.getText()));
