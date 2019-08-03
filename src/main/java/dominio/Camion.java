@@ -10,7 +10,7 @@ public class Camion {
 	private String dominio;
 	private Float costoKm;
 	private Boolean transportaLiq;
-	private int capacidad;
+	private Integer capacidad;
 	
 	public Camion(Integer id){
 		this.id = id;
@@ -70,11 +70,11 @@ public class Camion {
 		this.transportaLiq = transportaLiq;
 	}
 	
-	public int getCapacidad() {
+	public Integer getCapacidad() {
 		return capacidad;
 	}
 	
-	public void setCapacidad(int capacidad) {
+	public void setCapacidad(Integer capacidad) {
 		this.capacidad = capacidad;
 	}
 	

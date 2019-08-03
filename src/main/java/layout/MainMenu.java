@@ -393,16 +393,17 @@ public class MainMenu {
 		ActionListener searchAction = new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String val = txtSearchInsumo.getText();
-				System.out.println(txtSearchInsumo.getText());
 
 				if (val.length() == 0) {
 					refreshInsumoTable(null);
 					return;
 				}
+				
+				if(gestorInsumo.getListaInsumos().size() == 0)
+					return;
 
 				switch (comboBox.getSelectedIndex()) {
 				case 0: {
-					System.out.println("Buscar por nombre: " + val);
 					ArrayList<Insumo> resultados = gestorInsumo.buscar(val);
 					System.out.println(resultados);
 					refreshInsumoTable(resultados);
@@ -410,28 +411,64 @@ public class MainMenu {
 					break;
 				}
 				case 1: {
-					System.out.println("Buscar por costo (false): " + val);
-					refreshInsumoTable(gestorInsumo.buscarPorCosto(Float.parseFloat(val), false));
+					
+					Float costo;
+					
+					try {
+						costo = Float.parseFloat(val);
+					} catch (NumberFormatException e) {
+						JOptionPane.showMessageDialog(frmTrabajoPrctico, "El dato ingresado debe ser numérico",
+								"Información", JOptionPane.INFORMATION_MESSAGE);
 
+						return;
+					}
+
+					refreshInsumoTable(gestorInsumo.buscarPorCosto(costo, false));
 					break;
 				}
 				case 2: {
-					System.out.println("Buscar por costo (true): " + val);
-					refreshInsumoTable(gestorInsumo.buscarPorCosto(Float.parseFloat(val), true));
+					Float costo;
+					
+					try {
+						costo = Float.parseFloat(val);
+					} catch (NumberFormatException e) {
+						JOptionPane.showMessageDialog(frmTrabajoPrctico, "El dato ingresado debe ser numérico",
+								"Información", JOptionPane.INFORMATION_MESSAGE);
 
+						return;
+					}
+					
+					refreshInsumoTable(gestorInsumo.buscarPorCosto(costo, true));
 					break;
 				}
 				case 3: {
-					System.out.println("Buscar por stock (false): " + val);
-					System.out.println(gestorInsumo.buscarPorStock(Integer.parseInt(val), false));
-					refreshInsumoTable(gestorInsumo.buscarPorStock(Integer.parseInt(val), false));
+					Integer stock;
+					
+					try {
+						stock = Integer.parseInt(val);
+					} catch (NumberFormatException e) {
+						JOptionPane.showMessageDialog(frmTrabajoPrctico, "El dato ingresado debe ser numérico",
+								"Información", JOptionPane.INFORMATION_MESSAGE);
 
+						return;
+					}
+					
+					refreshInsumoTable(gestorInsumo.buscarPorStock(stock, false));
 					break;
 				}
 				case 4: {
-					System.out.println("Buscar por stock (true): " + val);
-					refreshInsumoTable(gestorInsumo.buscarPorStock(Integer.parseInt(val), true));
+					Integer stock;
+					
+					try {
+						stock = Integer.parseInt(val);
+					} catch (NumberFormatException e) {
+						JOptionPane.showMessageDialog(frmTrabajoPrctico, "El dato ingresado debe ser numérico",
+								"Información", JOptionPane.INFORMATION_MESSAGE);
 
+						return;
+					}
+					
+					refreshInsumoTable(gestorInsumo.buscarPorStock(stock, true));
 					break;
 				}
 				}
@@ -1174,8 +1211,8 @@ public class MainMenu {
 			}
 		});
 
-		// Eliminar insumo
-		JButton btnCalcular = new JButton("Calcular");
+		// Generar solución
+		JButton btnCalcular = new JButton("Generar solución");
 		GridBagConstraints gbc_btnCalcular = new GridBagConstraints();
 		gbc_btnCalcular.anchor = GridBagConstraints.WEST;
 		gbc_btnCalcular.insets = new Insets(0, 0, 5, 5);
@@ -1185,37 +1222,53 @@ public class MainMenu {
 
 		btnCalcular.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			Integer rowId = tableCamiones.getSelectedRow();
-
-			if (rowId < 0) {
-				JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún camión seleccionado", "Información",
-				JOptionPane.INFORMATION_MESSAGE);
-				return;
+				Integer rowId = tableCamiones.getSelectedRow();
+	
+				if (rowId < 0) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún camión seleccionado", "Información",
+					JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+	
+				Camion camionSelect = gestorCamion.getListaCamiones().get(tableCamiones.convertRowIndexToModel(rowId));
+				
+				ArrayList<Float> peso = new ArrayList<Float>(); 
+				ArrayList<Float> valor = new ArrayList<Float>();
+				ArrayList<Integer> ids = new ArrayList<Integer>();
+				
+				ArrayList<Insumo> listaInsumos;
+				
+				if(camionSelect.getTransportaLiq())
+					listaInsumos = gestorInsumo.getListaInsumos();
+				else
+				{
+					listaInsumos = new ArrayList<Insumo>();
+					
+			        for (Insumo i : gestorInsumo.getListaInsumos()) {
+			            if (!(i instanceof InsumoLiquido)) {
+			            	listaInsumos.add(i);
+			            }
+			        }
+				}
+				
+				for(Insumo i : listaInsumos)
+				{
+					peso.add(i.getPeso());
+					valor.add(i.getCosto());
+				}
+	
+				Boolean[] resultado = camionSelect.resolver(peso.toArray(new Float[0]), valor.toArray(new Float[0]));
+				System.out.println(peso.toString());
+				System.out.println(valor.toString());
+				
+				for(int i = 0; i < resultado.length; i++)
+				{
+					System.out.println("(" + ids.get(i) + ") valor = " + resultado[i]);
+				}
+				
+				//showBestCaseCamion(listaInsumos, resultado);
 			}
-
-			Camion camionSelect = gestorCamion.getListaCamiones().get(tableCamiones.convertRowIndexToModel(rowId));
-			
-			ArrayList<Float> peso = new ArrayList<Float>(); 
-			ArrayList<Float> valor = new ArrayList<Float>();
-			ArrayList<Integer> ids = new ArrayList<Integer>();
-			
-			for(Insumo i : gestorInsumo.getListaInsumos())
-			{
-				peso.add(i.getPeso());
-				valor.add(i.getCosto());
-				ids.add(i.getId());
-			}
-
-			Boolean[] resultado = camionSelect.resolver(peso.toArray(new Float[0]), valor.toArray(new Float[0]));
-			System.out.println(peso.toString());
-			System.out.println(valor.toString());
-			
-			for(int i = 0; i < resultado.length; i++)
-			{
-				System.out.println("(" + ids.get(i) + ") valor = " + resultado[i]);
-			}
-		}
-	});
+		});
 
 		// ------------------------------------------------------------------------------------------------
 		// Tabla de insumos
@@ -2210,7 +2263,7 @@ public class MainMenu {
 		txtCosto.addKeyListener(validForm);
 		txtCosto.addActionListener(saveInsumo);
 
-		JLabel lblPeso = new JLabel("Peso:");
+		JLabel lblPeso = new JLabel("Peso (kg):");
 		GridBagConstraints gbc_lblPeso = new GridBagConstraints();
 		gbc_lblPeso.anchor = GridBagConstraints.EAST;
 		gbc_lblPeso.insets = new Insets(0, 0, 5, 5);
@@ -2371,7 +2424,7 @@ public class MainMenu {
 		txtCosto.addKeyListener(validForm);
 		txtCosto.addActionListener(saveInsumo);
 
-		JLabel lblPeso = new JLabel("Peso:");
+		JLabel lblPeso = new JLabel("Peso (kg):");
 		GridBagConstraints gbc_lblPeso = new GridBagConstraints();
 		gbc_lblPeso.anchor = GridBagConstraints.EAST;
 		gbc_lblPeso.insets = new Insets(0, 0, 5, 5);
@@ -2427,12 +2480,13 @@ public class MainMenu {
 	public void CreateCamionDialog() {
 		JDialog jdialog = new JDialog(frmTrabajoPrctico, "Añadir camión", Dialog.ModalityType.DOCUMENT_MODAL);
 		JPanel contentPane;
-		JTextField txtMarca;
-		JTextField txtModelo;
-		JTextField txtAnio;
-		JTextField txtDominio;
-		JTextField txtCostoKm;
-		JTextField txtCapacidad;
+		JTextField txtMarca = new JTextField();
+		JTextField txtModelo = new JTextField();
+		JTextField txtAnio = new JTextField();
+		JTextField txtDominio = new JTextField();
+		JTextField txtCostoKm = new JTextField();
+		JTextField txtCapacidad = new JTextField();
+		JButton btnGuardar = new JButton("Guardar");
 		JCheckBox chckbxS = new JCheckBox("Transporta líquidos");
 
 		jdialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -2454,6 +2508,54 @@ public class MainMenu {
 		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 
+		KeyAdapter validForm = new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if (txtMarca.getText().length() == 0 || txtModelo.getText().length() == 0
+						|| txtAnio.getText().length() == 0 || txtDominio.getText().length() == 0
+						|| txtCostoKm.getText().length() == 0 || txtCapacidad.getText().length() == 0)
+					btnGuardar.setEnabled(false);
+				else
+					btnGuardar.setEnabled(true);
+			}
+		};
+
+		ActionListener saveCamion = new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (txtMarca.getText().length() == 0 || txtModelo.getText().length() == 0
+						|| txtAnio.getText().length() == 0 || txtDominio.getText().length() == 0
+						|| txtCostoKm.getText().length() == 0 || txtCapacidad.getText().length() == 0)
+					return;
+				
+				Integer anio;
+				Float costokm;
+				Integer capacidad;
+				
+				try
+				{
+					anio = Integer.parseInt(txtAnio.getText());
+					costokm = Float.parseFloat(txtCostoKm.getText());
+					capacidad = Integer.parseInt(txtCapacidad.getText());
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "Uno o más datos ingresados no son válidos",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+
+					return;
+				}
+				
+				Camion camion = gestorCamion.crearCamion();
+				camion.setMarca(txtMarca.getText());
+				camion.setModelo(txtModelo.getText());
+				camion.setAnio(anio);
+				camion.setDominio(txtDominio.getText());
+				camion.setCostoKm(costokm);
+				camion.setTransportaLiq(chckbxS.isSelected());
+				camion.setCapacidad(capacidad);
+
+				refreshCamionTable();
+				jdialog.dispose();
+			}
+		};
+		
 		JLabel lblMarca = new JLabel("Marca:");
 		GridBagConstraints gbc_lblMarca = new GridBagConstraints();
 		gbc_lblMarca.anchor = GridBagConstraints.EAST;
@@ -2462,7 +2564,6 @@ public class MainMenu {
 		gbc_lblMarca.gridy = 1;
 		panel.add(lblMarca, gbc_lblMarca);
 
-		txtMarca = new JTextField();
 		GridBagConstraints gbc_txtMarca = new GridBagConstraints();
 		gbc_txtMarca.insets = new Insets(0, 0, 5, 5);
 		gbc_txtMarca.fill = GridBagConstraints.HORIZONTAL;
@@ -2470,7 +2571,9 @@ public class MainMenu {
 		gbc_txtMarca.gridy = 1;
 		panel.add(txtMarca, gbc_txtMarca);
 		txtMarca.setColumns(10);
-
+		txtMarca.addKeyListener(validForm);
+		txtMarca.addActionListener(saveCamion);
+		
 		JLabel lblModelo = new JLabel("Modelo:");
 		GridBagConstraints gbc_lblModelo = new GridBagConstraints();
 		gbc_lblModelo.anchor = GridBagConstraints.EAST;
@@ -2479,7 +2582,6 @@ public class MainMenu {
 		gbc_lblModelo.gridy = 2;
 		panel.add(lblModelo, gbc_lblModelo);
 
-		txtModelo = new JTextField();
 		GridBagConstraints gbc_txtModelo = new GridBagConstraints();
 		gbc_txtModelo.insets = new Insets(0, 0, 5, 5);
 		gbc_txtModelo.fill = GridBagConstraints.HORIZONTAL;
@@ -2487,7 +2589,9 @@ public class MainMenu {
 		gbc_txtModelo.gridy = 2;
 		panel.add(txtModelo, gbc_txtModelo);
 		txtModelo.setColumns(10);
-
+		txtModelo.addKeyListener(validForm);
+		txtModelo.addActionListener(saveCamion);
+		
 		JLabel lblAnio = new JLabel("Año:");
 		GridBagConstraints gbc_lblAnio = new GridBagConstraints();
 		gbc_lblAnio.anchor = GridBagConstraints.EAST;
@@ -2496,7 +2600,6 @@ public class MainMenu {
 		gbc_lblAnio.gridy = 3;
 		panel.add(lblAnio, gbc_lblAnio);
 
-		txtAnio = new JTextField();
 		GridBagConstraints gbc_txtAnio = new GridBagConstraints();
 		gbc_txtAnio.insets = new Insets(0, 0, 5, 5);
 		gbc_txtAnio.fill = GridBagConstraints.HORIZONTAL;
@@ -2504,7 +2607,9 @@ public class MainMenu {
 		gbc_txtAnio.gridy = 3;
 		panel.add(txtAnio, gbc_txtAnio);
 		txtAnio.setColumns(10);
-
+		txtAnio.addKeyListener(validForm);
+		txtAnio.addActionListener(saveCamion);
+		
 		JLabel lblDominio = new JLabel("Dominio:");
 		GridBagConstraints gbc_lblDominio = new GridBagConstraints();
 		gbc_lblDominio.anchor = GridBagConstraints.EAST;
@@ -2513,7 +2618,6 @@ public class MainMenu {
 		gbc_lblDominio.gridy = 4;
 		panel.add(lblDominio, gbc_lblDominio);
 
-		txtDominio = new JTextField();
 		GridBagConstraints gbc_txtDominio = new GridBagConstraints();
 		gbc_txtDominio.insets = new Insets(0, 0, 5, 5);
 		gbc_txtDominio.fill = GridBagConstraints.HORIZONTAL;
@@ -2521,7 +2625,9 @@ public class MainMenu {
 		gbc_txtDominio.gridy = 4;
 		panel.add(txtDominio, gbc_txtDominio);
 		txtAnio.setColumns(10);
-
+		txtAnio.addKeyListener(validForm);
+		txtAnio.addActionListener(saveCamion);
+		
 		JLabel lblCostoKm = new JLabel("Costo/km:");
 		GridBagConstraints gbc_lblCostoKm = new GridBagConstraints();
 		gbc_lblCostoKm.anchor = GridBagConstraints.EAST;
@@ -2530,15 +2636,16 @@ public class MainMenu {
 		gbc_lblCostoKm.gridy = 5;
 		panel.add(lblCostoKm, gbc_lblCostoKm);
 
-		txtCostoKm = new JTextField();
 		GridBagConstraints gbc_txtCostoKm = new GridBagConstraints();
 		gbc_txtCostoKm.insets = new Insets(0, 0, 5, 5);
 		gbc_txtCostoKm.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtCostoKm.gridx = 2;
 		gbc_txtCostoKm.gridy = 5;
 		panel.add(txtCostoKm, gbc_txtCostoKm);
-		txtAnio.setColumns(10);
-
+		txtCostoKm.setColumns(10);
+		txtCostoKm.addKeyListener(validForm);
+		txtCostoKm.addActionListener(saveCamion);
+		
 		JLabel lblCapacidad = new JLabel("Capacidad:");
 		GridBagConstraints gbc_lblCapacidad = new GridBagConstraints();
 		gbc_lblCapacidad.anchor = GridBagConstraints.EAST;
@@ -2547,15 +2654,16 @@ public class MainMenu {
 		gbc_lblCapacidad.gridy = 6;
 		panel.add(lblCapacidad, gbc_lblCapacidad);
 
-		txtCapacidad = new JTextField();
 		GridBagConstraints gbc_txtCapacidad = new GridBagConstraints();
 		gbc_txtCapacidad.insets = new Insets(0, 0, 5, 5);
 		gbc_txtCapacidad.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtCapacidad.gridx = 2;
 		gbc_txtCapacidad.gridy = 6;
 		panel.add(txtCapacidad, gbc_txtCapacidad);
-		txtAnio.setColumns(10);
-
+		txtCapacidad.setColumns(10);
+		txtCapacidad.addKeyListener(validForm);
+		txtCapacidad.addActionListener(saveCamion);
+		
 		GridBagConstraints gbc_chckbxS = new GridBagConstraints();
 		gbc_chckbxS.anchor = GridBagConstraints.WEST;
 		gbc_chckbxS.insets = new Insets(0, 0, 0, 5);
@@ -2566,22 +2674,8 @@ public class MainMenu {
 		JPanel panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
 
-		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Camion camion = gestorCamion.crearCamion();
-				camion.setMarca(txtMarca.getText());
-				camion.setModelo(txtModelo.getText());
-				camion.setAnio(Integer.parseInt(txtAnio.getText()));
-				camion.setDominio(txtDominio.getText());
-				camion.setCostoKm(Float.parseFloat(txtCostoKm.getText()));
-				camion.setTransportaLiq(chckbxS.isSelected());
-				camion.setCapacidad(Integer.parseInt(txtCapacidad.getText()));
-
-				refreshCamionTable();
-				jdialog.dispose();
-			}
-		});
+		btnGuardar.addActionListener(saveCamion);
+		btnGuardar.setEnabled(false);
 		panel_1.add(btnGuardar);
 
 		JButton btnCancelar = new JButton("Cancelar");
@@ -2590,6 +2684,7 @@ public class MainMenu {
 				jdialog.dispose();
 			}
 		});
+		
 		panel_1.add(btnCancelar);
 		jdialog.setVisible(true);
 	}
@@ -2597,19 +2692,22 @@ public class MainMenu {
 	public void EditCamionDialog(Camion camion) {
 		JDialog jdialog = new JDialog(frmTrabajoPrctico, "Modificar camión", Dialog.ModalityType.DOCUMENT_MODAL);
 		JPanel contentPane;
-		JTextField txtMarca;
-		JTextField txtModelo;
-		JTextField txtAnio;
-		JTextField txtDominio;
-		JTextField txtCostoKm;
-		JTextField txtCapacidad;
+		JTextField txtMarca = new JTextField(camion.getMarca());
+		JTextField txtModelo = new JTextField(camion.getModelo());
+		JTextField txtAnio = new JTextField(camion.getAnio().toString());
+		JTextField txtDominio = new JTextField(camion.getDominio());
+		JTextField txtCostoKm = new JTextField(camion.getCostoKm().toString());
+		JTextField txtCapacidad = new JTextField(camion.getCapacidad().toString());
+		JButton btnGuardar = new JButton("Guardar");
 		JCheckBox chckbxS = new JCheckBox("Transporta líquidos");
 
+		System.out.println("Capacidad:" + camion.getCapacidad());
+		
 		jdialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		jdialog.setResizable(false);
 		jdialog.setMinimumSize(new Dimension(100, 100));
-		jdialog.setBounds(100, 100, 450, 300);
+		jdialog.setBounds(100, 100, 350, 275);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		jdialog.setContentPane(contentPane);
@@ -2619,11 +2717,58 @@ public class MainMenu {
 		contentPane.add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 86, 58, 205, 32, 0 };
-		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 10, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel.columnWeights = new double[] { 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 
+		KeyAdapter validForm = new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if (txtMarca.getText().length() == 0 || txtModelo.getText().length() == 0
+						|| txtAnio.getText().length() == 0 || txtDominio.getText().length() == 0
+						|| txtCostoKm.getText().length() == 0 || txtCapacidad.getText().length() == 0)
+					btnGuardar.setEnabled(false);
+				else
+					btnGuardar.setEnabled(true);
+			}
+		};
+
+		ActionListener saveCamion = new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (txtMarca.getText().length() == 0 || txtModelo.getText().length() == 0
+						|| txtAnio.getText().length() == 0 || txtDominio.getText().length() == 0
+						|| txtCostoKm.getText().length() == 0 || txtCapacidad.getText().length() == 0)
+					return;
+				
+				Integer anio;
+				Float costokm;
+				Integer capacidad;
+				
+				try
+				{
+					anio = Integer.parseInt(txtAnio.getText());
+					costokm = Float.parseFloat(txtCostoKm.getText());
+					capacidad = Integer.parseInt(txtCapacidad.getText());
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "Uno o más datos ingresados no son válidos",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+
+					return;
+				}
+				
+				camion.setMarca(txtMarca.getText());
+				camion.setModelo(txtModelo.getText());
+				camion.setAnio(anio);
+				camion.setDominio(txtDominio.getText());
+				camion.setCostoKm(costokm);
+				camion.setTransportaLiq(chckbxS.isSelected());
+				camion.setCapacidad(capacidad);
+
+				refreshCamionTable();
+				jdialog.dispose();
+			}
+		};
+		
 		JLabel lblMarca = new JLabel("Marca:");
 		GridBagConstraints gbc_lblMarca = new GridBagConstraints();
 		gbc_lblMarca.anchor = GridBagConstraints.EAST;
@@ -2632,7 +2777,6 @@ public class MainMenu {
 		gbc_lblMarca.gridy = 1;
 		panel.add(lblMarca, gbc_lblMarca);
 
-		txtMarca = new JTextField(camion.getMarca());
 		GridBagConstraints gbc_txtMarca = new GridBagConstraints();
 		gbc_txtMarca.insets = new Insets(0, 0, 5, 5);
 		gbc_txtMarca.fill = GridBagConstraints.HORIZONTAL;
@@ -2640,6 +2784,8 @@ public class MainMenu {
 		gbc_txtMarca.gridy = 1;
 		panel.add(txtMarca, gbc_txtMarca);
 		txtMarca.setColumns(10);
+		txtMarca.addActionListener(saveCamion);
+		txtMarca.addKeyListener(validForm);
 
 		JLabel lblModelo = new JLabel("Modelo:");
 		GridBagConstraints gbc_lblModelo = new GridBagConstraints();
@@ -2649,7 +2795,6 @@ public class MainMenu {
 		gbc_lblModelo.gridy = 2;
 		panel.add(lblModelo, gbc_lblModelo);
 
-		txtModelo = new JTextField(camion.getModelo());
 		GridBagConstraints gbc_txtModelo = new GridBagConstraints();
 		gbc_txtModelo.insets = new Insets(0, 0, 5, 5);
 		gbc_txtModelo.fill = GridBagConstraints.HORIZONTAL;
@@ -2657,6 +2802,8 @@ public class MainMenu {
 		gbc_txtModelo.gridy = 2;
 		panel.add(txtModelo, gbc_txtModelo);
 		txtModelo.setColumns(10);
+		txtModelo.addActionListener(saveCamion);
+		txtModelo.addKeyListener(validForm);
 
 		JLabel lblAnio = new JLabel("Año:");
 		GridBagConstraints gbc_lblAnio = new GridBagConstraints();
@@ -2666,7 +2813,6 @@ public class MainMenu {
 		gbc_lblAnio.gridy = 3;
 		panel.add(lblAnio, gbc_lblAnio);
 
-		txtAnio = new JTextField(camion.getAnio().toString());
 		GridBagConstraints gbc_txtAnio = new GridBagConstraints();
 		gbc_txtAnio.insets = new Insets(0, 0, 5, 5);
 		gbc_txtAnio.fill = GridBagConstraints.HORIZONTAL;
@@ -2674,6 +2820,8 @@ public class MainMenu {
 		gbc_txtAnio.gridy = 3;
 		panel.add(txtAnio, gbc_txtAnio);
 		txtAnio.setColumns(10);
+		txtAnio.addActionListener(saveCamion);
+		txtAnio.addKeyListener(validForm);
 
 		JLabel lblDominio = new JLabel("Dominio:");
 		GridBagConstraints gbc_lblDominio = new GridBagConstraints();
@@ -2683,14 +2831,15 @@ public class MainMenu {
 		gbc_lblDominio.gridy = 4;
 		panel.add(lblDominio, gbc_lblDominio);
 
-		txtDominio = new JTextField(camion.getDominio());
 		GridBagConstraints gbc_txtDominio = new GridBagConstraints();
 		gbc_txtDominio.insets = new Insets(0, 0, 5, 5);
 		gbc_txtDominio.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtDominio.gridx = 2;
 		gbc_txtDominio.gridy = 4;
 		panel.add(txtDominio, gbc_txtDominio);
-		txtAnio.setColumns(10);
+		txtDominio.setColumns(10);
+		txtDominio.addActionListener(saveCamion);
+		txtDominio.addKeyListener(validForm);
 
 		JLabel lblCostoKm = new JLabel("Costo/km:");
 		GridBagConstraints gbc_lblCostoKm = new GridBagConstraints();
@@ -2700,14 +2849,15 @@ public class MainMenu {
 		gbc_lblCostoKm.gridy = 5;
 		panel.add(lblCostoKm, gbc_lblCostoKm);
 
-		txtCostoKm = new JTextField(camion.getCostoKm().toString());
 		GridBagConstraints gbc_txtCostoKm = new GridBagConstraints();
 		gbc_txtCostoKm.insets = new Insets(0, 0, 5, 5);
 		gbc_txtCostoKm.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtCostoKm.gridx = 2;
 		gbc_txtCostoKm.gridy = 5;
 		panel.add(txtCostoKm, gbc_txtCostoKm);
-		txtAnio.setColumns(10);
+		txtCostoKm.setColumns(10);
+		txtCostoKm.addActionListener(saveCamion);
+		txtCostoKm.addKeyListener(validForm);
 
 		JLabel lblCapacidad = new JLabel("Capacidad:");
 		GridBagConstraints gbc_lblCapacidad = new GridBagConstraints();
@@ -2717,14 +2867,15 @@ public class MainMenu {
 		gbc_lblCapacidad.gridy = 6;
 		panel.add(lblCapacidad, gbc_lblCapacidad);
 
-		txtCapacidad = new JTextField(camion.getCapacidad());
 		GridBagConstraints gbc_txtCapacidad = new GridBagConstraints();
 		gbc_txtCapacidad.insets = new Insets(0, 0, 5, 5);
 		gbc_txtCapacidad.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtCapacidad.gridx = 2;
 		gbc_txtCapacidad.gridy = 6;
 		panel.add(txtCapacidad, gbc_txtCapacidad);
-		txtAnio.setColumns(10);
+		txtCapacidad.setColumns(10);
+		txtCapacidad.addActionListener(saveCamion);
+		txtCapacidad.addKeyListener(validForm);
 
 		GridBagConstraints gbc_chckbxS = new GridBagConstraints();
 		gbc_chckbxS.anchor = GridBagConstraints.WEST;
@@ -2737,21 +2888,7 @@ public class MainMenu {
 		JPanel panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
 
-		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				camion.setMarca(txtMarca.getText());
-				camion.setModelo(txtModelo.getText());
-				camion.setAnio(Integer.parseInt(txtAnio.getText()));
-				camion.setDominio(txtDominio.getText());
-				camion.setCostoKm(Float.parseFloat(txtCostoKm.getText()));
-				camion.setTransportaLiq(chckbxS.isSelected());
-				camion.setCapacidad(Integer.parseInt(txtCapacidad.getText()));
-
-				refreshCamionTable();
-				jdialog.dispose();
-			}
-		});
+		btnGuardar.addActionListener(saveCamion);
 		panel_1.add(btnGuardar);
 
 		JButton btnCancelar = new JButton("Cancelar");

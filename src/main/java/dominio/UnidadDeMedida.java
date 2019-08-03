@@ -1,9 +1,7 @@
 package dominio;
 
 public enum UnidadDeMedida {
-	KILO("kilogramo(s)"),
 	PIEZA("pieza(s)"),
-	GRAMO("gramo(s)"),
 	METRO("metro(s)"),
 	LITRO("litro(s)"),
 	M3("metro(s) cúbico(s)"),
