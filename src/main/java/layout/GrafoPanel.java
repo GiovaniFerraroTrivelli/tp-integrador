@@ -41,7 +41,7 @@ public class GrafoPanel extends JPanel {
 					if (verticeSeleccionado.getColor() == Color.BLUE) {
 						verticeSeleccionado.setColor(Color.CYAN);
 					} else {
-						verticeSeleccionado.setColor(new Color(0XEBDE34));
+						verticeSeleccionado.setColor(new Color(0xEBDE34));
 					}
 
 					actualizarPosicionVertice(verticeSeleccionado, event.getPoint());
@@ -51,11 +51,9 @@ public class GrafoPanel extends JPanel {
 
 			public void mouseReleased(MouseEvent event) {
 				if (verticeSeleccionado != null) {
-
 					verticeSeleccionado.setColor(verticeSeleccionado.getColorBase());
 					actualizarPosicionVertice(verticeSeleccionado, event.getPoint());
 					actualizarAristas();
-					// inicializarAristas();
 				}
 				verticeSeleccionado = null;
 			}
@@ -110,11 +108,8 @@ public class GrafoPanel extends JPanel {
 		aristas.clear();
 
 		for (Ruta rut : listaRutas) {
-
-			VerticeLayout verticeOrigen = vertices.stream().filter(v -> v.getNombre() == rut.getOrigen().getNombre())
-					.findFirst().get();
-			VerticeLayout verticeDestino = vertices.stream().filter(v -> v.getNombre() == rut.getDestino().getNombre())
-					.findFirst().get();
+			VerticeLayout verticeOrigen = this.getVertice(rut.getOrigen());
+			VerticeLayout verticeDestino = this.getVertice(rut.getDestino());
 
 			AristaLayout a = new AristaLayout(verticeOrigen, verticeDestino, rut, Color.RED);
 			aristas.add(a);
@@ -161,6 +156,16 @@ public class GrafoPanel extends JPanel {
 				return v;
 			}
 		}
+
+		return null;
+	}
+
+	private VerticeLayout getVertice(Planta p) {
+		for (VerticeLayout v : this.vertices) {
+			if (v.getPlantaAsociada() == p)
+				return v;
+		}
+
 		return null;
 	}
 
@@ -203,7 +208,7 @@ public class GrafoPanel extends JPanel {
 
 	public void nodoNecesitaInsumo(Planta p) {
 		for (VerticeLayout v : vertices) {
-			if (v.getPlantaAsociada().getId() == p.getId()) {
+			if (v.getPlantaAsociada() == p) {
 				this.actualizarColorVertice(v, Color.ORANGE);
 			}
 		}

@@ -11,7 +11,6 @@ public class VerticeLayout {
 
 	private Paint color;
 
-
 	private Paint colorBase;
 
 	private Integer coordenadaX;
@@ -92,13 +91,13 @@ public class VerticeLayout {
 	}
 
 	public String etiqueta() {
-		return "[" + id + "]" + this.nombre;
+		return "[" + id + "][" + this.nombre + "][" + this.getPlantaAsociada().getTipo() + "]";
 	}
 
 	public void update() {
 		this.nodo = new Ellipse2D.Double(coordenadaX, coordenadaY, DIAMETRO, DIAMETRO);
 	}
-	
+
 	public Planta getPlantaAsociada() {
 		return plantaAsociada;
 	}
