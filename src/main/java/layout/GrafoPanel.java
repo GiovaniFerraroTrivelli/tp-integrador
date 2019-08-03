@@ -16,6 +16,7 @@ import dominio.Planta;
 import dominio.Ruta;
 import gestores.GestorRuta;
 
+@SuppressWarnings("serial")
 public class GrafoPanel extends JPanel {
 
 	private int xRepintado = 0;
@@ -161,12 +162,7 @@ public class GrafoPanel extends JPanel {
 	}
 
 	private VerticeLayout getVertice(Planta p) {
-		for (VerticeLayout v : this.vertices) {
-			if (v.getPlantaAsociada() == p)
-				return v;
-		}
-
-		return null;
+		return this.vertices.stream().filter(v -> v.getPlantaAsociada() == p).findFirst().get();
 	}
 
 	protected void paintComponent(Graphics g) {
