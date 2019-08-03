@@ -1185,30 +1185,37 @@ public class MainMenu {
 
 		btnCalcular.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Integer rowId = tableCamiones.getSelectedRow();
+			Integer rowId = tableCamiones.getSelectedRow();
 
-				if (rowId < 0) {
-					JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún camión seleccionado", "Información",
-							JOptionPane.INFORMATION_MESSAGE);
-					return;
-				}
-
-				Camion camionSelect = gestorCamion.getListaCamiones().get(tableCamiones.convertRowIndexToModel(rowId));
-
-				int[] pesos = new int[gestorInsumo.getListaInsumos().size()];
-				int[] valor = new int[gestorInsumo.getListaInsumos().size()];
-
-				for (int i = 0; i < gestorInsumo.getListaInsumos().size(); i++) {
-					pesos[i] = (int) (Math.floor(gestorInsumo.getListaInsumos().get(i).getPeso()));
-					valor[i] = (int) (Math.floor(gestorInsumo.getListaInsumos().get(i).getCosto()));
-				}
-
-				boolean[] result = camionSelect.resolver(pesos, valor);
-				for (int i = 0; i < result.length; i++) {
-					System.out.println(result[i]);
-				}
+			if (rowId < 0) {
+				JOptionPane.showMessageDialog(frmTrabajoPrctico, "No hay ningún camión seleccionado", "Información",
+				JOptionPane.INFORMATION_MESSAGE);
+				return;
 			}
-		});
+
+			Camion camionSelect = gestorCamion.getListaCamiones().get(tableCamiones.convertRowIndexToModel(rowId));
+			
+			ArrayList<Float> peso = new ArrayList<Float>(); 
+			ArrayList<Float> valor = new ArrayList<Float>();
+			ArrayList<Integer> ids = new ArrayList<Integer>();
+			
+			for(Insumo i : gestorInsumo.getListaInsumos())
+			{
+				peso.add(i.getPeso());
+				valor.add(i.getCosto());
+				ids.add(i.getId());
+			}
+
+			Boolean[] resultado = camionSelect.resolver(peso.toArray(new Float[0]), valor.toArray(new Float[0]));
+			System.out.println(peso.toString());
+			System.out.println(valor.toString());
+			
+			for(int i = 0; i < resultado.length; i++)
+			{
+				System.out.println("(" + ids.get(i) + ") valor = " + resultado[i]);
+			}
+		}
+	});
 
 		// ------------------------------------------------------------------------------------------------
 		// Tabla de insumos
