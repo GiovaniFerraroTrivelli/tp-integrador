@@ -91,7 +91,7 @@ public class GestorRuta {
 		buscarCaminosAux(origen, destino, marcados, listaCaminos);
 		return listaCaminos;
 	}
-	
+
 	public ArrayList<Integer> getInfoRuta(List<Planta> listaPlantas) {
 		ArrayList<Integer> infoRuta = new ArrayList<Integer>();
 
@@ -117,14 +117,14 @@ public class GestorRuta {
 		// infoRuta[2]: peso maximo admitido
 		return infoRuta;
 	}
-	
+
 	public List<Planta> mejorCaminoConInsumoDistancia(Planta origen, Planta destino,
 			ArrayList<Planta> necesitanInsumo) {
 		GestorRuta g = GestorRuta.getInstance();
-		
-		if(g.getListaRutas().size() == 0)
+
+		if (g.getListaRutas().size() == 0)
 			return null;
-		
+
 		List<List<Planta>> listaCaminos = this.caminos(origen, destino);
 
 		ArrayList<Planta> verticesInsumo = new ArrayList<Planta>();
@@ -149,16 +149,15 @@ public class GestorRuta {
 		};
 
 		Collections.sort(listaCaminos, distanciaComparator);
-		return listaCaminos.get(listaCaminos.size()-1);
+		return listaCaminos.get(listaCaminos.size() - 1);
 	}
-	
-	public List<Planta> mejorCaminoConInsumoTiempo(Planta origen, Planta destino,
-			ArrayList<Planta> necesitanInsumo) {
+
+	public List<Planta> mejorCaminoConInsumoTiempo(Planta origen, Planta destino, ArrayList<Planta> necesitanInsumo) {
 		GestorRuta g = GestorRuta.getInstance();
-		
-		if(g.getListaRutas().size() == 0)
+
+		if (g.getListaRutas().size() == 0)
 			return null;
-		
+
 		List<List<Planta>> listaCaminos = this.caminos(origen, destino);
 
 		ArrayList<Planta> verticesInsumo = new ArrayList<Planta>();
@@ -183,7 +182,7 @@ public class GestorRuta {
 		};
 
 		Collections.sort(listaCaminos, tiempoComparator);
-		return listaCaminos.get(listaCaminos.size()-1);
+		return listaCaminos.get(listaCaminos.size() - 1);
 	}
 
 	private List<Planta> getPlantasAdyacentes(Planta p) {
