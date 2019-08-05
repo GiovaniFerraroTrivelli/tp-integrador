@@ -1,5 +1,6 @@
 package estructuras;
 
+import java.util.Collection;
 import java.util.List;
 
 public abstract class Arbol<E extends Comparable<E>> {
@@ -35,5 +36,7 @@ public abstract class Arbol<E extends Comparable<E>> {
 	public abstract boolean esLleno();
 
 	protected abstract int cuentaNodosDeNivelAux(int nivel, int i);
+
+	protected abstract List<E> buscar(E busqueda);
 
 }

@@ -3,6 +3,8 @@ package estructuras;
 import java.util.ArrayList;
 import java.util.List;
 
+import estructuras.ArbolVacio;
+
 public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 
 	protected Arbol<E> izquierdo;
@@ -166,18 +168,24 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 				lista.add(e);
 			}
 		}
-
 		return lista;
 	}
 
 	public List<E> buscar(E busqueda) {
 		List<E> lista = new ArrayList<E>();
-		List<E> inorden = new ArrayList<E>();
-		inorden = this.inOrden();
-		for (E e : inorden) {
-			if (e.compareTo(busqueda) == 0) {
-				lista.add(e);
-			}
+		
+		if(this.valor.equals(busqueda)) 
+			lista.add(this.valor);
+		
+		if(this.izquierdo instanceof ArbolVacio && !(this.derecho instanceof ArbolVacio)) 
+			lista.addAll(this.derecho.buscar(busqueda));
+		
+		else if(this.derecho instanceof ArbolVacio && !(this.izquierdo instanceof ArbolVacio))
+			lista.addAll(this.izquierdo.buscar(busqueda));
+	
+		else {
+			lista.addAll(this.izquierdo.buscar(busqueda));
+			lista.addAll(this.derecho.buscar(busqueda));
 		}
 		return lista;
 	}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,7 @@ public class GestorPlanta {
 		}
 		return null;
 	}
+	
 
 	public Planta getFirstPlantaWithTipo(TipoPlanta tipo) {
 		for (Planta planta : listaPlantas.values()) {
@@ -82,6 +84,7 @@ public class GestorPlanta {
 		return arbol.buscar(busqueda).stream().map(s -> this.obtenerPlanta(s))
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
+	
 
 	public ArrayList<Planta> necesitanInsumo(Insumo i) {
 		ArrayList<Planta> arrListaPlantas = new ArrayList<>(this.getListaPlantas().values());

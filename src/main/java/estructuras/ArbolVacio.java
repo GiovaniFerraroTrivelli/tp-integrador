@@ -83,5 +83,10 @@ public class ArbolVacio<E extends Comparable<E>> extends Arbol<E> {
 	public int cuentaNodosDeNivelAux(int nivel, int nivelActual) {
 		return 0;
 	}
+	
+	public List<E> buscar (E busqueda){
+		List<E> list = new ArrayList<E>();
+		return list;
+	}
 
 }

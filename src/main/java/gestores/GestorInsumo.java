@@ -54,8 +54,19 @@ public class GestorInsumo {
 		return null;
 	}
 
+
 	public Insumo getInsumoByStr(String nombre) {
 		for(Insumo i : getListaInsumos())
+		{
+			if(i.getDescripcion().equals(nombre))
+				return i;
+		}
+
+		return null;
+	}
+	
+	public Insumo getInsumoByStr(String nombre, ArrayList<Insumo> listInsumosCopy) {
+		for(Insumo i : listInsumosCopy)
 		{
 			if(i.getDescripcion().equals(nombre))
 				return i;
@@ -133,12 +144,37 @@ public class GestorInsumo {
 	}
 
 	public ArrayList<Insumo> buscar(String busqueda) {
+		ArrayList<Insumo> listInsumosCopy = new ArrayList<Insumo>(getListaInsumos());
 		String primElem = this.getListaInsumos().get(0).getDescripcion();
 		ArbolBinarioBusqueda<String> arbol = new ArbolBinarioBusqueda<String>(primElem);
 		for (int i = 1; i < this.getListaInsumos().size(); i++) {
 			arbol.agregar(this.getListaInsumos().get(i).getDescripcion());
 		}
-		return arbol.buscar(busqueda).stream().map(s -> this.getInsumoByStr(s)).collect(Collectors.toCollection(ArrayList::new));
+		List<String> resultado = new ArrayList<String>();		
+		resultado = arbol.buscar(busqueda);
+		
+		ArrayList<Insumo> listaInsumosAux = new ArrayList<Insumo>();
+		Insumo a = this.getInsumoByStr(resultado.get(0));	
+		listaInsumosAux.add(a);	
+		
+		Insumo b;
+		Insumo c;
+		
+		for(int i=1; i < resultado.size() ; i++) {
+			b = this.getInsumoByStr(resultado.get(i), listInsumosCopy);
+			
+			if(listaInsumosAux.contains(b))
+			{
+				listInsumosCopy.remove(b);
+				c = this.getInsumoByStr(resultado.get(i), listInsumosCopy);
+				
+				listaInsumosAux.add(c);
+			}
+			else listaInsumosAux.add(b);
+		}
+		
+		return listaInsumosAux;	
+		
 	}
 	
 	public ArrayList<Insumo> buscarPorStock(Integer busqueda, boolean tipo) {
