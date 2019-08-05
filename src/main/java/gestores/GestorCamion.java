@@ -8,33 +8,31 @@ public class GestorCamion {
 	private static Integer lastCamionId = 0;
 	private static final GestorCamion INSTANCE = new GestorCamion();
 	private ArrayList<Camion> listaCamiones = new ArrayList<Camion>();
-	
-	private GestorCamion() {}
+
+	private GestorCamion() {
+	}
 
 	public static GestorCamion getInstance() {
 		return INSTANCE;
 	}
-	
-	public ArrayList<Camion> getListaCamiones()
-	{
+
+	public ArrayList<Camion> getListaCamiones() {
 		return this.listaCamiones;
 	}
-	
-	public Camion getCamionById(Integer id)
-	{
-		for(Camion camion : listaCamiones)
-		{
-			if(camion.getId() == id)
+
+	public Camion getCamionById(Integer id) {
+		for (Camion camion : listaCamiones) {
+			if (camion.getId() == id)
 				return camion;
 		}
-		
+
 		return null;
 	}
-	
+
 	public Camion crear(String nombre) {
 		return new Camion(++lastCamionId);
 	}
-	
+
 	public Camion crearCamion() {
 		Camion camion = new Camion(++lastCamionId);
 		listaCamiones.add(camion);
@@ -43,18 +41,11 @@ public class GestorCamion {
 	}
 
 	public void borrar(Integer id) {
-		for(Camion camion : listaCamiones)
-		{
-			if(camion.getId() == id)
-			{
+		for (Camion camion : listaCamiones) {
+			if (camion.getId() == id) {
 				listaCamiones.remove(camion);
 				break;
 			}
 		}
-	}
-
-	public ArrayList<Object> buscar(String busqueda) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

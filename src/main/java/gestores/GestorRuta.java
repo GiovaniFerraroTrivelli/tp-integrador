@@ -75,16 +75,6 @@ public class GestorRuta {
 		return pageRank;
 	}
 
-	public void borrar(Integer id) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public ArrayList<Object> buscar(String busqueda) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public Ruta getRuta(Planta origen, Planta destino) {
 		for (Ruta r : this.getListaRutas()) {
 			if (r.getOrigen() == origen && r.getDestino() == destino) {
