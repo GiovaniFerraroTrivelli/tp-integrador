@@ -97,14 +97,14 @@ public class GestorRuta {
 
 		Integer distanciaTotal = 0;
 		Integer tiempoTotal = 0;
-		Integer pesoMax = 0;
+		Integer pesoMax = this.getRuta(listaPlantas.get(0), listaPlantas.get(1)).getPesoMaximo();
 
 		for (int i = 0; i < listaPlantas.size() - 1; i++) {
 			Ruta r = this.getRuta(listaPlantas.get(i), listaPlantas.get(i + 1));
 			distanciaTotal += r.getDistancia();
 			tiempoTotal += r.getDuracion();
 
-			if (r.getPesoMaximo() > pesoMax)
+			if (r.getPesoMaximo() < pesoMax)
 				pesoMax = r.getPesoMaximo();
 		}
 
