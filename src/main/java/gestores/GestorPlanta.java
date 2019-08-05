@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import dominio.Insumo;
 import dominio.Planta;
 import dominio.Planta.TipoPlanta;
+import estructuras.ArbolBinarioBusqueda;
 import dominio.Stock;
-import estructurasAuxiliares.ArbolBinarioBusqueda;
 
 public class GestorPlanta {
 	private static Integer lastPlantaId = 0;
