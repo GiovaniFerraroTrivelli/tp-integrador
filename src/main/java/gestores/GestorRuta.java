@@ -216,8 +216,10 @@ public class GestorRuta {
 	}
 
 	public int flujoMaximo() {
+		
+		ArrayList<Integer> backupPesosRuta = new ArrayList<Integer>();
 		for(Ruta r : this.getListaRutas()) {
-			r.setBackupPesoMaximo(r.getPesoMaximo());
+			backupPesosRuta.add(r.getPesoMaximo());
 		}
 		
 		int flujoMaximo = 0;
@@ -243,8 +245,10 @@ public class GestorRuta {
 			this.modificarPesoMaximo(camino, flujo);
 		}
 
+		int i = 0;
 		for(Ruta r: this.getListaRutas()) {
-			r.restaurarPesoMaximo();
+			r.setPesoMaximo(backupPesosRuta.get(i));
+			i++;
 		}
 
 		return flujoMaximo;
