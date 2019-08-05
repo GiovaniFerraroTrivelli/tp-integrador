@@ -233,6 +233,7 @@ public class MainMenu {
 		camionb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				refreshCamionTable();
+				System.out.println(gestorRuta.flujoMaximo());
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Camiones");
 			}
 		});

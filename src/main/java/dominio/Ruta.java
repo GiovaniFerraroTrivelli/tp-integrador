@@ -7,6 +7,7 @@ public class Ruta {
 	private Integer distancia;
 	private Integer duracion;
 	private Integer pesoMaximo;
+	private Integer backupPesoMaximo;
 	
 	Ruta() { }
 	
@@ -54,6 +55,14 @@ public class Ruta {
 
 	public void setPesoMaximo(Integer pesoMaximo) {
 		this.pesoMaximo = pesoMaximo;
+	}
+	
+	public void setBackupPesoMaximo(Integer n) {
+		this.backupPesoMaximo = n;
+	}
+	
+	public void restaurarPesoMaximo() {
+		this.pesoMaximo = this.backupPesoMaximo;
 	}
 	
 	@Override

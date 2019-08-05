@@ -216,10 +216,13 @@ public class GestorRuta {
 	}
 
 	public int flujoMaximo() {
+		for(Ruta r : this.getListaRutas()) {
+			r.setBackupPesoMaximo(r.getPesoMaximo());
+		}
+		
 		int flujoMaximo = 0;
 		GestorPlanta gestorPlanta = GestorPlanta.getInstance();
-		ArrayList<Ruta> backupListaRutas = new ArrayList<Ruta>(this.getListaRutas());
-
+		
 		List<List<Planta>> listaCaminos = this.caminos(gestorPlanta.getAcopioInicial(), gestorPlanta.getAcopioFinal());
 
 		Comparator<List<Planta>> flujoResidualMaximo = new Comparator<List<Planta>>() {
@@ -240,7 +243,10 @@ public class GestorRuta {
 			this.modificarPesoMaximo(camino, flujo);
 		}
 
-		this.listaCaminos = backupListaRutas;
+		for(Ruta r: this.getListaRutas()) {
+			r.restaurarPesoMaximo();
+		}
+
 		return flujoMaximo;
 	}
 
