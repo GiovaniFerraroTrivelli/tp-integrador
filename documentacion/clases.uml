@@ -156,7 +156,7 @@ package dominio{
 
 package estructuras{
     abstract class "Arbol<E>" as Arbol_E_  {
-    	#valor: E
+    	#E valor
     	+{abstract}preOrden(): List<E>
     	+{abstract}inOrden(): List<E>
     	+{abstract}posOrden(): List<E>
@@ -175,8 +175,8 @@ package estructuras{
     }
     
     class "ArbolBinarioBusqueda<E>" as ArbolBinarioBusqueda_E_ {
-    	#izquierdo: Arbol<E>
-    	#derecho: Arbol<E> 
+    	#Arbol<E> izquierdo
+    	#Arbol<E> derecho
     	+ArbolBinarioBusqueda()
     	+ArbolBinarioBusqueda(E)
     	+ArbolBinarioBusqueda(E, Arbol<E>, Arbol<E>)
@@ -429,6 +429,7 @@ package layout{
 }
 
 AristaLayout "1" <-- "1" Ruta: ˗ rutaAsociada
+VerticeLayout "1" <-- "1" Planta: ˗ plantaAsociada
 
 GestorInsumo "1" -- "1" ArbolBinarioBusqueda_E_
 GestorPlanta "1" -- "1" ArbolBinarioBusqueda_E_
