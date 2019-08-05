@@ -154,6 +154,74 @@ package dominio{
 
 }
 
+package estructuras{
+    abstract class "Arbol<E>" as Arbol_E_  {
+    	#valor: E
+    	+{abstract}preOrden(): List<E>
+    	+{abstract}inOrden(): List<E>
+    	+{abstract}posOrden(): List<E>
+    	+{abstract}esVacio(): boolean
+    	+{abstract}valor(): E
+    	+{abstract}izquierdo(): Arbol<E>
+    	+{abstract}derecho(): Arbol<E>
+    	+{abstract}contiene(E): boolean
+    	+{abstract}equals(Arbol<E> unArbol): boolean
+    	+{abstract}agregar(E): Void
+    	+{abstract}profundidad(): int
+    	+{abstract}cuentaNodosDeNivel(int): int
+    	+{abstract}esCompleto(): boolean
+    	+{abstract}esLleno(): boolean
+    	#{abstract}cuentaNodosDeNivelAux(int nivel, int i): int
+    }
+    
+    class "ArbolBinarioBusqueda<E>" as ArbolBinarioBusqueda_E_ {
+    	#izquierdo: Arbol<E>
+    	#derecho: Arbol<E> 
+    	+ArbolBinarioBusqueda()
+    	+ArbolBinarioBusqueda(E)
+    	+ArbolBinarioBusqueda(E, Arbol<E>, Arbol<E>)
+    	+preOrden(): List<E> //<<Override>>//
+    	+inOrden(): List<E> //<<Override>>//
+    	+posOrden(): List<E> //<<Override>>//
+    	+esVacio(): boolean //<<Override>>//
+    	+valor(): E ///<<Override>>//
+    	+izquierdo(): Arbol<E> //<<Override>>//
+    	+derecho(): Arbol<E> //<<Override>>//
+    	+agregar(E a): Void //<<Override>>//
+    	+equals(Arbol<E>) boolean //<<Override>>//
+    	+contiene(E unValor): boolean //<<Override>>//
+    	+profundidad(): int //<<Override>>//
+    	+cuentaNodosDeNivel(int): int //<<Override>>//
+    	+cuentaNodosDeNivelAux(int, int): int
+    	+esCompleto(): boolean //<<Override>>//
+    	+esLleno(): boolean //<<Override>>//
+    	+rango(E, E): List<E>
+    	+buscar(E): List<E>
+    }
+    
+    class "ArbolVacio<E>" as ArbolVacio{
+    	+ArbolVacio()
+    	+preOrden(): List<E> //<<Override>>//
+    	+inOrden(): List<E> //<<Override>>//
+    	+posOrden(): List<E> //<<Override>>//
+    	+esVacio(): boolean //<<Override>>//
+    	+valor(): E ///<<Override>>//
+    	+izquierdo(): Arbol<E> //<<Override>>//
+    	+derecho(): Arbol<E> //<<Override>>//
+    	+agregar(E a): Void //<<Override>>//
+    	+equals(Arbol<E>) boolean //<<Override>>//
+    	+contiene(E unValor): boolean //<<Override>>//
+    	+profundidad(): int //<<Override>>//
+    	+cuentaNodosDeNivel(int): int //<<Override>>//
+    	+cuentaNodosDeNivelAux(int, int): int //<<Override>>//
+    	+esCompleto(): boolean //<<Override>>//
+    	+esLleno(): boolean //<<Override>>//
+    }
+    
+    Arbol_E_ <|-- ArbolBinarioBusqueda_E_
+    Arbol_E_ <|-- ArbolVacio
+}
+
 package gestores{
     class GestorInsumo <<(S, #FF7700) Singleton>>{
     	-{static}INSTANCE: GestorInsumo
@@ -176,9 +244,9 @@ package gestores{
     }
 
     class GestorPlanta <<(S, #FF7700) Singleton>> {
+        -{static} INSTANCE: GestorPlanta
         -listaPlantas: HashMap<Integer, Planta>
         -{static} lastPlantaId: Integer
-        -{static} INSTANCE: GestorPlanta
         -GestorPlanta()
         +{static} getInstance(): GestorPlanta
         +crear(String[]): Planta
@@ -189,6 +257,8 @@ package gestores{
         +getFirstPlantaWithTipo(TipoPlanta): Planta
         +getStockByPlantaId(Integer): HashMap<Integer, Stock>
 		+pageRankSort(): ArrayList<Planta>
+		+getAcopioInicial(): Planta
+		+getAcopioFinal(): Planta
     }
 
     class GestorRuta <<(S, #FF7700) Singleton>> {
@@ -200,15 +270,25 @@ package gestores{
     	+getStartingPlantas(Planta): ArrayList<Planta>
     	+deleteRuta(Planta, Planta): Void
     	+getListaRutas(): ArrayList<Ruta>
-    	+createRuta(Planta, Planta): Ruta
-    	+crear(String): Ruta
+    	+crearRuta(Planta, Planta): Ruta
+    	+getPageRank(Planta): Integer
+    	+getRuta(Planta, Planta): Ruta
     	+borrar(Integer): Void
+    	+caminos(Planta, Planta): List<List<Planta>>
     	+buscar(String): ArrayList<Ruta>
+    	+getInfoRuta(List<Planta>): ArrayList<Integer>
+        +mejorCaminoConInsumoTiempo(Planta, Planta, ArrayList<Planta>): List<Planta>    
+    	+mejorCaminoConInsumoDistancia(Planta, Planta, ArrayList<Planta>): List<Planta>
+    	-getPlantasAdyacentes(Planta): List<Planta>
+    	-buscarCaminosAux(Planta, Planta, List<Planta>, List<List<Planta>>): Void
+    	+flujoMaximo(): Integer
+    	-flujoResidual(List<Planta>): Integer
+    	-modificarPesoMaximo(List<Planta): Void
     }
 
     class GestorCamion <<(S, #FF7700) Singleton>>{
-    	-{static}lastCamionId: Integer
     	-{static}INSTANCE: GestorCamion
+    	-{static}lastCamionId: Integer
     	-listaCamiones: ArrayList<Camion>
     	-GestorCamion()
     	+{static}getInstance(): GestorCamion
@@ -349,6 +429,9 @@ package layout{
 }
 
 AristaLayout "1" <-- "1" Ruta: ˗ rutaAsociada
+
+GestorInsumo "1" -- "1" ArbolBinarioBusqueda_E_
+GestorPlanta "1" -- "1" ArbolBinarioBusqueda_E_
 
 class JPanel {
 }
