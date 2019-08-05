@@ -126,7 +126,6 @@ public class GestorRuta {
 			return null;
 
 		List<List<Planta>> listaCaminos = this.caminos(origen, destino);
-
 		ArrayList<Planta> verticesInsumo = new ArrayList<Planta>();
 
 		for (Planta p : necesitanInsumo) {
@@ -159,7 +158,6 @@ public class GestorRuta {
 			return null;
 
 		List<List<Planta>> listaCaminos = this.caminos(origen, destino);
-
 		ArrayList<Planta> verticesInsumo = new ArrayList<Planta>();
 
 		for (Planta p : necesitanInsumo) {
@@ -215,6 +213,53 @@ public class GestorRuta {
 				}
 			}
 		}
+	}
 
+	public int flujoMaximo() {
+		int flujoMaximo = 0;
+		GestorPlanta gestorPlanta = GestorPlanta.getInstance();
+		ArrayList<Ruta> backupListaRutas = new ArrayList<Ruta>(this.getListaRutas());
+
+		List<List<Planta>> listaCaminos = this.caminos(gestorPlanta.getAcopioInicial(), gestorPlanta.getAcopioFinal());
+
+		Comparator<List<Planta>> flujoResidualMaximo = new Comparator<List<Planta>>() {
+			@Override
+			public int compare(List<Planta> camino1, List<Planta> camino2) {
+				GestorRuta gestorRuta = GestorRuta.getInstance();
+				return (gestorRuta.getRuta(camino1.get(0), camino1.get(1)).getPesoMaximo()
+						- gestorRuta.getRuta(camino2.get(0), camino2.get(1)).getPesoMaximo());
+			}
+
+		};
+
+		Collections.sort(listaCaminos, flujoResidualMaximo);
+
+		for (List<Planta> camino : listaCaminos) {
+			int flujo = this.flujoResidual(camino);
+			flujoMaximo += flujo;
+			this.modificarPesoMaximo(camino, flujo);
+		}
+
+		this.listaCaminos = backupListaRutas;
+		return flujoMaximo;
+	}
+
+	private int flujoResidual(List<Planta> camino) {
+		Integer flujoResidual = this.getRuta(camino.get(0), camino.get(1)).getPesoMaximo();
+
+		for (int i = 1; i < camino.size() - 1; i++) {
+			Ruta r = this.getRuta(camino.get(i), camino.get(i + 1));
+			if (r.getPesoMaximo() < flujoResidual)
+				flujoResidual = r.getPesoMaximo();
+		}
+
+		return flujoResidual;
+	}
+
+	private void modificarPesoMaximo(List<Planta> camino, int pesoMaximo) {
+		for (int i = 0; i < camino.size() - 1; i++) {
+			Ruta r = this.getRuta(camino.get(i), camino.get(i + 1));
+			r.setPesoMaximo(r.getPesoMaximo() - pesoMaximo);
+		}
 	}
 }
