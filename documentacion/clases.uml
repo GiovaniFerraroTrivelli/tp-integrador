@@ -1,0 +1,442 @@
+@startuml
+
+package dominio{
+
+    class Insumo {
+    	-{static}lastId: Integer
+    	#id: Integer
+    	#descripcion: String
+    	#costo: Float
+    	#peso: Float
+    	#esRefrigerado: Boolean
+    	+Insumo(String)
+    	+Insumo(Integer, UnidadDeMedida, Float)
+    	+getDescripcion(): String
+    	+getUnidadDeMedida(): UnidadDeMedida
+    	+setUnidadDeMedida(UnidadDeMedida): Void
+    	+toString(): String
+    	+getPeso(): Float
+    	+setPeso(Float): Void
+    	+setDescripcion(String): String
+    	+getCosto(): Float
+    	+setCosto(Float): Void
+    	+getStock(): Integer
+    	+getId(): Integer    
+        +compareTo(Insumo): int //<<Override>>//
+    }
+
+    class InsumoLiquido  {
+    	-densidad: Float
+    	-volumen: Float
+    	+InsumoLiquido(Integer, UnidadDeMedida, Float)
+    	+InsumoLiquido(String)
+    	+setDensidad(Float): Void
+    	+setVolumen(Float): Void
+    	+calcularPeso(): Float
+    	+calcularPeso(Float): Float
+    }
+    
+    Insumo <|-- InsumoLiquido
+
+    enum UnidadDeMedida{
+        KILO
+        PIEZA
+        GRAMO
+        METRO
+        LITRO
+        M3
+        M2
+        CM2
+        CM
+        -desc: String
+        -UnidadDeMedida(String)
+        +gestDesc(): String
+        +toString(): String //<<Override>>//
+    }
+
+    class Stock {
+    	-cantidad: Integer
+    	-puntoPedido: Integer
+    	+setInsumo(Insumo): Void
+    	+getCantidad(): Integer
+    	+setCantidad(Integer): Void
+    	+getPuntoPedido(): Integer
+    	+setPuntoPedido(Integer): Void
+    	+getInsumo(): Insumo
+    }
+
+    class Planta{
+    	-Integer id: Integer
+    	-String nombre: String
+    	+Planta(Integer, String)
+    	+costoTotal(): Double
+    	+stockEntre(Integer, Integer): List<Insumo>
+    	+necesitaInsumo(Insumo): Boolean
+    	+getListaStock(): HashMap<Integer, Stock>
+    	+setListaStock(HashMap<Integer,Stock>): Void
+    	+getId(): Integer
+    	+getNombre(): String
+    	+setNombre(String): Void
+    	+getTipo(): TipoPlanta
+    	+setTipo(TipoPlanta): Void
+        +toString(): String //<<Override>>//
+    }
+
+    enum TipoPlanta{
+        PLANTAPRODUCCION
+        PLANTAACOPIOINICIAL
+        PLANTAACOPIOFINAL
+        -desc: String
+        -TipoPlanta(String)
+        +getDesc(): String
+        +toString(): String //<<Override>>//
+    }
+
+    class Ruta {
+    	-origen: Planta
+    	-destino: Planta
+    	-distancia: Float
+    	-duracion: Integer
+    	-pesoMaximo: Integer
+    	+Ruta(Planta, Planta)
+    	+getOrigen(): Planta
+    	+setOrigen(Planta): Void
+    	+getDestino(): Planta
+    	+setDestino(Planta): Void
+    	+getDistancia(): Float
+    	+setDistancia(Float): Void
+    	+getDuracion(): Integer
+    	+setDuracion(Integer): Void
+    	+getPesoMaximo(): Integer
+    	+setPesoMaximo(Integer): Void
+        +toString(): String //<<Override>>//
+    }
+    
+    class Camion {
+    	-id: Integer
+    	-marca: String
+    	-modelo: String
+    	-anio: Integer
+    	-dominio: String
+    	-costoKm: Float
+    	-transportaLiq: Boolean
+    	-capacidad: Float
+    	+Camion(Integer)
+    	+getId(): Integer
+    	+setId(Integer): Void
+    	+getMarca(): String
+    	+setMarca(String): Void
+    	+getModelo(): String
+    	+setModelo(String): Void
+    	+getAnio(): Integer
+    	+setAnio(Integer): Void
+    	+getDominio(): String
+    	+setDominio(String): Void
+    	+getCostoKm(): Float
+    	+setCostoKm(Float): Void
+    	+getTransportaLiq(): Boolean
+    	+setTransportaLiq(Boolean): Void
+    	+getCapacidad(): Float
+    	+setCapacidad(Float): Void
+    }
+
+    interface "Comparable<T>"{
+            +compareTo(T): int
+    }
+
+    Insumo --> UnidadDeMedida
+    Insumo ..|> "Comparable<T>": "<<implements>>"
+    Planta --> TipoPlanta
+    Stock "0..n" *-- "1" Insumo
+    Planta "1" <-- "0..n" Stock: ˗ listaStock
+    Camion "1..n"  --> "1..n" Insumo: ˗ transporta
+    Ruta "1" <-- "2" Planta: ˗ conecta
+
+}
+
+package estructuras{
+    abstract class "Arbol<E>" as Arbol_E_  {
+    	#E valor
+    	+{abstract}preOrden(): List<E>
+    	+{abstract}inOrden(): List<E>
+    	+{abstract}posOrden(): List<E>
+    	+{abstract}esVacio(): boolean
+    	+{abstract}valor(): E
+    	+{abstract}izquierdo(): Arbol<E>
+    	+{abstract}derecho(): Arbol<E>
+    	+{abstract}contiene(E): boolean
+    	+{abstract}equals(Arbol<E> unArbol): boolean
+    	+{abstract}agregar(E): Void
+    	+{abstract}profundidad(): int
+    	+{abstract}cuentaNodosDeNivel(int): int
+    	+{abstract}esCompleto(): boolean
+    	+{abstract}esLleno(): boolean
+    	#{abstract}cuentaNodosDeNivelAux(int nivel, int i): int
+    }
+    
+    class "ArbolBinarioBusqueda<E>" as ArbolBinarioBusqueda_E_ {
+    	#Arbol<E> izquierdo
+    	#Arbol<E> derecho
+    	+ArbolBinarioBusqueda()
+    	+ArbolBinarioBusqueda(E)
+    	+ArbolBinarioBusqueda(E, Arbol<E>, Arbol<E>)
+    	+preOrden(): List<E> //<<Override>>//
+    	+inOrden(): List<E> //<<Override>>//
+    	+posOrden(): List<E> //<<Override>>//
+    	+esVacio(): boolean //<<Override>>//
+    	+valor(): E ///<<Override>>//
+    	+izquierdo(): Arbol<E> //<<Override>>//
+    	+derecho(): Arbol<E> //<<Override>>//
+    	+agregar(E a): Void //<<Override>>//
+    	+equals(Arbol<E>) boolean //<<Override>>//
+    	+contiene(E unValor): boolean //<<Override>>//
+    	+profundidad(): int //<<Override>>//
+    	+cuentaNodosDeNivel(int): int //<<Override>>//
+    	+cuentaNodosDeNivelAux(int, int): int
+    	+esCompleto(): boolean //<<Override>>//
+    	+esLleno(): boolean //<<Override>>//
+    	+rango(E, E): List<E>
+    	+buscar(E): List<E>
+    }
+    
+    class "ArbolVacio<E>" as ArbolVacio{
+    	+ArbolVacio()
+    	+preOrden(): List<E> //<<Override>>//
+    	+inOrden(): List<E> //<<Override>>//
+    	+posOrden(): List<E> //<<Override>>//
+    	+esVacio(): boolean //<<Override>>//
+    	+valor(): E ///<<Override>>//
+    	+izquierdo(): Arbol<E> //<<Override>>//
+    	+derecho(): Arbol<E> //<<Override>>//
+    	+agregar(E a): Void //<<Override>>//
+    	+equals(Arbol<E>) boolean //<<Override>>//
+    	+contiene(E unValor): boolean //<<Override>>//
+    	+profundidad(): int //<<Override>>//
+    	+cuentaNodosDeNivel(int): int //<<Override>>//
+    	+cuentaNodosDeNivelAux(int, int): int //<<Override>>//
+    	+esCompleto(): boolean //<<Override>>//
+    	+esLleno(): boolean //<<Override>>//
+    }
+    
+    Arbol_E_ <|-- ArbolBinarioBusqueda_E_
+    Arbol_E_ <|-- ArbolVacio
+}
+
+package gestores{
+    class GestorInsumo <<(S, #FF7700) Singleton>>{
+    	-{static}INSTANCE: GestorInsumo
+    	-listaInsumos: HashMap<Integer,Insumo>
+    	-GestorInsumo()
+    	+{static}getInstance(): GestorInsumo
+    	+getListaInsumos(): ArrayList<Insumo>
+    	+crear(String descripcion): Insumo
+    	+crearLiquido(String): InsumoLiquido
+    	+getInsumoById(Integer): Insumo
+    	+getInsumoByStr(String): Insumo
+    	+getInsumoByStock(Integer): Insumo
+    	+getInsumoByStock(Integer, ArrayList<Insumo>): Insumo
+    	+getInsumoByCosto(Float): Insumo
+    	+getCantidadStockById(Integer): Insumo
+    	+borrar(Integer): Void
+    	+buscar(String): Void
+    	+buscarPorStock(Integer, boolean): ArrayList<Insumo>
+    	+buscarPorCosto(Float, boolean): ArrayList<Insumo>
+    }
+
+    class GestorPlanta <<(S, #FF7700) Singleton>> {
+        -{static} INSTANCE: GestorPlanta
+        -listaPlantas: HashMap<Integer, Planta>
+        -{static} lastPlantaId: Integer
+        -GestorPlanta()
+        +{static} getInstance(): GestorPlanta
+        +crear(String[]): Planta
+        +borrar(Integer): Void
+        +buscar(String): Planta
+        +obtenerPlanta(Integer): Planta
+        +obtenerPlanta(String): Planta
+        +getFirstPlantaWithTipo(TipoPlanta): Planta
+        +getStockByPlantaId(Integer): HashMap<Integer, Stock>
+		+pageRankSort(): ArrayList<Planta>
+		+getAcopioInicial(): Planta
+		+getAcopioFinal(): Planta
+    }
+
+    class GestorRuta <<(S, #FF7700) Singleton>> {
+    	-{static}INSTANCE: GestorRuta
+    	-listaCaminos: ArrayList<Ruta>
+    	-GestorRuta()
+    	+{static}getInstance(): GestorRuta
+    	+getEndingPlantas(Planta): ArrayList<Planta>
+    	+getStartingPlantas(Planta): ArrayList<Planta>
+    	+deleteRuta(Planta, Planta): Void
+    	+getListaRutas(): ArrayList<Ruta>
+    	+crearRuta(Planta, Planta): Ruta
+    	+getPageRank(Planta): Integer
+    	+getRuta(Planta, Planta): Ruta
+    	+borrar(Integer): Void
+    	+caminos(Planta, Planta): List<List<Planta>>
+    	+buscar(String): ArrayList<Ruta>
+    	+getInfoRuta(List<Planta>): ArrayList<Integer>
+        +mejorCaminoConInsumoTiempo(Planta, Planta, ArrayList<Planta>): List<Planta>    
+    	+mejorCaminoConInsumoDistancia(Planta, Planta, ArrayList<Planta>): List<Planta>
+    	-getPlantasAdyacentes(Planta): List<Planta>
+    	-buscarCaminosAux(Planta, Planta, List<Planta>, List<List<Planta>>): Void
+    	+flujoMaximo(): Integer
+    	-flujoResidual(List<Planta>): Integer
+    	-modificarPesoMaximo(List<Planta): Void
+    }
+
+    class GestorCamion <<(S, #FF7700) Singleton>>{
+    	-{static}INSTANCE: GestorCamion
+    	-{static}lastCamionId: Integer
+    	-listaCamiones: ArrayList<Camion>
+    	-GestorCamion()
+    	+{static}getInstance(): GestorCamion
+    	+getListaCamiones(): ArrayList<Camion>
+    	+getCamionById(Integer): Camion
+    	+crear(String): Camion
+    	+crearCamion(): Camion
+    	+borrar(Integer): Void
+    	+buscar(String): ArrayList<Camion>
+    }
+
+    together {
+        class GestorPlanta
+        class GestorRuta
+        class GestorInsumo
+        class GestorCamion
+    } 
+}
+
+GestorRuta "1" -- "0.. n" Ruta
+GestorCamion "1" -- "0.. n" Camion
+GestorPlanta "1" -- "0.. n" Planta
+GestorInsumo "1" -- "0.. n" Insumo
+
+package layout{
+
+    class GrafoPanel <<(S, #FF7700) Singleton>>{
+    	-int xRepintado: int
+    	-int yRepintado: int
+    	-VerticeLayout verticeSeleccionado: VerticeLayout
+    	-{static}INSTANCE: GrafoPanel INSTANCE
+    	+{static}getInstance(): GrafoPanel
+    	~GrafoPanel()
+    	+getVertices(): List<VerticeLayout>
+    	+getAristas(): List<AristaLayout>
+    	+refreshVertices(): Void
+    	+refreshAristas(): Void
+    	-actualizarVertice(VerticeLayout, Point): Void
+    	-clicEnUnNodo(Point): VerticeLayout
+    	#paintComponent(Graphics): Void
+    	-dibujarVertices(Graphics2D): Void
+    	-dibujarAristas(Graphics2D): Void
+    	+getPreferredSize(): Dimension
+    	-dibujarFlecha(Graphics2D, Point, Point, Color): Void
+    }
+    
+    class VerticeLayout {
+    	-color: Paint
+    	-colorBase: Color
+    	-coordenadaX: Integer
+    	-coordenadaY: Integer
+    	-nodo: Shape
+    	-nombre: String
+    	-id: Integer
+    	+{static}DIAMETRO: Integer
+    	+VerticeLayout()
+    	+VerticeLayout(Integer, Integer, Color)
+    	+getColor()
+    	+setColor(Paint): Void
+    	+getColorBase(): Color
+    	+setColorBase(Color): Void
+    	+getCoordenadaX(): Integer
+    	+setCoordenadaX(Integer): Void
+    	+getCoordenadaY(): Integer
+    	+setCoordenadaY(Integer): Void
+    	+getNodo(): Shape
+    	+setNodo(Shape nodo): Void
+    	+getNombre(): String
+    	+setNombre(String): Void
+    	+getId(): Integer
+    	+setId(Integer id): Void
+    	+etiqueta(): String
+    	+update(): Void
+    }
+
+    
+    class AristaLayout{
+    	-origen: VerticeLayout
+    	-destino: VerticeLayout
+    	-linea: Shape
+    	-formatoLinea: Stroke
+    	-color: Paint
+    	-offset: int
+    	+AristaLayout()
+    	+AristaLayout(VerticeLayout, VerticeLayout, Color)
+    	+getColor(): Paint
+    	+getOrigen(): VerticeLayout
+    	+setOrigen(VerticeLayout): Void
+    	+getDestino(): VerticeLayout
+    	+setDestino(VerticeLayout): Void
+    	+getLinea(): Shape
+    	+setLinea(Shape): Void
+    	+getFormatoLinea(): Stroke
+    	+setFormatoLinea(Stroke): Void
+    	+setColor(Paint): Void
+    	+getRutaAsociada(): Ruta
+    	+setRutaAsociada(Ruta): Void
+    	+update(): Void
+    }
+    
+    class MainMenu {
+    	-frmTrabajoPractico: JFrame
+    	-cl: CardLayout
+    	-{static}tablePlantas: JTable
+    	-{static}tableStock: JTable
+    	-{static}tableInsumos: JTable
+    	-{static}tableCamiones: JTable
+    	-{static}listRuta: JList<Planta>
+    	~{static}gestorPlanta: GestorPlanta
+    	~{static}gestorInsumo: GestorInsumo
+    	~{static}gestorRuta: GestorRuta
+    	~{static}gestorCamion: GestorCamion
+    	+MainMenu()
+    	+{static}main(String[]): Void
+    	-initialize(): Void
+    	-loadMainMenu(): Void
+    	-loadInsumosMenu(): Void
+    	-loadPlantasMenu(): Void
+    	-loadCamionesMenu(): Void
+    	-loadRutasMenu(): Void
+    	-loadInfoMenu(): Void
+    	+{static}refreshCamionTable(): Void
+    	+{static}refreshRutaList(): Void
+    	+{static}refreshPlantaTable(ArrayList<Planta>): Void
+    	+{static}refreshStockTable(Integer): Void
+    	+{static}refreshInsumoTable(ArrayList<Insumo>): Void
+    	+createRutaDialog(): Void
+    	+createInsumoDialog(): Void
+    	+editInsumoDialog(Insumo): Void
+    	+createCamionDialog(): Void
+    	+editCamionDialog(Camion): Void
+    	+addInsumoDialog(Integer): Void
+    }
+    
+    GrafoPanel "1" *-- "0.. n" VerticeLayout
+    GrafoPanel "1" *-- "0.. n" AristaLayout
+    MainMenu "1" *-- "1" GrafoPanel
+}
+
+AristaLayout "1" <-- "1" Ruta: ˗ rutaAsociada
+VerticeLayout "1" <-- "1" Planta: ˗ plantaAsociada
+
+GestorInsumo "1" -- "1" ArbolBinarioBusqueda_E_
+GestorPlanta "1" -- "1" ArbolBinarioBusqueda_E_
+
+class JPanel {
+}
+    
+JPanel <|-- GrafoPanel
+
+@enduml
