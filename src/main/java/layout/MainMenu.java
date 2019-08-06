@@ -78,6 +78,7 @@ public class MainMenu {
 	private static JComboBox<List<List<Planta>>> listaListaCaminos = new JComboBox<List<List<Planta>>>();
 	private static JLabel lblResultados = new JLabel("");
 	private static JLabel lblDatos = new JLabel("");
+	private static JLabel lblFlujo = new JLabel("");
 
 	static GestorPlanta gestorPlanta = GestorPlanta.getInstance();
 	static GestorInsumo gestorInsumo = GestorInsumo.getInstance();
@@ -233,7 +234,7 @@ public class MainMenu {
 		camionb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				refreshCamionTable();
-				System.out.println(gestorRuta.flujoMaximo());
+				loadFlujoInfo();
 				cl.show(frmTrabajoPrctico.getContentPane(), "card__Camiones");
 			}
 		});
@@ -1269,6 +1270,13 @@ public class MainMenu {
 			}
 		});
 
+		GridBagConstraints gbc_lblFlujo = new GridBagConstraints();
+		gbc_lblFlujo.anchor = GridBagConstraints.WEST;
+		gbc_lblFlujo.insets = new Insets(0, 0, 5, 5);
+		gbc_lblFlujo.gridx = 7;
+		gbc_lblFlujo.gridy = 3;
+		panel.add(lblFlujo, gbc_lblFlujo);
+		
 		// ------------------------------------------------------------------------------------------------
 		// Tabla de insumos
 		// ------------------------------------------------------------------------------------------------
@@ -1378,7 +1386,7 @@ public class MainMenu {
 		panel.add(panel_133, gbc_panel_1);
 
 		// Añadir camino
-		JButton btnNuevoCamino = new JButton("Añadir");
+		JButton btnNuevoCamino = new JButton("Añadir ruta");
 		GridBagConstraints gbc_btnNuevoCamino = new GridBagConstraints();
 		gbc_btnNuevoCamino.anchor = GridBagConstraints.EAST;
 		gbc_btnNuevoCamino.insets = new Insets(0, 0, 5, 5);
@@ -1401,9 +1409,9 @@ public class MainMenu {
 		panel.add(btnNuevoCamino, gbc_btnNuevoCamino);
 
 		// Eliminar camino
-		JButton btnEliminarCamino = new JButton("Eliminar");
+		JButton btnEliminarCamino = new JButton("Eliminar ruta");
 		GridBagConstraints gbc_btnEliminarCamino = new GridBagConstraints();
-		gbc_btnEliminarCamino.anchor = GridBagConstraints.EAST;
+		gbc_btnEliminarCamino.anchor = GridBagConstraints.WEST;
 		gbc_btnEliminarCamino.insets = new Insets(0, 0, 5, 5);
 		gbc_btnEliminarCamino.gridx = 3;
 		gbc_btnEliminarCamino.gridy = 4;
@@ -1879,7 +1887,7 @@ public class MainMenu {
 	}
 
 	public static void refreshRutaTable() {
-		String col[] = { "Origen", "Destino", "Distancia", "Duracion", "Peso máximo" };
+		String col[] = { "Origen", "Destino", "Distancia", "Duración", "Peso máximo" };
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 
 		ArrayList<Ruta> listaRutas = gestorRuta.getListaRutas();
@@ -1892,9 +1900,9 @@ public class MainMenu {
 		for (Ruta ruta : listaRutas) {
 			String origen = ruta.getOrigen().toString();
 			String destino = ruta.getDestino().toString();
-			Integer distancia = ruta.getDistancia();
-			Integer duracion = ruta.getDuracion();
-			Integer pesoMaximo = ruta.getPesoMaximo();
+			String distancia = ruta.getDistancia() + " km";
+			String duracion = ruta.getDuracion() + " min";
+			String pesoMaximo = ruta.getPesoMaximo() + " Tn";
 
 			Object[] data = { origen, destino, distancia, duracion, pesoMaximo };
 			tableModel.addRow(data);
@@ -1934,7 +1942,7 @@ public class MainMenu {
 	}
 
 	public static void refreshStockTable(Integer plantaId) {
-		String col[] = { "Insumo", "Cantidad", "Punto pedido" };
+		String col[] = { "Insumo", "Cantidad", "Punto pedido", "Estado" };
 		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 		HashMap<Integer, Stock> tempListaStock;
 
@@ -1947,8 +1955,9 @@ public class MainMenu {
 			String descripcion = stock.getInsumo().getDescripcion();
 			Integer cantidad = stock.getCantidad();
 			Integer puntopedido = stock.getPuntoPedido();
+			String estado = cantidad < puntopedido ? "Necesita reponer" : "Disponible";
 
-			Object[] data = { descripcion, cantidad, puntopedido };
+			Object[] data = { descripcion, cantidad, puntopedido, estado };
 			tableModel.addRow(data);
 		}
 
@@ -2049,7 +2058,7 @@ public class MainMenu {
 		gbc_comboEnd.gridy = 3;
 		panel.add(comboEnd, gbc_comboEnd);
 
-		JLabel lblDistancia = new JLabel("Distancia:");
+		JLabel lblDistancia = new JLabel("Distancia (km):");
 		GridBagConstraints gbc_lblDistancia = new GridBagConstraints();
 		gbc_lblDistancia.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDistancia.anchor = GridBagConstraints.EAST;
@@ -2066,7 +2075,7 @@ public class MainMenu {
 		gbc_textDistancia.gridy = 4;
 		panel.add(textDistancia, gbc_textDistancia);
 
-		JLabel lblDuracion = new JLabel("Duración:");
+		JLabel lblDuracion = new JLabel("Duración (min):");
 		GridBagConstraints gbc_lblDuracion = new GridBagConstraints();
 		gbc_lblDuracion.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDuracion.anchor = GridBagConstraints.EAST;
@@ -2083,7 +2092,7 @@ public class MainMenu {
 		gbc_textDuracion.gridy = 5;
 		panel.add(textDuracion, gbc_textDuracion);
 
-		JLabel lblPesoMaximo = new JLabel("Peso máximo:");
+		JLabel lblPesoMaximo = new JLabel("Peso máximo (Tn):");
 		GridBagConstraints gbc_lblPesoMaximo = new GridBagConstraints();
 		gbc_lblPesoMaximo.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPesoMaximo.anchor = GridBagConstraints.EAST;
@@ -2109,6 +2118,14 @@ public class MainMenu {
 				Planta origen = (Planta) comboStart.getSelectedItem();
 				Planta destino = (Planta) comboEnd.getSelectedItem();
 
+				if(origen == null || destino == null)
+				{
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "Es necesario seleccionar una planta de origen y una de destino",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+
+					return;
+				}
+				
 				if (origen == destino) {
 					JOptionPane.showMessageDialog(frmTrabajoPrctico, "La planta de origen y destino son iguales",
 							"Información", JOptionPane.INFORMATION_MESSAGE);
@@ -2118,11 +2135,25 @@ public class MainMenu {
 
 				Ruta nuevaRuta = gestorRuta.crearRuta(origen, destino);
 
-				nuevaRuta.setDistancia(Integer.parseInt(textDistancia.getText()));
-				nuevaRuta.setDuracion(Integer.parseInt(textDuracion.getText()));
-				nuevaRuta.setPesoMaximo(Integer.parseInt(textPesoMaximo.getText()));
-
-				System.out.println("Nueva ruta: " + nuevaRuta);
+				Integer distancia;
+				Integer duracion;
+				Integer pesoMaximo;
+				
+				try
+				{
+					distancia = Integer.parseInt(textDistancia.getText());
+					duracion = Integer.parseInt(textDuracion.getText());
+					pesoMaximo = Integer.parseInt(textDuracion.getText());
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(frmTrabajoPrctico, "Uno o más datos ingresados no son válidos",
+							"Información", JOptionPane.INFORMATION_MESSAGE);
+	
+					return;
+				}
+			
+				nuevaRuta.setDistancia(distancia);
+				nuevaRuta.setDuracion(duracion);
+				nuevaRuta.setPesoMaximo(pesoMaximo);
 
 				refreshRutaTable();
 
@@ -3110,5 +3141,13 @@ public class MainMenu {
 		});
 		panel_1.add(btnCancelar);
 		jdialog.setVisible(true);
+	}
+	
+	public void loadFlujoInfo()
+	{
+		if(gestorPlanta.getAcopioInicial() == null || gestorPlanta.getAcopioFinal() == null)
+			lblFlujo.setText("Flujo máximo transportable: desconocido");
+		else
+			lblFlujo.setText("Flujo máximo transportable: " + 1000 * gestorRuta.flujoMaximo() + " kg");
 	}
 }
